@@ -81,8 +81,11 @@ public abstract class MvvmBaseActivity<V extends ViewDataBinding, VM extends IMv
      */
     public void setLoadSir(View view)
     {
-        mLoadService = LoadSir.getDefault()
-            .register(view, (Callback.OnReloadListener)v -> onRetryBtnClick());
+        if (mLoadService == null){
+            mLoadService = LoadSir.getDefault()
+                    .register(view, (Callback.OnReloadListener)v -> onRetryBtnClick());
+        }
+
     }
 
     private boolean isShowedContent = false;

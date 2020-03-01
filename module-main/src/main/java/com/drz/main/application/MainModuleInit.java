@@ -42,7 +42,7 @@ public class MainModuleInit implements IModuleInit
             .setConnectTimeout(15 * 1000)
             .setRetryCount(3)
             .setCacheDiskConverter(new GsonDiskConverter())
-            .setCacheMode(CacheMode.CACHEANDREMOTEDISTINCT);
+            .setCacheMode(CacheMode.FIRSTREMOTE);
         LoadSir.beginBuilder()
             .addCallback(new ErrorCallback())
             .addCallback(new LoadingCallback())

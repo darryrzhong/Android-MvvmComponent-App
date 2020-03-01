@@ -177,7 +177,7 @@ public class AttentionFragment
         {
             adapter.addData(viewModels);
             showContent();
-            viewDataBinding.refreshLayout.finishLoadMore(false);
+            viewDataBinding.refreshLayout.finishLoadMore(true);
         }
     }
 

@@ -16,12 +16,14 @@ import com.drz.player.databinding.PlayerActivityVideoPlayerBinding;
 import com.drz.player.databinding.PlayerItemVideoHeaderViewBinding;
 import com.drz.video.helper.VideoPlayerHelper;
 import com.gyf.immersionbar.ImmersionBar;
+import com.kingja.loadsir.core.LoadSir;
 import com.orhanobut.logger.Logger;
 import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -67,10 +69,7 @@ public class VideoPlayerActivity extends
         ScreenAutoAdapter.match(this, 375.0f);
         super.onCreate(savedInstanceState);
         ARouter.getInstance().inject(this);
-        ImmersionBar.with(this)
-            .statusBarView(viewDataBinding.topView)
-            .init();
-        Logger.d(headerBean.toString());
+        ImmersionBar.with(this).statusBarView(viewDataBinding.topView).init();
         if (headerBean != null)
         {
             initView(headerBean);
@@ -82,9 +81,9 @@ public class VideoPlayerActivity extends
                 if (liveHeaderBean != null)
                 {
                     initView(liveHeaderBean);
+                    Logger.d(liveHeaderBean.toString());
                 }
             });
-
         
     }
     
@@ -92,12 +91,12 @@ public class VideoPlayerActivity extends
     {
         viewDataBinding.setBlurred(headerBean.getBlurredUrl());
         viewDataBinding.executePendingBindings();
-        initVideoView();
+        initVideoView(headerBean);
         viewDataBinding.rvVideoList.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         viewDataBinding.rvVideoList.setLayoutManager(layoutManager);
         adapter = new ProviderVideoPagerAdapter();
-        adapter.addHeaderView(getHeaderView());
+        adapter.addHeaderView(getHeaderView(headerBean));
         adapter.addFooterView(getFooterView());
         viewDataBinding.rvVideoList.setAdapter(adapter);
         viewDataBinding.refreshLayout
@@ -111,7 +110,7 @@ public class VideoPlayerActivity extends
         viewModel.loadData(headerBean.getVideoId());
     }
     
-    private void initVideoView()
+    private void initVideoView(VideoHeaderBean headerBean)
     {
         
         // 设置返回键
@@ -171,7 +170,7 @@ public class VideoPlayerActivity extends
                 false);
     }
     
-    private View getHeaderView()
+    private View getHeaderView(VideoHeaderBean headerBean)
     {
         if (headerBean != null)
         {
