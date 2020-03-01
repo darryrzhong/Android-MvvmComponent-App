@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.drz.home.discover.bean.viewmodel.BriefCardViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+
+        <ImageView
+            android:id="@+id/iv_cover"
+            tools:background="@drawable/common_tools_iv_bg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"
+            android:layout_marginStart="10dp"
+            imageUrl="@{viewModel.coverUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+            app:layout_constraintEnd_toStartOf="@+id/btn_action"
+            app:layout_constraintStart_toEndOf="@+id/iv_cover"
+            app:layout_constraintTop_toTopOf="@+id/iv_cover">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@{viewModel.title}"
+                android:textColor="@android:color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="#封面控" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{viewModel.description}"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="人靠脸面，书靠封面" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_action"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/home_shape_border_btn_bg"
+            android:gravity="center"
+            android:textSize="11sp"
+            android:text="+关注"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_cover" />
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/iv_cover" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,65 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+    sourceSets {
+        main {
+//            jniLibs.srcDirs = ['libs']
+            if (isBuildModule.toBoolean()) {
+            } else {
+                resources {
+                    //正式版本时，排除debug文件夹下所有调试文件
+                    exclude 'src/debug/*'
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //统一资源前缀,规范资源引用
+    resourcePrefix "base_"
+
+    dataBinding {
+        enabled true
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+
+}
+
+dependencies {
+    api rootProject.ext.androidx["androidx-appcompat"]
+    api rootProject.ext.androidx["androidx.lifecycle"]
+    api rootProject.ext.androidx["androidx.recyclerview"]
+    api rootProject.ext.androidx["androidx.constraintlayout"]
+    api rootProject.ext.androidx["androidx.cardview"]
+    api rootProject.ext.androidx["android.material"]
+    api rootProject.ext.androidx["androidx.navigation-fragment"]
+    api rootProject.ext.androidx["androidx.navigation-ui:"]
+    api rootProject.ext.dependencies["loadsir"]
+    api rootProject.ext.dependencies["gson"]
+    api rootProject.ext.dependencies["rxjava2"]
+    api rootProject.ext.dependencies["rxpermissions"]
+    api rootProject.ext.dependencies["mmkv"]
+    api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
+    api rootProject.ext.dependencies["immersionbar"]
+    api rootProject.ext.dependencies["glide"]
+}

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.drz.common.utils.DateTimeUtils"/>
+        <variable
+            name="viewModel"
+            type="com.drz.player.bean.viewmodel.VideoCardViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        tools:background="@drawable/tools_player_bg"
+        android:layout_width="match_parent"
+        android:layout_height="160dp">
+
+        <ImageView
+            android:id="@+id/iv_video_cover"
+            imageUrl="@{viewModel.coverUrl}"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="10dp"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.5"
+            tools:background="@drawable/common_tools_iv_bg" />
+
+        <com.drz.common.views.CommonCustomTextView
+            android:id="@+id/tv_video_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/player_shape_video_time_bg"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@{DateTimeUtils.format(viewModel.videoTime)}"
+            android:textColor="@color/common_colorWhite"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_video_cover"
+            app:layout_constraintEnd_toEndOf="@+id/iv_video_cover"
+            tools:text="03:16" />
+
+        <TextView
+            android:id="@+id/tv_video_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:text="@{viewModel.title}"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_video_cover"
+            app:layout_constraintTop_toTopOf="@+id/iv_video_cover"
+            tools:text="这不是你想的那种羞羞的广告 [ 真的] !" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/common_color_small_text"
+            android:text="@{viewModel.description}"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_video_cover"
+            app:layout_constraintEnd_toStartOf="@+id/iv_share"
+            app:layout_constraintStart_toEndOf="@+id/iv_video_cover"
+            tools:text="# 广告 / 开眼精选" />
+
+        <ImageView
+            android:id="@+id/iv_share"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/player_like"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

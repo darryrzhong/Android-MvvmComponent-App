@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.drz.common.utils.DateTimeUtils"/>
+        <variable
+            name="viewModel"
+            type="com.drz.home.nominate.bean.viewmodel.FollowCardViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="295dp">
+
+        <ImageView
+            android:id="@+id/iv_video_cover"
+            android:layout_width="0dp"
+            android:layout_height="220dp"
+            android:scaleType="fitXY"
+           android:layout_margin="10dp"
+            imageUrl="@{viewModel.coverUrl}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/common_tools_iv_bg" />
+
+        <com.drz.common.views.CommonCustomTextView
+            android:id="@+id/tv_video_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/home_shape_video_time_bg"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@{DateTimeUtils.format(viewModel.videoTime)}"
+            android:textColor="@color/common_colorWhite"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_video_cover"
+            app:layout_constraintEnd_toEndOf="@+id/iv_video_cover"
+            tools:text="03:16" />
+
+        <ImageView
+            android:id="@+id/iv_author"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitXY"
+            imageCircleUrl="@{viewModel.authorUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/iv_video_cover"
+            app:layout_constraintTop_toBottomOf="@+id/iv_video_cover"
+            tools:background="@drawable/common_tools_iv_bg" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_share"
+            app:layout_constraintStart_toEndOf="@+id/iv_author"
+            app:layout_constraintTop_toBottomOf="@+id/iv_video_cover">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textColor="@android:color/black"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:text="@{viewModel.title}"
+                tools:text="2020 奥斯卡吐槽大会，小金人将花落谁家?" />
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:id="@+id/tv_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:text="@{viewModel.description}"
+                tools:text="凯拉特  /  #影视" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_share"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/common_share"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="@+id/iv_video_cover"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/iv_video_cover"
+            app:layout_constraintStart_toStartOf="@+id/iv_video_cover" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

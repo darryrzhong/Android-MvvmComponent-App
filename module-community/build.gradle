@@ -1,0 +1,22 @@
+apply from: "../module.build.gradle"
+android {
+    defaultConfig {
+        if (isBuildModule.toBoolean()){
+            applicationId "com.drz.community"
+        }
+    }
+    //统一资源前缀，规范资源引用
+    resourcePrefix "community_"
+}
+
+dependencies {
+    testImplementation rootProject.ext.androidx["junit"]
+    androidTestImplementation rootProject.ext.androidx["androidx.test.ext-junit"]
+    androidTestImplementation rootProject.ext.androidx["androidx.test.espresso:espresso-core"]
+    //组件中依赖阿里路由编译框架
+    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+    annotationProcessor rootProject.ext.dependencies["glide-compiler"]
+    //组件依赖基础库
+    api project(':library-common')
+    api project(':library-video')
+}

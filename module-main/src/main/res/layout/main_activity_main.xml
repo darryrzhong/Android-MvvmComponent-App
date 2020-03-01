@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+   >
+
+    <data>
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        tools:context=".ui.MainActivity"
+        android:id="@+id/cl_main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.drz.main.views.CustomNoTouchViewPager
+            android:id="@+id/cv_content_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
+
+        <me.majiajie.pagerbottomtabstrip.PageNavigationView
+            android:id="@+id/bottom_view"
+            android:elevation="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:background="@android:color/white"
+            app:layout_behavior="com.drz.main.behavior.BottomNavigationBehavior"
+            />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

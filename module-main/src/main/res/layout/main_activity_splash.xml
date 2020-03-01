@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_splash_bg"
+    >
+
+    <View
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        />
+
+    <com.drz.common.views.CommonCustomTextView
+        android:id="@+id/spash_tv_english"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:layout_centerInParent="true"
+        android:textSize="25sp"
+        android:text="Eyepetizer" />
+
+    <com.drz.common.views.CommonCustomTextView
+        android:id="@+id/tv1"
+        android:text="Daily appetizers for your eyes，Bon eyepetit"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_above="@id/textView"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="每日精选视频推介，让你大开眼界。"
+        android:layout_marginBottom="46dp"
+        android:id="@+id/textView"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

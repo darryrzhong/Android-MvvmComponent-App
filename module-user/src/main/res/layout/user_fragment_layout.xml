@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/user_more"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            tools:background="@drawable/avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_more" />
+
+        <TextView
+            android:id="@+id/tv_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点击登录即可评论及发布内容"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_avatar" />
+
+
+        <View
+            android:id="@+id/user_view"
+            android:layout_width="1px"
+            android:layout_height="20dp"
+            android:background="@color/common_color_text_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_like"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_like" />
+
+        <TextView
+            android:id="@+id/tv_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:drawableLeft="@drawable/common_collection"
+            android:gravity="center"
+            android:text="收藏"
+            android:textSize="13sp"
+            android:textColor="@color/common_color_small_text"
+            app:layout_constraintEnd_toStartOf="@+id/user_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tip" />
+
+        <TextView
+            android:id="@+id/tv_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/common_collection"
+            android:gravity="center"
+            android:text="收藏"
+            android:textSize="13sp"
+            android:textColor="@color/common_color_small_text"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_like"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/user_view"
+            app:layout_constraintTop_toTopOf="@+id/tv_like" />
+
+        <View
+            android:id="@+id/user_view2"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_marginTop="10dp"
+            android:background="@color/common_color_text_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_like" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_tables"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_view2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

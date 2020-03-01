@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+       <variable
+           name="viewModel"
+           type="com.drz.home.discover.bean.SquareCard" />
+    </data>
+    
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="match_parent"
+       android:layout_height="95dp">
+
+       <ImageView
+           android:id="@+id/iv_category_bg"
+           android:layout_width="0dp"
+           android:layout_height="0dp"
+           imageUrl="@{viewModel.image}"
+           android:scaleType="fitXY"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           tools:background="@drawable/common_tools_iv_bg" />
+
+       <com.drz.common.views.CommonCustomTextView
+           android:id="@+id/tv_label"
+           android:textSize="13sp"
+           android:layout_width="0dp"
+           android:layout_height="0dp"
+           android:maxLines="2"
+           android:gravity="center"
+           android:ellipsize="end"
+           android:background="@android:color/transparent"
+           android:textColor="@android:color/white"
+           app:layout_constraintBottom_toBottomOf="@id/iv_category_bg"
+           app:layout_constraintEnd_toEndOf="@+id/iv_category_bg"
+           app:layout_constraintStart_toStartOf="@id/iv_category_bg"
+           app:layout_constraintTop_toTopOf="@+id/iv_category_bg"
+           tools:text="异地恋也可以很甜"
+           android:text="@{viewModel.title}"
+           />
+
+   </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

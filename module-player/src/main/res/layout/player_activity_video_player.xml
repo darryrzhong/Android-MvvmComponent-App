@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+<data>
+    <variable
+        name="blurred"
+        type="String" />
+
+</data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        imageBgUrl="@{blurred}"
+        >
+
+
+        <View
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            tools:background="@drawable/tools_player_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.drz.video.views.CoverVideoPlayerView
+                android:id="@+id/cv_video_view"
+                android:layout_width="0dp"
+                android:layout_height="220dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_video_view"
+                android:orientation="vertical"
+                >
+
+                <com.scwang.smart.refresh.layout.SmartRefreshLayout
+                    android:id="@+id/refreshLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_video_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp" />
+
+                </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</layout>

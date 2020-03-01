@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.drz.community.attention.bean.AttentionCardViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="380dp">
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            imageCircleUrl="@{viewModel.avatarUrl}"
+            android:scaleType="fitXY"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/common_tools_iv_bg2" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+            app:layout_constraintTop_toTopOf="@+id/iv_avatar">
+
+            <TextView
+                android:id="@+id/tv_issuer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:text="@{viewModel.issuerName}"
+                tools:text="乐愚电影" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_release_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="13sp"
+                    tools:text="17:04 发布:" />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp"
+                    android:text="@{viewModel.title}"
+                    tools:text="经典童话改编《格蕾特和韩塞尔》幕后特辑" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/common_colorBlacklight"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/iv_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
+            android:text="@{viewModel.description}"
+            tools:text="人一旦忙碌起来，就会忘掉很多与日常无关的回忆，旅行尤为如此。这也是为何我们需要影像记忆，来帮助我们，至少在未来的某一个甚至连家门都无法踏出的时刻，还能回忆起那些个曾经放纵、狂奔、疾驰与热爱的日日夜夜。2020年，我们已经失去了太多的时间，但未来依旧可期，也正因为我们经历过美好，才会有向往，不屈服于当下的捉襟见肘，我们看见过远方，才会有期待，不停滞于眼前的寸步难行。当我们失去了短暂的自由，才会想起，曾经的，那些个忙碌又平凡的日子，有多宝贵。\nBGM：「Pyres」Broken Elegance；「Revolutions」Capo Productions；「梵高先生」李志" />
+
+        <com.drz.video.views.CoverVideoPlayerView
+            android:id="@+id/video_item_player"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="210dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description"
+            />
+
+        <TextView
+            android:id="@+id/tv_collection_count"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/common_collection"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/video_item_player"
+            android:text="@{String.valueOf(viewModel.collectionCount)}"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/tv_reply_count"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:drawableLeft="@drawable/common_collection"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_collection_count"
+            app:layout_constraintEnd_toStartOf="@+id/tv_real_count"
+            app:layout_constraintStart_toEndOf="@+id/tv_collection_count"
+            android:text="@{String.valueOf(viewModel.replyCount)}"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/tv_real_count"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:drawableLeft="@drawable/common_collection"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_collection_count"
+            app:layout_constraintEnd_toStartOf="@+id/iv_share"
+            app:layout_constraintStart_toEndOf="@+id/tv_reply_count"
+            android:text="@{String.valueOf(viewModel.realCollectionCount)}"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/iv_share"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:drawableLeft="@drawable/common_collection"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            tools:text="0"
+            android:text="@{String.valueOf(viewModel.shareCount)}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_collection_count"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

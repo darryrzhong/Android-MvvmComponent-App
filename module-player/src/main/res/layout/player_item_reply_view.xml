@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+<variable
+    name="viewModel"
+    type="com.drz.player.bean.viewmodel.ReplyViewModel" />
+        <import type="com.drz.common.utils.DateTimeUtils"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        tools:background="@drawable/tools_player_bg"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            imageCircleUrl="@{viewModel.avatar}"
+            android:id="@+id/iv_user_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/common_tools_iv_bg2" />
+
+        <TextView
+            android:text="@{viewModel.nickName}"
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_user_avatar"
+            app:layout_constraintStart_toEndOf="@+id/iv_user_avatar"
+            app:layout_constraintTop_toTopOf="@+id/iv_user_avatar"
+            tools:text="J,JR" />
+
+        <TextView
+            android:text="@{viewModel.replyMessage}"
+            android:id="@+id/tv_user_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_user_name"
+            app:layout_constraintTop_toBottomOf="@+id/iv_user_avatar"
+            tools:text="胜者就是正义的，正确的一方" />
+
+        <TextView
+            android:id="@+id/tv_user_release_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_user_message"
+            app:layout_constraintStart_toStartOf="@+id/tv_user_message"
+            app:layout_constraintTop_toBottomOf="@+id/tv_user_message"
+            tools:text="发布于: 20:46" />
+
+        <TextView
+            android:text="@{String.valueOf(viewModel.likeCount)}"
+            android:id="@+id/tv_like_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:drawableRight="@drawable/player_like"
+            android:drawablePadding="5dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_user_avatar"
+            app:layout_constraintEnd_toEndOf="@+id/tv_user_message"
+            app:layout_constraintTop_toTopOf="@+id/iv_user_avatar"
+            tools:text="20" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_user_release_time"
+            app:layout_constraintStart_toStartOf="@+id/tv_user_release_time"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,107 @@
+apply plugin: 'com.android.application'
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+//            storeFile file('/mvvm.jks')
+//            storePassword 'mvvm123'
+//            keyAlias = 'key0'
+//            keyPassword 'mvvm123'
+        }
+    }
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    defaultConfig {
+        applicationId rootProject.ext.android.applicationId
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'arm64-v8a', 'armeabi-v7a'
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    sourceSets {
+        main{
+            //jni库统一放在libs目录下
+//            jniLibs.srcDir = ['libs']
+            if (isBuildModule.toBoolean()){
+                //单独运行
+                manifest.srcFile 'src/main/alone/AndroidManifest.xml'
+            }
+            else {
+                //合并到宿主中
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                resources{
+                    //正式版本时.剔除debug文件夹下的所有调式文件
+                    exclude 'src/debug/*'
+                }
+            }
+        }
+    }
+    //统一资源前缀,规范资源引用
+    resourcePrefix "app_"
+    //开启dataBinding
+    dataBinding{
+        enabled true
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+dependencies {
+    testImplementation rootProject.ext.androidx["junit"]
+    androidTestImplementation rootProject.ext.androidx["androidx.test.ext-junit"]
+    androidTestImplementation rootProject.ext.androidx["androidx.test.espresso:espresso-core"]
+    //组件中依赖阿里路由编译框架
+    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+    annotationProcessor rootProject.ext.dependencies["glide-compiler"]
+    //宿主项目中判断组件是否需要独立运行
+    if (isBuildModule.toBoolean()) {
+        //组件独立运行时，宿主项目直接依赖基础库，避免编译错误
+        implementation project(':library-base')
+    } else {
+        //主业务模块
+        implementation project(':module-main')
+        //首页模块
+        implementation project(':module-home')
+        //社区模块
+        implementation project(':module-community')
+        //更多模块
+        implementation project(':module-more')
+        //视频播放模块
+        implementation project(':module-player')
+        //用户模块
+        implementation project(':module-user')
+    }
+}

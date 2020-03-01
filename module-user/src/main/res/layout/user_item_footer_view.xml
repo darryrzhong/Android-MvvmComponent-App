@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.drz.common.views.CommonCustomTextView
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:text="-you contribution in hiyhly appreciated -"
+        android:textColor="@color/common_color_small_text"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:text="让每一个人都开眼,开了又开"
+        android:textColor="@color/common_color_small_text"
+        android:textSize="13sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+</LinearLayout>

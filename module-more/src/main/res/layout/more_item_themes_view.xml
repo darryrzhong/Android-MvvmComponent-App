@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.drz.more.themes.childpager.bean.ThemesItemViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+
+        <ImageView
+            android:id="@+id/iv_cover"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            imageUrl="@{viewModel.coverUrl}"
+            tools:background="@drawable/common_tools_iv_bg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
+            android:scaleType="fitXY" />
+
+        <LinearLayout
+            app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+            app:layout_constraintStart_toEndOf="@+id/iv_cover"
+            app:layout_constraintTop_toTopOf="@+id/iv_cover"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title"
+                tools:text="#封面控"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@{viewModel.title}"
+                android:textColor="@android:color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                tools:text="人靠脸面，书靠封面"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{viewModel.description}"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/iv_cover"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

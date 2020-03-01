@@ -1,0 +1,60 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode 4
+        versionName "2.1.6"
+        consumerProguardFiles 'consumer-rules.pro'
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+//            jniLibs.srcDirs = ['libs']
+            if (isBuildModule.toBoolean()) {
+            } else {
+                resources {
+                    //正式版本时，排除debug文件夹下所有调试文件
+                    exclude 'src/debug/*'
+                }
+            }
+        }
+    }
+
+    //统一资源前缀,规范资源引用
+    resourcePrefix "net_"
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+dependencies {
+    //第三方依赖库
+    api 'com.squareup.okhttp3:logging-interceptor:3.12.2'
+    api 'com.squareup.okhttp3:okhttp:3.12.2'
+    api 'com.jakewharton:disklrucache:2.0.2'
+    api 'io.reactivex.rxjava2:rxjava:2.2.10'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    api 'com.squareup.retrofit2:retrofit:2.5.0'
+    api 'com.squareup.retrofit2:converter-gson:2.5.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+}
+

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_content_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabGravity="center"
+                app:tabIndicatorColor="@android:color/darker_gray"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorHeight="3dp"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@android:color/black"
+                app:tabTextColor="@android:color/darker_gray" />
+
+            <ImageView
+                android:id="@+id/iv_net_search"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/community_search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:layout_marginTop="10dp"
+            android:id="@+id/vp_home_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

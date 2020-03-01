@@ -1,0 +1,21 @@
+apply from: "../module.build.gradle"
+android {
+    defaultConfig {
+        if (isBuildModule.toBoolean()){
+            applicationId "com.drz.user"
+        }
+    }
+    //统一资源前缀，规范资源引用
+    resourcePrefix "user_"
+}
+
+
+dependencies {
+    testImplementation rootProject.ext.androidx["junit"]
+    androidTestImplementation rootProject.ext.androidx["androidx.test.ext-junit"]
+    androidTestImplementation rootProject.ext.androidx["androidx.test.espresso:espresso-core"]
+    //组件中依赖阿里路由编译框架
+    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+    annotationProcessor rootProject.ext.dependencies["glide-compiler"]
+    api project(':library-common')
+}

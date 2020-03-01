@@ -1,0 +1,24 @@
+<resources>
+    <string name="base_name">library-base</string>
+    <string name="base_no_more_data">"没有更多了"</string>
+    <string name="base_empty_tips_null">暂无数据</string>
+    <string name="base_empty_tips_netword">请检查你的网络连接</string>
+    <string name="base_empty_tips_btn">重试</string>
+    <string name="base_activity_empty">Activity(empty)</string>
+    <string name="base_activity_placeholder">Activity(placeholder)</string>
+    <string name="base_activity_with_convertor">Activity with Convertor</string>
+    <string name="base_single_fragment_custom">single Fragment(custom)</string>
+    <string name="base_multiple_fragment">multiple Fragment</string>
+    <string name="base_multiple_fragment_viewpager">multiple Fragment+ViewPager</string>
+    <string name="base_view_timeout">View(timeout)</string>
+    <string name="base_animat_callback">Animat Callback</string>
+    <string name="base_keep_title_bar_in_fragment">keep title bar in Fragment</string>
+    <string name="base_loadsir">LoadSir</string>
+    <string name="base_success">Success</string>
+    <string name="base_keep_title_bar">keep title bar</string>
+    <string name="base_fine_no_data">fine, no data.</string>
+    <string name="base_click_me_to_retry">click me to retry!</string>
+    <string name="base_best_practices">best practices</string>
+    <string name="base_default_loadsir_callback">default LoadSir Callback</string>
+    <string name="base_keep_title_bar_in_activity">keep title bar in Activity</string>
+</resources>

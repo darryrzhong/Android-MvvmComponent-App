@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.drz.more.message.bean.MessageViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_cover"
+            imageCircleUrl="@{viewModel.coverUrl}"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/common_tools_iv_bg" />
+
+        <com.drz.common.views.CommonCustomTextView
+            android:id="@+id/customTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{viewModel.title}"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_cover"
+            app:layout_constraintTop_toTopOf="@+id/iv_cover"
+            tools:text="今天最值得关注的 5 件全球新鲜事" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@{viewModel.messageDate}"
+            android:textColor="@color/common_color_text_gray"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@+id/customTextView"
+            app:layout_constraintTop_toBottomOf="@+id/customTextView"
+            tools:text="1 天前" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@{viewModel.comtent}"
+            android:textColor="@color/common_color_text_gray"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/customTextView"
+            app:layout_constraintTop_toBottomOf="@id/tv_date"
+            tools:text="柏林｜柏林电影节开幕：蔡明亮、贾樟柯参展;\n伦敦｜4月将举行首个穆斯林骄傲游行;\n印度 | 为特朗普建了一堵墙隐藏贫民窟;\n时尚｜八位设计师和Moncler2020天才计划;\n设计 | 2020日本平面设计师协会公布三大奖获奖作品;" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/common_color_small_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_content" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

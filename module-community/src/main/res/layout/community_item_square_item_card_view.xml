@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+<variable
+    name="viewModel"
+    type="com.drz.community.recommend.bean.SquareContentCard" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="175dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_cover_bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            imageUrl="@{viewModel.data.bgPicture}"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            tools:background="@drawable/common_tools_iv_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/iv_cover_bg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.drz.common.views.CommonCustomTextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:text="@{viewModel.data.title}"
+                tools:text="主题创作广场" />
+
+            <com.drz.common.views.CommonCustomTextView
+                android:id="@+id/tv_subtitle"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:text="@{viewModel.data.subTitle}"
+                tools:text="发布你的作品和日常" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

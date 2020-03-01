@@ -1,0 +1,62 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+    sourceSets {
+        main {
+//            jniLibs.srcDirs = ['libs']
+            if (isBuildModule.toBoolean()) {
+            } else {
+                resources {
+                    //正式版本时，排除debug文件夹下所有调试文件
+                    exclude 'src/debug/*'
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //统一资源前缀,规范资源引用
+    resourcePrefix "common_"
+
+    dataBinding {
+        enabled true
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+}
+
+dependencies {
+    api project(':library-base')
+    api project(':library-network')
+    api project(':library-servicemanager')
+    api 'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
+    api 'com.scwang.smart:refresh-header-classics:2.0.0-alpha-1'
+    api 'com.scwang.smart:refresh-footer-classics:2.0.0-alpha-1'
+    api rootProject.ext.dependencies["arouter-api"]
+    api 'com.orhanobut:logger:2.2.0'
+    api 'org.jetbrains:annotations:15.0'
+    api 'com.blankj:utilcodex:1.26.0'
+    //banner
+    api 'com.github.zhpanvip:BannerViewPager:2.6.6'
+    api 'com.github.zhpanvip:viewpagerindicator:1.0.0'
+
+}

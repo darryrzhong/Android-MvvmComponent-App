@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+  <variable
+      name="viewModel"
+      type="com.drz.home.nominate.bean.viewmodel.BannerCardViewModel" />
+    </data>
+
+    <com.zhpan.bannerview.BannerViewPager
+        android:id="@+id/bv_top"
+        android:layout_width="match_parent"
+        initBannerView="@{viewModel.banners}"
+        android:layout_margin="10dp"
+        app:bvp_indicator_checked_color="@android:color/holo_red_dark"
+        app:bvp_indicator_normal_color="@android:color/darker_gray"
+        app:bvp_page_margin="10dp"
+        app:bvp_reveal_width="20dp"
+        android:layout_height="160dp"/>
+</layout>

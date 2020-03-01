@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+<variable
+    name="viewModel"
+    type="com.drz.common.contract.VideoHeaderBean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:background="@drawable/tools_player_bg">
+
+        <com.drz.common.views.CommonCustomTextView
+            android:id="@+id/tv_video_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{viewModel.videoTitle}"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="枪响之后没有赢家，带你身临其境体验战争" />
+
+        <TextView
+            android:id="@+id/tv_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="13sp"
+            android:textColor="@color/common_color_small_text"
+            android:text="@{viewModel.category}"
+            app:layout_constraintEnd_toEndOf="@+id/tv_video_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_video_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_video_title"
+            tools:text="#动画" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:maxLines="4"
+            android:textColor="@color/common_color_small_text"
+            android:textSize="13sp"
+            android:text="@{viewModel.video_description}"
+            app:layout_constraintEnd_toEndOf="@+id/tv_video_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_video_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_category"
+            tools:text="「儿菜的三种吃法」我家的儿菜做法，儿菜的三个部分，儿菜叶、儿菜崽子、菜头的三个做法，炝炒、清炒、连锅汤，我挺喜欢这样吃的，分享给你们，愿有那么一点点小小的帮助，加油！" />
+
+        <TextView
+            android:id="@+id/tv_collection_count"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/common_collection"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/common_color_small_text"
+            android:textSize="12sp"
+            android:text="@{String.valueOf(viewModel.collectionCount)}"
+            android:drawableTint="@color/common_colorWhite"
+            app:layout_constraintStart_toStartOf="@+id/tv_video_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/tv_reply_count"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:drawableLeft="@drawable/common_collection"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/common_colorWhite"
+            android:gravity="center_vertical"
+            android:textColor="@color/common_color_small_text"
+            android:textSize="12sp"
+            android:text="@{String.valueOf(viewModel.shareCount)}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_collection_count"
+            app:layout_constraintEnd_toStartOf="@+id/tv_real_count"
+            app:layout_constraintStart_toEndOf="@+id/tv_collection_count"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/tv_real_count"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:drawableLeft="@drawable/common_collection"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/common_colorWhite"
+            android:gravity="center_vertical"
+            android:textColor="@color/common_color_small_text"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_collection_count"
+            app:layout_constraintEnd_toStartOf="@+id/iv_share"
+            app:layout_constraintStart_toEndOf="@+id/tv_reply_count"
+            android:text="缓存" />
+
+        <TextView
+            android:id="@+id/iv_share"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:drawableLeft="@drawable/common_collection"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/common_colorWhite"
+            android:gravity="center_vertical"
+            android:textColor="@color/common_color_small_text"
+            android:textSize="12sp"
+            android:text="收藏"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_collection_count"
+            app:layout_constraintEnd_toEndOf="@+id/tv_video_title" />
+
+        <ImageView
+            android:id="@+id/iv_author"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitXY"
+            imageCircleUrl="@{viewModel.avatar}"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_video_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_collection_count"
+            tools:background="@drawable/common_tools_iv_bg" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="@+id/iv_author"
+            app:layout_constraintEnd_toEndOf="@+id/tv_video_title"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_author"
+            app:layout_constraintStart_toEndOf="@+id/iv_author">
+
+            <TextView
+                android:id="@+id/tv_nike_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{viewModel.nickName}"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="The Cgbros" />
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:id="@+id/tv_author_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="@color/common_color_small_text"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="@{viewModel.user_description}"
+                android:textStyle="bold"
+                tools:text="凯拉特  /  #影视" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
