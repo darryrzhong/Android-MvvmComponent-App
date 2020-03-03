@@ -1,5 +1,7 @@
 package com.drz.player;
 
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
@@ -23,10 +25,14 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.OrientationEventListener;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -261,12 +267,44 @@ public class VideoPlayerActivity extends
             .setListener(viewDataBinding.cvVideoView.getGSYVideoManager()
                 .lastListener());
         viewDataBinding.cvVideoView.getGSYVideoManager().setLastListener(null);
+        viewDataBinding.cvVideoView.cancel();
         GSYVideoManager.releaseAllVideos();
         if (orientationUtils != null)
         {
             orientationUtils.releaseListener();
+            try
+            {
+                // 第三方库中的内存泄漏,只能利用反射来解决
+                Field mOrientationEventListener = OrientationUtils.class
+                    .getDeclaredField("mOrientationEventListener");
+                Field contextField =
+                    OrientationUtils.class.getField("mActivity");
+                contextField.setAccessible(true);
+                contextField.set(orientationUtils, null);
+                mOrientationEventListener.setAccessible(true);
+                OrientationEventListener listener =
+                    (OrientationEventListener)mOrientationEventListener
+                        .get(orientationUtils);
+                Field mSensorEventListener = OrientationEventListener.class
+                    .getDeclaredField("mSensorEventListener");
+                mSensorEventListener.setAccessible(true);
+                mSensorEventListener.set(listener, null);
+                Field mSensorManager = OrientationEventListener.class
+                    .getDeclaredField("mSensorManager");
+                mSensorManager.setAccessible(true);
+                mSensorManager.set(listener, null);
+                
+            }
+            catch (NoSuchFieldException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IllegalAccessException e)
+            {
+                e.printStackTrace();
+            }
+            orientationUtils = null;
         }
-        
         VideoPlayerHelper.release();
     }
     

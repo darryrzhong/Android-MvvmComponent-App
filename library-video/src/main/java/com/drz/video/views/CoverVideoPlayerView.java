@@ -6,11 +6,13 @@ import com.drz.video.R;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+import com.shuyu.gsyvideoplayer.utils.NetInfoModule;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.View;
@@ -19,6 +21,10 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
+import java.util.logging.Logger;
 
 /**
  * 应用模块: video
@@ -38,22 +44,21 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
     public RelativeLayout rvContent;
     
     int mDefaultRes;
-    
-    public CoverVideoPlayerView(Context context, Boolean fullFlag)
-    {
+
+
+    public CoverVideoPlayerView(Context context, Boolean fullFlag) {
         super(context, fullFlag);
     }
-    
-    public CoverVideoPlayerView(Context context)
-    {
+
+    public CoverVideoPlayerView(Context context) {
         super(context);
     }
-    
-    public CoverVideoPlayerView(Context context, AttributeSet attrs)
-    {
+
+    public CoverVideoPlayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-    
+
+
     @Override
     public int getLayoutId()
     {
@@ -63,6 +68,7 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
     @Override
     protected void init(Context context)
     {
+
         super.init(context);
         mCoverImage = (ImageView)findViewById(R.id.thumbImage);
         rvContent = findViewById(R.id.surface_container);
@@ -332,5 +338,27 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
         byStartedClick = true;
         super.onStartTrackingTouch(seekBar);
     }
-    
+
+    /**
+     * 利用反射 解决gsy库中导致的内存泄漏
+     * */
+    public void cancel(){
+        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+        try {
+            Field mConnectivityBroadcastReceiver = NetInfoModule.class.getDeclaredField("mConnectivityBroadcastReceiver");
+            mConnectivityBroadcastReceiver.setAccessible(true);
+            mConnectivityBroadcastReceiver.set(mNetInfoModule,null);
+            Field mNetChangeListener =  NetInfoModule.class.getDeclaredField("mNetChangeListener");
+            mNetChangeListener.setAccessible(true);
+            mNetChangeListener.set(mNetInfoModule,null);
+
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        mAudioManager = null;
+        mContext = null;
+    }
+
 }
