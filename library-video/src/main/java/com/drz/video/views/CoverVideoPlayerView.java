@@ -1,4 +1,5 @@
 package com.drz.video.views;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -44,21 +45,22 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
     public RelativeLayout rvContent;
     
     int mDefaultRes;
-
-
-    public CoverVideoPlayerView(Context context, Boolean fullFlag) {
+    
+    public CoverVideoPlayerView(Context context, Boolean fullFlag)
+    {
         super(context, fullFlag);
     }
-
-    public CoverVideoPlayerView(Context context) {
+    
+    public CoverVideoPlayerView(Context context)
+    {
         super(context);
     }
-
-    public CoverVideoPlayerView(Context context, AttributeSet attrs) {
+    
+    public CoverVideoPlayerView(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
     }
-
-
+    
     @Override
     public int getLayoutId()
     {
@@ -68,7 +70,7 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
     @Override
     protected void init(Context context)
     {
-
+        
         super.init(context);
         mCoverImage = (ImageView)findViewById(R.id.thumbImage);
         rvContent = findViewById(R.id.surface_container);
@@ -88,18 +90,18 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
         mUrl = url;
         mOriginUrl = url;
     }
-
+    
     /**
      * 是否边缓存
-     * */
+     */
     public void setVideoCache(boolean cache)
     {
         mCache = cache;
     }
-
+    
     /**
      * 设置title
-     * */
+     */
     public void setVideoTitle(String title)
     {
         mTitle = title;
@@ -115,11 +117,11 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
         cloneParams(this, switchVideo);
         return switchVideo;
     }
-
-    public void cloneState(CoverVideoPlayerView coverVideoPlayerView) {
+    
+    public void cloneState(CoverVideoPlayerView coverVideoPlayerView)
+    {
         cloneParams(coverVideoPlayerView, this);
     }
-
     
     /**
      * 加载封面
@@ -139,7 +141,7 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
     
     @Override
     public GSYBaseVideoPlayer startWindowFullscreen(Context context,
-                                                    boolean actionBar, boolean statusBar)
+        boolean actionBar, boolean statusBar)
     {
         GSYBaseVideoPlayer gsyBaseVideoPlayer =
             super.startWindowFullscreen(context, actionBar, statusBar);
@@ -151,7 +153,7 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
     
     @Override
     public GSYBaseVideoPlayer showSmallVideo(Point size, boolean actionBar,
-                                             boolean statusBar)
+        boolean statusBar)
     {
         // 下面这里替换成你自己的强制转化
         CoverVideoPlayerView sampleCoverVideo =
@@ -338,27 +340,38 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
         byStartedClick = true;
         super.onStartTrackingTouch(seekBar);
     }
-
+    
     /**
      * 利用反射 解决gsy库中导致的内存泄漏
-     * */
-    public void cancel(){
+     */
+    public void cancel()
+    {
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
-        try {
-            Field mConnectivityBroadcastReceiver = NetInfoModule.class.getDeclaredField("mConnectivityBroadcastReceiver");
+        try
+        {
+            // 拿到NetInfoModule对象中 mConnectivityBroadcastReceiver字段.
+            Field mConnectivityBroadcastReceiver = NetInfoModule.class
+                .getDeclaredField("mConnectivityBroadcastReceiver");
+            // 由于是私有字段,所以需要调用setAccessible(true),否则会报错
             mConnectivityBroadcastReceiver.setAccessible(true);
-            mConnectivityBroadcastReceiver.set(mNetInfoModule,null);
-            Field mNetChangeListener =  NetInfoModule.class.getDeclaredField("mNetChangeListener");
+            // 根据当前mNetInfoModule对象的 mConnectivityBroadcastReceiver字段值为null
+            mConnectivityBroadcastReceiver.set(mNetInfoModule, null);
+            Field mNetChangeListener =
+                NetInfoModule.class.getDeclaredField("mNetChangeListener");
             mNetChangeListener.setAccessible(true);
-            mNetChangeListener.set(mNetInfoModule,null);
-
-        } catch (NoSuchFieldException e) {
+            mNetChangeListener.set(mNetInfoModule, null);
+            
+        }
+        catch (NoSuchFieldException e)
+        {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e)
+        {
             e.printStackTrace();
         }
         mAudioManager = null;
         mContext = null;
     }
-
+    
 }
