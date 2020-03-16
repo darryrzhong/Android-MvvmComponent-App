@@ -73,7 +73,6 @@ public class VideoCardProvider extends BaseItemProvider<BaseCustomViewModel>
                     .navigation();
             });
             binding.setViewModel(cardViewModel);
-            binding.setViewModel(cardViewModel);
             binding.executePendingBindings();
         }
     }
