@@ -349,24 +349,23 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
         mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
         try
         {
-            // 拿到NetInfoModule对象中 mConnectivityBroadcastReceiver字段.
-            Field mConnectivityBroadcastReceiver = NetInfoModule.class
-                .getDeclaredField("mConnectivityBroadcastReceiver");
-            // 由于是私有字段,所以需要调用setAccessible(true),否则会报错
-            mConnectivityBroadcastReceiver.setAccessible(true);
-            // 根据当前mNetInfoModule对象的 mConnectivityBroadcastReceiver字段值为null
-            mConnectivityBroadcastReceiver.set(mNetInfoModule, null);
-            Field mNetChangeListener =
-                NetInfoModule.class.getDeclaredField("mNetChangeListener");
-            mNetChangeListener.setAccessible(true);
-            mNetChangeListener.set(mNetInfoModule, null);
+            if (mNetInfoModule != null){
+                // 拿到NetInfoModule对象中 mConnectivityBroadcastReceiver字段.
+                Field mConnectivityBroadcastReceiver = NetInfoModule.class
+                        .getDeclaredField("mConnectivityBroadcastReceiver");
+                // 由于是私有字段,所以需要调用setAccessible(true),否则会报错
+                mConnectivityBroadcastReceiver.setAccessible(true);
+                // 根据当前mNetInfoModule对象的 mConnectivityBroadcastReceiver字段值为null
+                mConnectivityBroadcastReceiver.set(mNetInfoModule, null);
+                Field mNetChangeListener =
+                        NetInfoModule.class.getDeclaredField("mNetChangeListener");
+                mNetChangeListener.setAccessible(true);
+                mNetChangeListener.set(mNetInfoModule, null);
+            }
+
             
         }
-        catch (NoSuchFieldException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
+        catch (NoSuchFieldException | IllegalAccessException e)
         {
             e.printStackTrace();
         }
