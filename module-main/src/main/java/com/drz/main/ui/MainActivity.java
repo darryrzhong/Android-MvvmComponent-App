@@ -1,7 +1,6 @@
 package com.drz.main.ui;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
@@ -14,8 +13,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.drz.base.activity.MvvmBaseActivity;
 import com.drz.base.storage.MmkvHelper;
 import com.drz.base.viewmodel.IMvvmBaseViewModel;
-import com.drz.base.viewmodel.MvmBaseViewModel;
-import com.drz.common.adapter.ScreenAutoAdapter;
+import com.drz.base.adapter.ScreenAutoAdapter;
 import com.drz.common.router.RouterActivityPath;
 import com.drz.common.router.RouterFragmentPath;
 import com.drz.main.R;

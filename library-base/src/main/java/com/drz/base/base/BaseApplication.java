@@ -9,6 +9,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.drz.base.adapter.ScreenAutoAdapter;
+import com.tencent.mmkv.MMKV;
+
 import java.util.List;
 
 /**
@@ -30,6 +34,10 @@ public class BaseApplication extends Application
     public void onCreate()
     {
         super.onCreate();
+        // 在此初始化是为了其他模块可以使用
+        ARouter.init(this);
+        MMKV.initialize(this);
+        ScreenAutoAdapter.setup(this);
         setApplication(this);
     }
     

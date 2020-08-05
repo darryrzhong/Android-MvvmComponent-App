@@ -1,6 +1,5 @@
 package com.drz.player;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -9,7 +8,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.drz.base.activity.MvvmBaseActivity;
 import com.drz.base.livedatabus.LiveDatabus;
-import com.drz.common.adapter.ScreenAutoAdapter;
+import com.drz.base.adapter.ScreenAutoAdapter;
 import com.drz.common.contract.BaseCustomViewModel;
 import com.drz.common.router.RouterActivityPath;
 import com.drz.player.adapter.ProviderVideoPagerAdapter;
@@ -18,18 +17,13 @@ import com.drz.player.databinding.PlayerActivityVideoPlayerBinding;
 import com.drz.player.databinding.PlayerItemVideoHeaderViewBinding;
 import com.drz.video.helper.VideoPlayerHelper;
 import com.gyf.immersionbar.ImmersionBar;
-import com.kingja.loadsir.core.LoadSir;
 import com.orhanobut.logger.Logger;
 import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
