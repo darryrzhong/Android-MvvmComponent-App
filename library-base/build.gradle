@@ -58,6 +58,7 @@ dependencies {
     api rootProject.ext.dependencies["gson"]
     api rootProject.ext.dependencies["rxjava2"]
     api rootProject.ext.dependencies["rxpermissions"]
+    api rootProject.ext.dependencies["arouter-api"]
     api rootProject.ext.dependencies["mmkv"]
     api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
     api rootProject.ext.dependencies["immersionbar"]

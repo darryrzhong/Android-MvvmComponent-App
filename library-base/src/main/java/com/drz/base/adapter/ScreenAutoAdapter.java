@@ -1,4 +1,4 @@
-package com.drz.common.adapter;
+package com.drz.base.adapter;
 
 import android.app.Activity;
 import android.app.Application;

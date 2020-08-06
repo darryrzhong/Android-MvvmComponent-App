@@ -38,8 +38,6 @@ public class CommonModuleInit implements IModuleInit
             ARouter.openLog(); // 开启日志
             ARouter.openDebug(); // 使用InstantRun的时候，需要打开该开关，上线之后关闭，否则有安全风险
         }
-        ARouter.init(application);
-        MMKV.initialize(application);
         Logger.i("基础层初始化完毕 -- onInitAhead");
 
         return false;
