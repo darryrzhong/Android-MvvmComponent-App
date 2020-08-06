@@ -80,7 +80,7 @@ public class DailyModel<T> extends BasePagingModel<T>
                 @Override
                 public void onSuccess(String s)
                 {
-                    e("DailyModel", "onSuccess: " + s.replace("\r", "").replace("\n","").replace("\t", ""));
+//                    e("DailyModel", "onSuccess: " + s.replace("\r", "").replace("\n","").replace("\t", ""));
                     parseJson(s);
                 }
             });
