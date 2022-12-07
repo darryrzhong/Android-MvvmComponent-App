@@ -7,9 +7,7 @@ import com.drz.base.loadsir.ErrorCallback;
 import com.drz.base.loadsir.LoadingCallback;
 import com.drz.base.loadsir.TimeoutCallback;
 import com.drz.common.IModuleInit;
-import com.drz.common.adapter.ScreenAutoAdapter;
 import com.kingja.loadsir.core.LoadSir;
-import com.limpoxe.support.servicemanager.ServiceManager;
 import com.orhanobut.logger.Logger;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.cache.converter.GsonDiskConverter;
@@ -29,7 +27,6 @@ public class MainModuleInit implements IModuleInit
     @Override
     public boolean onInitAhead(BaseApplication application)
     {
-        ScreenAutoAdapter.setup(application);
         EasyHttp.init(application);
         if (application.issDebug())
         {

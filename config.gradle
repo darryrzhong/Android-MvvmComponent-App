@@ -8,6 +8,7 @@ ext {
             applicationId    : "com.mvvm.mvvmcomponent",
             versionCode      : 1,
             versionName      : "1.0",
+            ndkVersion       : '21.3.6528147'
     ]
 
     //version 版本控制

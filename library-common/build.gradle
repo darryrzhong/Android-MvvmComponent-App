@@ -51,7 +51,6 @@ dependencies {
     api 'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
     api 'com.scwang.smart:refresh-header-classics:2.0.0-alpha-1'
     api 'com.scwang.smart:refresh-footer-classics:2.0.0-alpha-1'
-    api rootProject.ext.dependencies["arouter-api"]
     api 'com.orhanobut:logger:2.2.0'
     api 'org.jetbrains:annotations:15.0'
     api 'com.blankj:utilcodex:1.26.0'

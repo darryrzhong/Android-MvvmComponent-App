@@ -20,6 +20,7 @@ import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import io.reactivex.disposables.Disposable;
 
@@ -79,6 +80,7 @@ public class DailyModel<T> extends BasePagingModel<T>
                 @Override
                 public void onSuccess(String s)
                 {
+//                    e("DailyModel", "onSuccess: " + s.replace("\r", "").replace("\n","").replace("\t", ""));
                     parseJson(s);
                 }
             });
@@ -160,24 +162,54 @@ public class DailyModel<T> extends BasePagingModel<T>
         FollowCardBean cardBean)
     {
         FollowCardViewModel followCardViewModel = new FollowCardViewModel();
-        followCardViewModel.coverUrl =
-            cardBean.getData().getContent().getData().getCover().getDetail();
-        followCardViewModel.videoTime =
-            cardBean.getData().getContent().getData().getDuration();
-        followCardViewModel.authorUrl =
-            cardBean.getData().getContent().getData().getAuthor().getIcon();
-        followCardViewModel.description =
-            cardBean.getData().getContent().getData().getAuthor().getName()
-                + " / #"
-                + cardBean.getData().getContent().getData().getCategory();
-        followCardViewModel.title =
-            cardBean.getData().getContent().getData().getTitle();
-      followCardViewModel.video_description = cardBean.getData().getContent().getData().getDescription();
-      followCardViewModel.userDescription = cardBean.getData().getContent().getData().getAuthor().getDescription();
-      followCardViewModel.playerUrl = cardBean.getData().getContent().getData().getPlayUrl();
-      followCardViewModel.blurredUrl = cardBean.getData().getContent().getData().getCover().getBlurred();
-      followCardViewModel.videoId = cardBean.getData().getContent().getData().getId();
-        viewModels.add(followCardViewModel);
+        if (cardBean.getData() != null && cardBean.getData().getContent().getData() != null){
+            FollowCardBean.DataBeanX.ContentBean.DataBean bean = cardBean.getData().getContent().getData();
+            if (bean.getCover()!= null){
+                followCardViewModel.coverUrl =
+                        bean.getCover().getDetail();
+                followCardViewModel.blurredUrl = bean.getCover().getBlurred();
+            }
+
+            followCardViewModel.videoTime =
+                    cardBean.getData().getContent().getData().getDuration();
+
+            if (bean.getAuthor() != null){
+                followCardViewModel.authorUrl =
+                        cardBean.getData().getContent().getData().getAuthor().getIcon();
+                followCardViewModel.description =
+                        cardBean.getData().getContent().getData().getAuthor().getName()
+                                + " / #"
+                                + cardBean.getData().getContent().getData().getCategory();
+                followCardViewModel.userDescription = bean.getAuthor().getDescription();
+
+            }
+
+            followCardViewModel.title =
+                    cardBean.getData().getContent().getData().getTitle();
+            followCardViewModel.video_description = cardBean.getData().getContent().getData().getDescription();
+            followCardViewModel.playerUrl = cardBean.getData().getContent().getData().getPlayUrl();
+            followCardViewModel.videoId = cardBean.getData().getContent().getData().getId();
+            viewModels.add(followCardViewModel);
+        }
+    }
+
+    public static void e(String tag, String msg) {
+        if (tag == null || tag.length() == 0
+                || msg == null || msg.length() == 0)
+            return;
+
+        int segmentSize = 3 * 1024;
+        long length = msg.length();
+        if (length <= segmentSize ) {// 长度小于等于限制直接打印
+            Log.e(tag, msg);
+        }else {
+            while (msg.length() > segmentSize ) {// 循环分段打印日志
+                String logContent = msg.substring(0, segmentSize );
+                msg = msg.replace(logContent, "");
+                Log.e(tag, logContent);
+            }
+            Log.e(tag, msg);// 打印剩余日志
+        }
     }
     
 }

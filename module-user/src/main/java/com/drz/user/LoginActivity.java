@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         ObjectAnimator animator2 = ObjectAnimator.ofFloat(binding.loginBgImage2, "alpha", 0f, 1.0f);
         ObjectAnimator animatorScale1 = ObjectAnimator.ofFloat(binding.loginBgImage1, "scaleX", 1.0f, 1.3f);
         ObjectAnimator animatorScale2 = ObjectAnimator.ofFloat(binding.loginBgImage1, "scaleY", 1.0f, 1.3f);
-       AnimatorSet  animatorSet1 = new AnimatorSet();
+        AnimatorSet  animatorSet1 = new AnimatorSet();
         animatorSet1.setDuration(5000);
         animatorSet1.play(animator1).with(animator2).with(animatorScale1).with(animatorScale2);
         animatorSet1.addListener(new Animator.AnimatorListener() {
