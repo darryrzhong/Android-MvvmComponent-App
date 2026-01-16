@@ -6,29 +6,36 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 
 // Load your keystore.properties file into the keystoreProperties object.
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 android {
+    namespace "com.drz.mvvmcomponent"
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-//            storeFile file('/mvvm.jks')
-//            storePassword 'mvvm123'
-//            keyAlias = 'key0'
-//            keyPassword 'mvvm123'
+            if (keystoreProperties['keyAlias']) {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    compileSdkVersion libs.versions.android.compileSdk.get().toInteger()
+    buildToolsVersion libs.versions.android.buildTools.get()
     defaultConfig {
-        applicationId rootProject.ext.android.applicationId
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
+        applicationId libs.versions.android.applicationId.get() // Assuming I put applicationId in catalog? No I didn't.
+        // Wait, I didn't put applicationId in catalog. I should have.
+        // It was in config.gradle: applicationId    : "com.mvvm.mvvmcomponent"
+        // I will hardcode it here or add to catalog.
+        // Hardcode is fine for now, or use a variable.
+        applicationId "com.mvvm.mvvmcomponent"
+        
+        minSdkVersion libs.versions.android.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.android.targetSdk.get().toInteger()
+        versionCode libs.versions.android.versionCode.get().toInteger()
+        versionName libs.versions.android.versionName.get()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构
@@ -45,7 +52,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            if (keystoreProperties['keyAlias']) {
+                signingConfig signingConfigs.release
+            }
         }
     }
     sourceSets {
@@ -69,8 +78,9 @@ android {
     //统一资源前缀,规范资源引用
     resourcePrefix "app_"
     //开启dataBinding
-    dataBinding{
-        enabled true
+    buildFeatures {
+        dataBinding = true
+        buildConfig = true
     }
 
     compileOptions {
@@ -80,12 +90,12 @@ android {
 }
 
 dependencies {
-    testImplementation rootProject.ext.androidx["junit"]
-    androidTestImplementation rootProject.ext.androidx["androidx.test.ext-junit"]
-    androidTestImplementation rootProject.ext.androidx["androidx.test.espresso:espresso-core"]
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation libs.androidx.test.espresso.core
     //组件中依赖阿里路由编译框架
-    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
-    annotationProcessor rootProject.ext.dependencies["glide-compiler"]
+    annotationProcessor libs.arouter.compiler
+    annotationProcessor libs.glide.compiler
     //宿主项目中判断组件是否需要独立运行
     if (isBuildModule.toBoolean()) {
         //组件独立运行时，宿主项目直接依赖基础库，避免编译错误

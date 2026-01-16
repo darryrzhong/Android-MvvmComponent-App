@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.drz.main.R
@@ -19,7 +20,6 @@ import com.zhpan.bannerview.constants.TransformerStyle
 import com.zhpan.bannerview.holder.HolderCreator
 import com.zhpan.bannerview.utils.BannerUtils
 import com.zhpan.indicator.enums.IndicatorSlideMode
-import kotlinx.android.synthetic.main.main_activity_guide.*
 
 import java.util.ArrayList
 import java.util.Random
@@ -27,6 +27,8 @@ import java.util.Random
 class GuideActivity : BaseDataActivity(), HolderCreator<CustomPageViewHolder> {
 
     private lateinit var mViewPager: BannerViewPager<CustomBean, CustomPageViewHolder>
+    private var tv_describe: TextView? = null
+    private var btn_start: TextView? = null
 
     private val des = arrayOf("在这里\n你可以听到周围人的心声", "在这里\nTA会在下一秒遇见你", "在这里\n不再错过可以改变你一生的人")
 
@@ -47,6 +49,10 @@ class GuideActivity : BaseDataActivity(), HolderCreator<CustomPageViewHolder> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity_guide)
+        
+        tv_describe = findViewById(R.id.tv_describe)
+        btn_start = findViewById(R.id.btn_start)
+        
         ImmersionBar.with(this)
                 .titleBar(findViewById<View>(R.id.top_view))
                 .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
@@ -64,7 +70,7 @@ class GuideActivity : BaseDataActivity(), HolderCreator<CustomPageViewHolder> {
                 .setScrollDuration(ANIMATION_DURATION)
                 .setIndicatorMargin(0, 0, 0, resources.getDimension(R.dimen.main_dp_100).toInt())
                 .setIndicatorGap(resources.getDimension(R.dimen.main_dp_10).toInt())
-                .setIndicatorColor(ContextCompat.getColor(this, R.color.common_colorWhite),
+                .setIndicatorColor(ContextCompat.getColor(this, android.R.color.white),
                         ContextCompat.getColor(this, R.color.main_white_alpha_75))
                 .setIndicatorSlideMode(IndicatorSlideMode.SMOOTH)
                 .setIndicatorRadius(resources.getDimension(R.dimen.main_dp_3).toInt(), resources.getDimension(R.dimen.main_dp_4_5).toInt())
