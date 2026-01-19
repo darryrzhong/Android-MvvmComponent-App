@@ -1,56 +1,29 @@
-plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-}
+import com.android.build.gradle.BaseExtension
+import com.drz.plugin.ModulePlugin
 
-android {
+apply<ModulePlugin>()
+
+configure<BaseExtension> {
     namespace = "com.drz.base"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    buildToolsVersion = libs.versions.android.buildTools.get()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    // resources exclusion removed as it caused build errors and is likely redundant for standard source sets
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-
     resourcePrefix = "base_"
-    buildFeatures {
-        dataBinding = true
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
-    api(libs.androidx.appcompat)
-    api(libs.androidx.lifecycle.extensions)
-    api(libs.androidx.recyclerview)
-    api(libs.androidx.constraintlayout)
-    api(libs.androidx.cardview)
-    api(libs.android.material)
-    api(libs.androidx.navigation.fragment)
-    api(libs.androidx.navigation.ui)
-    api(libs.loadsir)
-    api(libs.gson)
-    api(libs.rxjava2)
-    api(libs.rxpermissions)
-    api(libs.mmkv)
-    api(libs.brvah)
-    api(libs.immersionbar)
-    api(libs.glide)
+    add("api", libs.androidx.appcompat)
+    add("api", libs.androidx.lifecycle.extensions)
+    add("api", libs.androidx.lifecycle.viewmodel.ktx) // Updated
+    add("api", libs.androidx.recyclerview)
+    add("api", libs.androidx.constraintlayout)
+    add("api", libs.androidx.cardview)
+    add("api", libs.android.material)
+    add("api", libs.androidx.navigation.fragment)
+    add("api", libs.androidx.navigation.ui)
+    add("api", libs.loadsir)
+    add("api", libs.gson)
+    add("api", libs.rxjava2)
+    add("api", libs.rxpermissions)
+    add("api", libs.mmkv)
+    add("api", libs.brvah)
+    add("api", libs.immersionbar)
+    add("api", libs.glide)
 }

@@ -6,7 +6,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class ModulePlugin : Plugin<Project> {
     override fun apply(project: Project) {
@@ -18,12 +19,17 @@ class ModulePlugin : Plugin<Project> {
             project.plugins.apply("com.android.library")
         }
         project.plugins.apply("org.jetbrains.kotlin.android")
-        // project.plugins.apply("kotlin-parcelize") // Optional, added in modules manually?
+        project.plugins.apply("kotlin-parcelize")
+        project.plugins.apply("com.google.devtools.ksp") 
+        project.plugins.apply("com.google.dagger.hilt.android")
+
+        val libs = project.rootProject.extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+        project.dependencies.add("implementation", libs.findLibrary("hilt-android").get())
+        project.dependencies.add("ksp", libs.findLibrary("hilt-compiler").get())
+        project.dependencies.add("implementation", libs.findLibrary("kotlinx-coroutines-android").get())
+        project.dependencies.add("implementation", libs.findLibrary("kotlinx-coroutines-core").get())
 
         project.extensions.configure<BaseExtension> {
-            val libs =
-                project.rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
-
             compileSdkVersion(libs.findVersion("android-compileSdk").get().requiredVersion.toInt())
             buildToolsVersion(libs.findVersion("android-buildTools").get().requiredVersion)
 
@@ -32,27 +38,17 @@ class ModulePlugin : Plugin<Project> {
                 targetSdk = libs.findVersion("android-targetSdk").get().requiredVersion.toInt()
 
                 if (isBuildModule) {
-                    val vCode =
-                        libs.findVersion("android-versionCode").get().requiredVersion.toInt()
+                    val vCode = libs.findVersion("android-versionCode").get().requiredVersion.toInt()
                     val vName = libs.findVersion("android-versionName").get().requiredVersion
-                    // Use reflection or dynamic assignment because BaseExtension type might not expose 
-                    // application-specific properties directly in a clean way for both app/lib?
-                    // But BaseExtension usually covers both.
-                    // However, 'versionCode' property on DefaultConfig is available.
-                    // But for Library, it is ignored or deprecated.
-                    // Let's try setting it safely.
+                    
                     try {
                         val method = this.javaClass.getMethod("setVersionCode", Integer::class.java)
                         method.invoke(this, vCode)
-                    } catch (e: Exception) {
-                        // ignore
-                    }
-                    try {
+                    } catch (e: Exception) { }
+                     try {
                         val method = this.javaClass.getMethod("setVersionName", String::class.java)
                         method.invoke(this, vName)
-                    } catch (e: Exception) {
-                        // ignore
-                    }
+                    } catch (e: Exception) { }
                 }
 
                 consumerProguardFiles("consumer-rules.pro")
@@ -68,17 +64,11 @@ class ModulePlugin : Plugin<Project> {
             buildTypes {
                 getByName("debug") {
                     isMinifyEnabled = false
-                    proguardFiles(
-                        getDefaultProguardFile("proguard-android-optimize.txt"),
-                        "proguard-rules.pro"
-                    )
+                    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
                 }
                 getByName("release") {
                     isMinifyEnabled = false
-                    proguardFiles(
-                        getDefaultProguardFile("proguard-android-optimize.txt"),
-                        "proguard-rules.pro"
-                    )
+                    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
                 }
             }
 
@@ -91,33 +81,27 @@ class ModulePlugin : Plugin<Project> {
                     }
                 }
             }
-
-            // dataBinding { isEnabled = true } legacy
+            
             try {
-                // buildFeatures.dataBinding = true
                 val buildFeatures = this::class.java.getMethod("getBuildFeatures").invoke(this)
-                val setMethod = buildFeatures::class.java.getMethod(
-                    "setDataBinding",
-                    java.lang.Boolean::class.java
-                )
+                val setMethod = buildFeatures::class.java.getMethod("setDataBinding", java.lang.Boolean::class.java)
                 setMethod.invoke(buildFeatures, true)
-            } catch (e: Exception) {
-                // Try legacy
-                try {
-                    val dataBinding = this::class.java.getMethod("getDataBinding").invoke(this)
-                    val setEnabled = dataBinding::class.java.getMethod(
-                        "setEnabled",
-                        Boolean::class.javaPrimitiveType
-                    )
-                    setEnabled.invoke(dataBinding, true)
-                } catch (e2: Exception) {
-                    println("Failed to enable dataBinding: $e2")
-                }
-            }
+                val setVBMethod = buildFeatures::class.java.getMethod("setViewBinding", java.lang.Boolean::class.java)
+                setVBMethod.invoke(buildFeatures, true)
+                
+                // Do NOT enable compose globally here. Let specific modules enable it.
+            } catch (e: Exception) { }
 
             compileOptions {
                 sourceCompatibility = JavaVersion.VERSION_1_8
                 targetCompatibility = JavaVersion.VERSION_1_8
+            }
+        }
+        
+        // Fix JVM target incompatibility
+        project.tasks.withType<KotlinCompile> {
+            kotlinOptions {
+                jvmTarget = "1.8"
             }
         }
     }

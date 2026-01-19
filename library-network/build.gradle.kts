@@ -1,46 +1,30 @@
-plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-}
+import com.android.build.gradle.BaseExtension
+import com.drz.plugin.ModulePlugin
 
-android {
+apply<ModulePlugin>()
+
+configure<BaseExtension> {
     namespace = "com.zhouyou.http"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    buildToolsVersion = libs.versions.android.buildTools.get()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-        }
-    }
-
-    // resources exclusion removed
-
     resourcePrefix = "net_"
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+    
+    defaultConfig {
+        versionCode = 4
+        versionName = "2.1.6"
     }
-    lint {
-        checkReleaseBuilds = false
-        abortOnError = false
+    
+    lintOptions {
+        isAbortOnError = false
+        isCheckReleaseBuilds = false
     }
 }
 
 dependencies {
-    api(libs.okhttp.logging)
-    api(libs.okhttp)
-    api(libs.disklrucache)
-    api(libs.rxjava2)
-    api(libs.rxandroid)
-    api(libs.retrofit)
-    api(libs.retrofit.converter.gson)
-    api(libs.retrofit.adapter.rxjava2)
+    add("api", libs.okhttp.logging)
+    add("api", libs.okhttp)
+    add("api", libs.disklrucache)
+    add("api", libs.rxjava2)
+    add("api", libs.rxandroid)
+    add("api", libs.retrofit)
+    add("api", libs.retrofit.converter.gson)
+    add("api", libs.retrofit.adapter.rxjava2)
 }

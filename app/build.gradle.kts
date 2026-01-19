@@ -4,6 +4,9 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -14,7 +17,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.drz.mvvmcomponent"
-
+    
     signingConfigs {
         create("release") {
             if (keystoreProperties["keyAlias"] != null) {
@@ -51,10 +54,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             if (keystoreProperties["keyAlias"] != null) {
                 signingConfig = signingConfigs.getByName("release")
             }
@@ -68,7 +68,6 @@ android {
                 manifest.srcFile("src/main/alone/AndroidManifest.xml")
             } else {
                 manifest.srcFile("src/main/AndroidManifest.xml")
-                // resources exclusion removed
             }
         }
     }
@@ -88,10 +87,15 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
-
+    
+    // Processors
+    ksp(libs.hilt.compiler)
     annotationProcessor(libs.arouter.compiler)
     annotationProcessor(libs.glide.compiler)
-
+    
+    // Hilt
+    implementation(libs.hilt.android)
+    
     val isBuildModule: String by project
     if (isBuildModule.toBoolean()) {
         implementation(project(":library-base"))
