@@ -50,7 +50,7 @@ banner-viewpager = "2.6.6"
 viewpagerindicator = "1.0.0"
 pager-bottom-tab-strip = "2.3.0X"
 annotations = "15.0"
-gsyVideoPlayer = "7.1.2"
+gsyVideoPlayer = "11.3.0"
 
 [libraries]
 # AndroidX
@@ -103,9 +103,9 @@ pager-bottom-tab-strip = { group = "me.majiajie", name = "pager-bottom-tab-strip
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
 
 # Video Player
-gsyVideoPlayer-java = { group = "com.shuyu", name = "gsyVideoPlayer-java", version.ref = "gsyVideoPlayer" }
-gsyVideoPlayer-armv7a = { group = "com.shuyu", name = "gsyVideoPlayer-armv7a", version.ref = "gsyVideoPlayer" }
-gsyVideoPlayer-arm64 = { group = "com.shuyu", name = "gsyVideoPlayer-arm64", version.ref = "gsyVideoPlayer" }
+gsyVideoPlayer-java = { group = "io.github.carguo", name = "gsyvideoplayer-java", version.ref = "gsyVideoPlayer" }
+gsyVideoPlayer-armv7a = { group = "io.github.carguo", name = "gsyvideoplayer-armv7a", version.ref = "gsyVideoPlayer" }
+gsyVideoPlayer-arm64 = { group = "io.github.carguo", name = "gsyvideoplayer-arm64", version.ref = "gsyVideoPlayer" }
 
 # Plugin Dependencies (for classpath)
 plugin-android-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }

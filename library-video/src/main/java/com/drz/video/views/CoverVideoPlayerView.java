@@ -13,8 +13,8 @@ import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.os.Build;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +23,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
-import java.util.logging.Logger;
 
 /**
  * 应用模块: video
@@ -271,8 +269,8 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
     
     protected boolean byStartedClick;
     
-    @Override
-    protected void onClickUiToggle()
+    // @Override
+    protected void onClickUiToggle(MotionEvent e)
     {
         if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull)
         {
@@ -280,7 +278,7 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
             return;
         }
         byStartedClick = true;
-        super.onClickUiToggle();
+        super.onClickUiToggle(e);
         
     }
     
@@ -346,7 +344,7 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
      */
     public void cancel()
     {
-        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
+        // mAudioManager.abandonAudioFocus(onAudioFocusChangeListener);
         try
         {
             if (mNetInfoModule != null){
@@ -369,7 +367,7 @@ public class CoverVideoPlayerView extends StandardGSYVideoPlayer
         {
             e.printStackTrace();
         }
-        mAudioManager = null;
+        // mAudioManager = null;
         mContext = null;
     }
     
