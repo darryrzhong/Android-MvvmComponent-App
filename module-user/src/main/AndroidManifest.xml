@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.drz.user">
 
-    <application >
-        <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".AttentionActivity"/>
+    <application>
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".AttentionActivity" />
     </application>
 
 </manifest>

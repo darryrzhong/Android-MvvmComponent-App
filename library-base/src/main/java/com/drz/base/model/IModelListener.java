@@ -9,20 +9,19 @@ package com.drz.base.model;
  * @author darryrzhoong
  * @since 2020-01-27
  */
-public interface IModelListener<T> extends IBaseModelListener
-{
+public interface IModelListener<T> extends IBaseModelListener {
     /**
      * 数据加载完成
-     * 
+     *
      * @param model model
-     * @param data 数据
+     * @param data  数据
      */
     void onLoadFinish(BaseModel model, T data);
-    
+
     /**
      * 数据加载失败
-     * 
-     * @param model model
+     *
+     * @param model  model
      * @param prompt 错误
      */
     void onLoadFail(BaseModel model, String prompt);

@@ -1,7 +1,6 @@
 package com.drz.more.topic;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.text.TextUtils;
 
 import com.drz.base.model.BasePagingModel;
 import com.drz.base.utils.GsonUtils;
@@ -13,7 +12,8 @@ import com.zhouyou.http.cache.model.CacheMode;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
-import android.text.TextUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
@@ -26,86 +26,71 @@ import io.reactivex.disposables.Disposable;
  * @author darryrzhoong
  * @since 2020-02-23
  */
-public class TopicModel<T> extends BasePagingModel<T>
-{
-    
+public class TopicModel<T> extends BasePagingModel<T> {
+
     private Disposable disposable;
-    
+
     private Disposable disposable1;
-    
+
     @Override
-    protected void load()
-    {
+    protected void load() {
         disposable = EasyHttp.get("/api/v7/topic/list")
-            .cacheKey(getClass().getSimpleName())
-            .execute(new SimpleCallBack<String>()
-            {
-                @Override
-                public void onError(ApiException e)
-                {
-                    loadFail(e.getMessage(), isRefresh);
-                }
-                
-                @Override
-                public void onSuccess(String s)
-                {
-                    parseData(s);
-                }
-            });
+                .cacheKey(getClass().getSimpleName())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        loadFail(e.getMessage(), isRefresh);
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        parseData(s);
+                    }
+                });
     }
-    
-    private void loadMore(String nextPageUrl)
-    {
+
+    private void loadMore(String nextPageUrl) {
         disposable1 = EasyHttp.get(nextPageUrl)
-            .cacheMode(CacheMode.NO_CACHE)
-            .execute(new SimpleCallBack<String>()
-            {
-                @Override
-                public void onError(ApiException e)
-                {
-                    loadFail(e.getMessage(), isRefresh);
-                }
-                
-                @Override
-                public void onSuccess(String s)
-                {
-                    parseData(s);
-                }
-            });
+                .cacheMode(CacheMode.NO_CACHE)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        loadFail(e.getMessage(), isRefresh);
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        parseData(s);
+                    }
+                });
     }
-    
-    private void parseData(String s)
-    {
-        TopicBean topicBean = GsonUtils.fromLocalJson(s,TopicBean.class);
+
+    private void parseData(String s) {
+        TopicBean topicBean = GsonUtils.fromLocalJson(s, TopicBean.class);
         List<BaseCustomViewModel> viewModels = new ArrayList<>();
-        if (topicBean != null){
+        if (topicBean != null) {
             nextPageUrl = topicBean.getNextPageUrl();
-            for (TopicBean.ItemListBean itemData : topicBean.getItemList()){
+            for (TopicBean.ItemListBean itemData : topicBean.getItemList()) {
                 ThemesItemViewModel viewModel = new ThemesItemViewModel();
                 viewModel.coverUrl = itemData.getData().getImageUrl();
                 viewModel.title = itemData.getData().getTitle();
-                viewModel.description = itemData.getData().getViewCount()+" 人浏览 / "+itemData.getData().getJoinCount()+"人参与";
+                viewModel.description = itemData.getData().getViewCount() + " 人浏览 / " + itemData.getData().getJoinCount() + "人参与";
                 viewModels.add(viewModel);
             }
         }
-        loadSuccess((T) viewModels,viewModels.size() == 0,isRefresh);
+        loadSuccess((T) viewModels, viewModels.size() == 0, isRefresh);
     }
-    
-    public void refresh()
-    {
+
+    public void refresh() {
         isRefresh = true;
         load();
     }
-    
-    public void loadMore()
-    {
+
+    public void loadMore() {
         isRefresh = false;
-        if (!TextUtils.isEmpty(nextPageUrl))
-        {
+        if (!TextUtils.isEmpty(nextPageUrl)) {
             loadMore(nextPageUrl);
-        }
-        else
-        {
+        } else {
             loadSuccess(null, true, isRefresh);
         }
     }

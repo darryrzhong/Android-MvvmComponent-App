@@ -28,7 +28,7 @@ public abstract class DownloadProgressCallBack<T> extends CallBack<T> {
 
     @Override
     public void onSuccess(T response) {
-        
+
     }
 
     public abstract void update(long bytesRead, long contentLength, boolean done);
@@ -37,6 +37,6 @@ public abstract class DownloadProgressCallBack<T> extends CallBack<T> {
 
     @Override
     public void onCompleted() {
-        
+
     }
 }

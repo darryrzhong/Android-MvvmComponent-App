@@ -42,7 +42,7 @@ import retrofit2.http.Body;
  * 日期： 2017/5/22 17:13 <br>
  * 版本： v1.0<br>
  */
-@SuppressWarnings(value={"unchecked", "deprecation"})
+@SuppressWarnings(value = {"unchecked", "deprecation"})
 public abstract class BaseBodyRequest<R extends BaseBodyRequest> extends BaseRequest<R> {
     protected String string;                                   //上传的文本内容
     protected MediaType mediaType;                                   //上传的文本内容
@@ -50,18 +50,6 @@ public abstract class BaseBodyRequest<R extends BaseBodyRequest> extends BaseReq
     protected byte[] bs;                                       //上传的字节数据
     protected Object object;                                   //上传的对象
     protected RequestBody requestBody;                         //自定义的请求体
-
-    public enum UploadType {
-        /**
-         * MultipartBody.Part方式上传
-         */
-        PART,
-        /**
-         * Map RequestBody方式上传
-         */
-        BODY
-    }
-
     private UploadType currentUploadType = UploadType.PART;
 
     public BaseBodyRequest(String url) {
@@ -184,7 +172,7 @@ public abstract class BaseBodyRequest<R extends BaseBodyRequest> extends BaseReq
         List<MultipartBody.Part> parts = new ArrayList<>();
         //拼接参数键值对
         for (Map.Entry<String, String> mapEntry : params.urlParamsMap.entrySet()) {
-            parts.add(MultipartBody.Part.createFormData(mapEntry.getKey(),mapEntry.getValue()));
+            parts.add(MultipartBody.Part.createFormData(mapEntry.getKey(), mapEntry.getValue()));
         }
         //拼接文件
         for (Map.Entry<String, List<HttpParams.FileWrapper>> entry : params.fileParamsMap.entrySet()) {
@@ -243,5 +231,16 @@ public abstract class BaseBodyRequest<R extends BaseBodyRequest> extends BaseReq
             requestBody = RequestBody.create(fileWrapper.contentType, (byte[]) fileWrapper.file);
         }
         return requestBody;
+    }
+
+    public enum UploadType {
+        /**
+         * MultipartBody.Part方式上传
+         */
+        PART,
+        /**
+         * Map RequestBody方式上传
+         */
+        BODY
     }
 }

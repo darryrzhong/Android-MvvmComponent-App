@@ -25,13 +25,14 @@ android {
     compileSdkVersion libs.versions.android.compileSdk.get().toInteger()
     buildToolsVersion libs.versions.android.buildTools.get()
     defaultConfig {
-        applicationId libs.versions.android.applicationId.get() // Assuming I put applicationId in catalog? No I didn't.
+        applicationId libs.versions.android.applicationId.get()
+        // Assuming I put applicationId in catalog? No I didn't.
         // Wait, I didn't put applicationId in catalog. I should have.
         // It was in config.gradle: applicationId    : "com.mvvm.mvvmcomponent"
         // I will hardcode it here or add to catalog.
         // Hardcode is fine for now, or use a variable.
         applicationId "com.mvvm.mvvmcomponent"
-        
+
         minSdkVersion libs.versions.android.minSdk.get().toInteger()
         targetSdkVersion libs.versions.android.targetSdk.get().toInteger()
         versionCode libs.versions.android.versionCode.get().toInteger()
@@ -58,17 +59,16 @@ android {
         }
     }
     sourceSets {
-        main{
+        main {
             //jni库统一放在libs目录下
 //            jniLibs.srcDir = ['libs']
-            if (isBuildModule.toBoolean()){
+            if (isBuildModule.toBoolean()) {
                 //单独运行
                 manifest.srcFile 'src/main/alone/AndroidManifest.xml'
-            }
-            else {
+            } else {
                 //合并到宿主中
                 manifest.srcFile 'src/main/AndroidManifest.xml'
-                resources{
+                resources {
                     //正式版本时.剔除debug文件夹下的所有调式文件
                     exclude 'src/debug/*'
                 }

@@ -32,14 +32,9 @@ public class ProviderDailyAdapter extends BaseProviderMultiAdapter<BaseCustomVie
 
     @Override
     protected int getItemType(@NotNull List<? extends BaseCustomViewModel> data, int position) {
-          if (data.get(position) instanceof FollowCardViewModel)
-        {
+        if (data.get(position) instanceof FollowCardViewModel) {
             return NominateItemType.FOLLOW_CARD_VIEW;
-        }
-        else
-
-        if (data.get(position) instanceof SingleTitleViewModel)
-        {
+        } else if (data.get(position) instanceof SingleTitleViewModel) {
             return NominateItemType.SINGLE_TITLE_VIEW;
         }
         return -1;

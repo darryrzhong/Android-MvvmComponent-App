@@ -21,7 +21,8 @@ class ModulePlugin : Plugin<Project> {
         // project.plugins.apply("kotlin-parcelize") // Optional, added in modules manually?
 
         project.extensions.configure<BaseExtension> {
-            val libs = project.rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
+            val libs =
+                project.rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
 
             compileSdkVersion(libs.findVersion("android-compileSdk").get().requiredVersion.toInt())
             buildToolsVersion(libs.findVersion("android-buildTools").get().requiredVersion)
@@ -31,7 +32,8 @@ class ModulePlugin : Plugin<Project> {
                 targetSdk = libs.findVersion("android-targetSdk").get().requiredVersion.toInt()
 
                 if (isBuildModule) {
-                    val vCode = libs.findVersion("android-versionCode").get().requiredVersion.toInt()
+                    val vCode =
+                        libs.findVersion("android-versionCode").get().requiredVersion.toInt()
                     val vName = libs.findVersion("android-versionName").get().requiredVersion
                     // Use reflection or dynamic assignment because BaseExtension type might not expose 
                     // application-specific properties directly in a clean way for both app/lib?
@@ -45,7 +47,7 @@ class ModulePlugin : Plugin<Project> {
                     } catch (e: Exception) {
                         // ignore
                     }
-                     try {
+                    try {
                         val method = this.javaClass.getMethod("setVersionName", String::class.java)
                         method.invoke(this, vName)
                     } catch (e: Exception) {
@@ -66,11 +68,17 @@ class ModulePlugin : Plugin<Project> {
             buildTypes {
                 getByName("debug") {
                     isMinifyEnabled = false
-                    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                    proguardFiles(
+                        getDefaultProguardFile("proguard-android-optimize.txt"),
+                        "proguard-rules.pro"
+                    )
                 }
                 getByName("release") {
                     isMinifyEnabled = false
-                    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                    proguardFiles(
+                        getDefaultProguardFile("proguard-android-optimize.txt"),
+                        "proguard-rules.pro"
+                    )
                 }
             }
 
@@ -83,19 +91,25 @@ class ModulePlugin : Plugin<Project> {
                     }
                 }
             }
-            
+
             // dataBinding { isEnabled = true } legacy
             try {
                 // buildFeatures.dataBinding = true
                 val buildFeatures = this::class.java.getMethod("getBuildFeatures").invoke(this)
-                val setMethod = buildFeatures::class.java.getMethod("setDataBinding", java.lang.Boolean::class.java)
+                val setMethod = buildFeatures::class.java.getMethod(
+                    "setDataBinding",
+                    java.lang.Boolean::class.java
+                )
                 setMethod.invoke(buildFeatures, true)
             } catch (e: Exception) {
                 // Try legacy
                 try {
-                     val dataBinding = this::class.java.getMethod("getDataBinding").invoke(this)
-                     val setEnabled = dataBinding::class.java.getMethod("setEnabled", Boolean::class.javaPrimitiveType)
-                     setEnabled.invoke(dataBinding, true)
+                    val dataBinding = this::class.java.getMethod("getDataBinding").invoke(this)
+                    val setEnabled = dataBinding::class.java.getMethod(
+                        "setEnabled",
+                        Boolean::class.javaPrimitiveType
+                    )
+                    setEnabled.invoke(dataBinding, true)
                 } catch (e2: Exception) {
                     println("Failed to enable dataBinding: $e2")
                 }

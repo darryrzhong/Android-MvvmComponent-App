@@ -902,7 +902,7 @@ public class AttentionCardBean implements Serializable {
                          * icon : http://img.kaiyanapp.com/4665bb83c1ecb42c352e13f192f64224.png?imageMogr2/quality/60/format/jpg
                          * name : 乐愚电影
                          * description : / BBS.LEYUZ.COM /
-                         乐在分享，畅聊世界，让电影遇上生活
+                         * 乐在分享，畅聊世界，让电影遇上生活
                          * link :
                          * latestReleaseTime : 1582109843000
                          * videoNum : 859

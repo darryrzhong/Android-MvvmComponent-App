@@ -1,9 +1,9 @@
 package com.drz.home.nominate;
 
-import java.util.ArrayList;
-
 import com.drz.base.activity.IBasePagingView;
 import com.drz.common.contract.BaseCustomViewModel;
+
+import java.util.ArrayList;
 
 /**
  * 应用模块: 首页
@@ -14,15 +14,14 @@ import com.drz.common.contract.BaseCustomViewModel;
  * @author darryrzhoong
  * @since 2020-02-11
  */
-public interface INominateView extends IBasePagingView
-{
-    
+public interface INominateView extends IBasePagingView {
+
     /**
      * 数据加载完成
-     * 
+     *
      * @param viewModels data
      */
     void onDataLoadFinish(ArrayList<BaseCustomViewModel> viewModels,
                           boolean isFirstPage);
-    
+
 }

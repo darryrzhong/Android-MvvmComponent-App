@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author darryrzhoong
  * @since 2020-02-15
  */
-public class TextCardbean  implements Serializable {
+public class TextCardbean implements Serializable {
 
     /**
      * type : textCard

@@ -3,23 +3,24 @@
     package="com.drz.main">
 
     <application>
-        <activity android:name="com.drz.main.ui.SplashActivity"
-            android:theme="@style/AppTheme.Start"
-            android:screenOrientation="portrait"
+        <activity
+            android:name="com.drz.main.ui.SplashActivity"
             android:exported="true"
-            >
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MainActivity"
-            android:screenOrientation="portrait"
+        <activity
+            android:name=".ui.MainActivity"
             android:exported="false"
-            />
-        <activity android:name=".ui.GuideActivity"
-            android:exported="false"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.GuideActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

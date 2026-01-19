@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by cailiming on 16/3/11.
- *
+ * <p>
  * 利用ContentProvider实现同步跨进程调用，如果contentprovider所在进程退出，
  * 其他服务进程注册的binder和service信息会丢失
  */
@@ -55,7 +55,7 @@ public class ServiceProvider extends ContentProvider {
 
     public static Uri buildUri() {
         if (CONTENT_URI == null) {
-            CONTENT_URI = Uri.parse("content://"+ ServiceManager.sApplication.getPackageName() + ".svcmgr/call");
+            CONTENT_URI = Uri.parse("content://" + ServiceManager.sApplication.getPackageName() + ".svcmgr/call");
         }
         return CONTENT_URI;
     }
@@ -92,7 +92,7 @@ public class ServiceProvider extends ContentProvider {
             String serviceName = arg;
             int pid = extras.getInt(PID);
             String interfaceClass = extras.getString(INTERFACE);
-            IBinder binder =  processBinder.get(pid);
+            IBinder binder = processBinder.get(pid);
             if (binder != null && binder.isBinderAlive()) {
                 Recorder recorder = new Recorder();
                 recorder.pid = pid;
@@ -162,7 +162,7 @@ public class ServiceProvider extends ContentProvider {
         //服务提供方进程挂了,或者服务提供方进程主动通知清理服务, 则先清理服务注册表, 再通知所有客户端清理自己的本地缓存
         processBinder.remove(pid);
         Iterator<Map.Entry<String, Recorder>> iterator = allServiceList.entrySet().iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Map.Entry<String, Recorder> entry = iterator.next();
             if (entry.getValue().pid.equals(pid)) {
                 iterator.remove();
@@ -176,11 +176,6 @@ public class ServiceProvider extends ContentProvider {
         Intent intent = new Intent(ServiceManager.ACTION_SERVICE_DIE_OR_CLEAR);
         intent.putExtra(NAME, name);
         ServiceManager.sApplication.sendBroadcast(intent);
-    }
-
-    public static class Recorder {
-        public Integer pid;
-        public String interfaceClass;
     }
 
     @Override
@@ -216,6 +211,11 @@ public class ServiceProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         //doNothing
         return 0;
+    }
+
+    public static class Recorder {
+        public Integer pid;
+        public String interfaceClass;
     }
 
 }

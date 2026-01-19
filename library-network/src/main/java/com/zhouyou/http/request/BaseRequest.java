@@ -16,6 +16,9 @@
 
 package com.zhouyou.http.request;
 
+import static com.zhouyou.http.EasyHttp.getRetrofitBuilder;
+import static com.zhouyou.http.EasyHttp.getRxCache;
+
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -59,9 +62,6 @@ import retrofit2.CallAdapter;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
-import static com.zhouyou.http.EasyHttp.getRetrofitBuilder;
-import static com.zhouyou.http.EasyHttp.getRxCache;
-
 /**
  * <p>描述：所有请求的基类</p>
  * 作者： zhouyou<br>
@@ -70,6 +70,8 @@ import static com.zhouyou.http.EasyHttp.getRxCache;
  */
 @SuppressWarnings(value = {"unchecked", "deprecation"})
 public abstract class BaseRequest<R extends BaseRequest> {
+    protected final List<Interceptor> networkInterceptors = new ArrayList<>();
+    protected final List<Interceptor> interceptors = new ArrayList<>();
     protected Cache cache = null;
     protected CacheMode cacheMode = CacheMode.NO_CACHE;                    //默认无缓存
     protected long cacheTime = -1;                                         //缓存时间
@@ -85,7 +87,6 @@ public abstract class BaseRequest<R extends BaseRequest> {
     protected int retryIncreaseDelay;                                      //叠加延迟
     protected boolean isSyncRequest;                                       //是否是同步请求
     protected List<Cookie> cookies = new ArrayList<>();                    //用户手动添加的Cookie
-    protected final List<Interceptor> networkInterceptors = new ArrayList<>();
     protected HttpHeaders headers = new HttpHeaders();                     //添加的header
     protected HttpParams params = new HttpParams();                        //添加的param
     protected Retrofit retrofit;
@@ -93,16 +94,15 @@ public abstract class BaseRequest<R extends BaseRequest> {
     protected ApiService apiManager;                                       //通用的的api接口
     protected OkHttpClient okHttpClient;
     protected Context context;
-    private boolean sign = false;                                          //是否需要签名
-    private boolean timeStamp = false;                                     //是否需要追加时间戳
-    private boolean accessToken = false;                                   //是否需要追加token
     protected HttpUrl httpUrl;
     protected Proxy proxy;
     protected HttpsUtils.SSLParams sslParams;
     protected HostnameVerifier hostnameVerifier;
     protected List<Converter.Factory> converterFactories = new ArrayList<>();
     protected List<CallAdapter.Factory> adapterFactories = new ArrayList<>();
-    protected final List<Interceptor> interceptors = new ArrayList<>();
+    private boolean sign = false;                                          //是否需要签名
+    private boolean timeStamp = false;                                     //是否需要追加时间戳
+    private boolean accessToken = false;                                   //是否需要追加token
 
 
     public BaseRequest(String url) {

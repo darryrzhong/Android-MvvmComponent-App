@@ -12,30 +12,31 @@ import android.os.Parcelable;
  * @author darryrzhoong
  * @since 2020-02-21
  */
-public class VideoHeaderBean implements Parcelable
-{
+public class VideoHeaderBean implements Parcelable {
+    public static final Creator<VideoHeaderBean> CREATOR =
+            new Creator<VideoHeaderBean>() {
+                @Override
+                public VideoHeaderBean createFromParcel(Parcel in) {
+                    return new VideoHeaderBean(in);
+                }
+
+                @Override
+                public VideoHeaderBean[] newArray(int size) {
+                    return new VideoHeaderBean[size];
+                }
+            };
     public String videoTitle;
-    
     public String category;
-    
     public String video_description;
-    
     // 点赞
     public int collectionCount;
-    
     // 分享
     public int shareCount;
-    
     public String avatar;
-    
     public String nickName;
-    
     public String userDescription;
-    
     public String playerUrl;
-    
     public String blurredUrl;
-    
     public int videoId;
 
     public VideoHeaderBean() {
@@ -45,8 +46,7 @@ public class VideoHeaderBean implements Parcelable
     public VideoHeaderBean(String videoTitle, String category,
                            String video_description, int collectionCount, int shareCount,
                            String avatar, String nickName, String userDescription,
-                           String playerUrl, String blurredUrl, int videoId)
-    {
+                           String playerUrl, String blurredUrl, int videoId) {
         this.videoTitle = videoTitle;
         this.category = category;
         this.video_description = video_description;
@@ -59,9 +59,8 @@ public class VideoHeaderBean implements Parcelable
         this.blurredUrl = blurredUrl;
         this.videoId = videoId;
     }
-    
-    protected VideoHeaderBean(Parcel in)
-    {
+
+    protected VideoHeaderBean(Parcel in) {
         videoTitle = in.readString();
         category = in.readString();
         video_description = in.readString();
@@ -73,12 +72,11 @@ public class VideoHeaderBean implements Parcelable
         playerUrl = in.readString();
         blurredUrl = in.readString();
         videoId = in.readInt();
-        
+
     }
-    
+
     @Override
-    public void writeToParcel(Parcel dest, int flags)
-    {
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(videoTitle);
         dest.writeString(category);
         dest.writeString(video_description);
@@ -91,29 +89,11 @@ public class VideoHeaderBean implements Parcelable
         dest.writeString(blurredUrl);
         dest.writeInt(videoId);
     }
-    
+
     @Override
-    public int describeContents()
-    {
+    public int describeContents() {
         return 0;
     }
-    
-    public static final Creator<VideoHeaderBean> CREATOR =
-        new Creator<VideoHeaderBean>()
-        {
-            @Override
-            public VideoHeaderBean createFromParcel(Parcel in)
-            {
-                return new VideoHeaderBean(in);
-            }
-            
-            @Override
-            public VideoHeaderBean[] newArray(int size)
-            {
-                return new VideoHeaderBean[size];
-            }
-        };
-
 
     public int getVideoId() {
         return videoId;
@@ -123,113 +103,91 @@ public class VideoHeaderBean implements Parcelable
         this.videoId = videoId;
     }
 
-    public String getBlurredUrl()
-    {
+    public String getBlurredUrl() {
         return blurredUrl;
     }
-    
-    public void setBlurredUrl(String blurredUrl)
-    {
+
+    public void setBlurredUrl(String blurredUrl) {
         this.blurredUrl = blurredUrl;
     }
-    
-    public String getUserDescription()
-    {
+
+    public String getUserDescription() {
         return userDescription;
     }
-    
-    public void setUserDescription(String userDescription)
-    {
+
+    public void setUserDescription(String userDescription) {
         this.userDescription = userDescription;
     }
-    
-    public String getPlayerUrl()
-    {
+
+    public String getPlayerUrl() {
         return playerUrl;
     }
-    
-    public void setPlayerUrl(String playerUrl)
-    {
+
+    public void setPlayerUrl(String playerUrl) {
         this.playerUrl = playerUrl;
     }
-    
-    public String getVideoTitle()
-    {
+
+    public String getVideoTitle() {
         return videoTitle;
     }
-    
-    public void setVideoTitle(String videoTitle)
-    {
+
+    public void setVideoTitle(String videoTitle) {
         this.videoTitle = videoTitle;
     }
-    
-    public String getCategory()
-    {
+
+    public String getCategory() {
         return category;
     }
-    
-    public void setCategory(String category)
-    {
+
+    public void setCategory(String category) {
         this.category = category;
     }
-    
-    public String getVideo_description()
-    {
+
+    public String getVideo_description() {
         return video_description;
     }
-    
-    public void setVideo_description(String video_description)
-    {
+
+    public void setVideo_description(String video_description) {
         this.video_description = video_description;
     }
-    
-    public int getCollectionCount()
-    {
+
+    public int getCollectionCount() {
         return collectionCount;
     }
-    
-    public void setCollectionCount(int collectionCount)
-    {
+
+    public void setCollectionCount(int collectionCount) {
         this.collectionCount = collectionCount;
     }
-    
-    public int getShareCount()
-    {
+
+    public int getShareCount() {
         return shareCount;
     }
-    
-    public void setShareCount(int shareCount)
-    {
+
+    public void setShareCount(int shareCount) {
         this.shareCount = shareCount;
     }
-    
-    public String getAvatar()
-    {
+
+    public String getAvatar() {
         return avatar;
     }
-    
-    public void setAvatar(String avatar)
-    {
+
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-    
-    public String getNickName()
-    {
+
+    public String getNickName() {
         return nickName;
     }
-    
-    public void setNickName(String nickName)
-    {
+
+    public void setNickName(String nickName) {
         this.nickName = nickName;
     }
-    
-    public String getUser_description()
-    {
+
+    public String getUser_description() {
         return userDescription;
     }
-    
-    public void setUser_description(String user_description)
-    {
+
+    public void setUser_description(String user_description) {
         this.userDescription = user_description;
     }
 

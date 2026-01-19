@@ -19,43 +19,37 @@ import androidx.annotation.Nullable;
  * @since 2020-02-26
  */
 @SuppressLint("AppCompatCustomView")
-public class CommonCustomTextView extends TextView
-{
-    public CommonCustomTextView(Context context)
-    {
+public class CommonCustomTextView extends TextView {
+    public CommonCustomTextView(Context context) {
         super(context);
         init(context);
     }
-    
-    public CommonCustomTextView(Context context, @Nullable AttributeSet attrs)
-    {
+
+    public CommonCustomTextView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
-    
+
     public CommonCustomTextView(Context context, @Nullable AttributeSet attrs,
-        int defStyleAttr)
-    {
+                                int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-    
+
     public CommonCustomTextView(Context context, @Nullable AttributeSet attrs,
-        int defStyleAttr, int defStyleRes)
-    {
+                                int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
-    
+
     /**
      * 定制字体
      */
-    private void init(Context context)
-    {
+    private void init(Context context) {
         // 获取资源文件
         AssetManager assets = context.getAssets();
         Typeface font =
-            Typeface.createFromAsset(assets, "fonts/Lobster-1.4.otf");
+                Typeface.createFromAsset(assets, "fonts/Lobster-1.4.otf");
         setTypeface(font);
     }
 }

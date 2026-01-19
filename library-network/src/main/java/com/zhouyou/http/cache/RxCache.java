@@ -108,7 +108,7 @@ public final class RxCache {
      * @param cacheMode 缓存类型
      * @param type      缓存clazz
      */
-    @SuppressWarnings(value={"unchecked", "deprecation"})
+    @SuppressWarnings(value = {"unchecked", "deprecation"})
     public <T> ObservableTransformer<T, CacheResult<T>> transformer(CacheMode cacheMode, final Type type) {
         final IStrategy strategy = loadStrategy(cacheMode);//获取缓存策略
         return new ObservableTransformer<T, CacheResult<T>>() {
@@ -127,36 +127,11 @@ public final class RxCache {
         };
     }
 
-    private static abstract class SimpleSubscribe<T> implements ObservableOnSubscribe<T> {
-        @Override
-        public void subscribe(@NonNull ObservableEmitter<T> subscriber) throws Exception {
-            try {
-                T data = execute();
-                if (!subscriber.isDisposed()) {
-                    subscriber.onNext(data);
-                }
-            } catch (Throwable e) {
-                HttpLog.e(e.getMessage());
-                if (!subscriber.isDisposed()) {
-                    subscriber.onError(e);
-                }
-                Exceptions.throwIfFatal(e);
-                //RxJavaPlugins.onError(e);
-                return;
-            }
-
-            if (!subscriber.isDisposed()) {
-                subscriber.onComplete();
-            }
-        }
-
-        abstract T execute() throws Throwable;
-    }
-
     /**
      * 获取缓存
+     *
      * @param type 保存的类型
-     * @param key 缓存key
+     * @param key  缓存key
      */
     public <T> Observable<T> load(final Type type, final String key) {
         return load(type, key, -1);
@@ -274,10 +249,36 @@ public final class RxCache {
         return diskMaxSize;
     }
 
+    private static abstract class SimpleSubscribe<T> implements ObservableOnSubscribe<T> {
+        @Override
+        public void subscribe(@NonNull ObservableEmitter<T> subscriber) throws Exception {
+            try {
+                T data = execute();
+                if (!subscriber.isDisposed()) {
+                    subscriber.onNext(data);
+                }
+            } catch (Throwable e) {
+                HttpLog.e(e.getMessage());
+                if (!subscriber.isDisposed()) {
+                    subscriber.onError(e);
+                }
+                Exceptions.throwIfFatal(e);
+                //RxJavaPlugins.onError(e);
+                return;
+            }
+
+            if (!subscriber.isDisposed()) {
+                subscriber.onComplete();
+            }
+        }
+
+        abstract T execute() throws Throwable;
+    }
+
     public static final class Builder {
+        public static final long CACHE_NEVER_EXPIRE = -1;//永久不过期
         private static final int MIN_DISK_CACHE_SIZE = 5 * 1024 * 1024; // 5MB
         private static final int MAX_DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
-        public static final long CACHE_NEVER_EXPIRE = -1;//永久不过期
         private int appVersion;
         private long diskMaxSize;
         private File diskDir;
@@ -303,6 +304,18 @@ public final class RxCache {
             this.cacheTime = rxCache.cacheTime;
         }
 
+        @SuppressWarnings("deprecation")
+        private static long calculateDiskCacheSize(File dir) {
+            long size = 0;
+            try {
+                StatFs statFs = new StatFs(dir.getAbsolutePath());
+                long available = ((long) statFs.getBlockCount()) * statFs.getBlockSize();
+                size = available / 50;
+            } catch (IllegalArgumentException ignored) {
+            }
+            return Math.max(Math.min(size, MAX_DISK_CACHE_SIZE), MIN_DISK_CACHE_SIZE);
+        }
+
         public Builder init(Context context) {
             this.context = context;
             return this;
@@ -326,7 +339,6 @@ public final class RxCache {
             this.diskDir = directory;
             return this;
         }
-
 
         public Builder diskConverter(IDiskConverter converter) {
             this.diskConverter = converter;
@@ -370,18 +382,6 @@ public final class RxCache {
             appVersion = Math.max(1, this.appVersion);
 
             return new RxCache(this);
-        }
-
-        @SuppressWarnings("deprecation")
-        private static long calculateDiskCacheSize(File dir) {
-            long size = 0;
-            try {
-                StatFs statFs = new StatFs(dir.getAbsolutePath());
-                long available = ((long) statFs.getBlockCount()) * statFs.getBlockSize();
-                size = available / 50;
-            } catch (IllegalArgumentException ignored) {
-            }
-            return Math.max(Math.min(size, MAX_DISK_CACHE_SIZE), MIN_DISK_CACHE_SIZE);
         }
 
         /**

@@ -12,14 +12,13 @@ import com.drz.common.contract.BaseCustomViewModel;
  * @author darryrzhoong
  * @since 2020-02-12
  */
-public class VideoCardViewModel extends BaseCustomViewModel
-{
+public class VideoCardViewModel extends BaseCustomViewModel {
     public String coverUrl;
-    
+
     public int videoTime;
-    
+
     public String title;
-    
+
     public String description;
 
     public String authorUrl;

@@ -47,7 +47,7 @@ public class ServiceManager {
 
     /**
      *
-      * @param name
+     * @param name
      * @param interfaceClassloader
      * @return
      */

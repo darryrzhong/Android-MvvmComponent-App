@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.drz.base.base.BaseApplication;
-import com.limpoxe.support.servicemanager.ServiceManager;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.mmkv.MMKV;
@@ -19,22 +18,17 @@ import com.tencent.mmkv.MMKV;
  * @author darryrzhoong
  * @since 2020-02-25
  */
-public class CommonModuleInit implements IModuleInit
-{
+public class CommonModuleInit implements IModuleInit {
     @Override
-    public boolean onInitAhead(BaseApplication application)
-    {
+    public boolean onInitAhead(BaseApplication application) {
         // 初始化日志
-        Logger.addLogAdapter(new AndroidLogAdapter()
-        {
+        Logger.addLogAdapter(new AndroidLogAdapter() {
             @Override
-            public boolean isLoggable(int priority, @Nullable String tag)
-            {
+            public boolean isLoggable(int priority, @Nullable String tag) {
                 return application.issDebug();
             }
         });
-        if (application.issDebug())
-        {
+        if (application.issDebug()) {
             ARouter.openLog(); // 开启日志
             ARouter.openDebug(); // 使用InstantRun的时候，需要打开该开关，上线之后关闭，否则有安全风险
         }
@@ -44,11 +38,10 @@ public class CommonModuleInit implements IModuleInit
 
         return false;
     }
-    
+
     @Override
-    public boolean onInitLow(BaseApplication application)
-    {
+    public boolean onInitLow(BaseApplication application) {
         return false;
     }
-    
+
 }

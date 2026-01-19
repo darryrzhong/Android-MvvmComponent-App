@@ -26,56 +26,70 @@ public interface ILoginService extends IProvider {
 
     /**
      * 是否登录
+     *
      * @return 是否登录
-     * */
+     *
+     */
     boolean isLogin();
 
     /**
      * 获取Token
+     *
      * @return token
-     * */
+     *
+     */
     String getToken();
 
     /**
      * 获取uuid
+     *
      * @return uuid
-     * */
+     *
+     */
     String getUUID();
 
     /**
      * 刷新用户信息
-     * */
+     *
+     */
     void refreshUserDetailInfo();
 
     /**
      * 登录
-     * */
+     *
+     */
     void login();
 
     /**
      * 是否以管理员身份登录
-     * */
+     *
+     */
     void login(boolean isMainAccountLogin);
 
     /**
      * 退出登录
-     * */
+     *
+     */
     void logout();
 
     /**
      * 获取用户信息
+     *
      * @return 用户信息
-     * */
+     *
+     */
     UserInfo getUserInfo();
 
     /**
      * 取消登录
-     * */
+     *
+     */
     void onLoginCancel();
 
     /**
      * token过期处理
-     * */
+     *
+     */
     void onTokenExpire();
 
 }

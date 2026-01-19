@@ -16,30 +16,29 @@
 
         <ImageView
             android:id="@+id/iv_cover"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             imageUrl="@{viewModel.coverUrl}"
-            tools:background="@drawable/common_tools_iv_bg"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="10dp"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/common_tools_iv_bg" />
 
         <LinearLayout
-            app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
-            app:layout_constraintStart_toEndOf="@+id/iv_cover"
-            app:layout_constraintTop_toTopOf="@+id/iv_cover"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
+            app:layout_constraintStart_toEndOf="@+id/iv_cover"
+            app:layout_constraintTop_toTopOf="@+id/iv_cover">
 
             <TextView
                 android:id="@+id/tv_title"
-                tools:text="#封面控"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
@@ -48,11 +47,11 @@
                 android:text="@{viewModel.title}"
                 android:textColor="@android:color/black"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="#封面控" />
 
             <TextView
                 android:id="@+id/tv_description"
-                tools:text="人靠脸面，书靠封面"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -61,14 +60,15 @@
                 android:text="@{viewModel.description}"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="人靠脸面，书靠封面" />
         </LinearLayout>
 
         <View
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/iv_cover"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/iv_cover" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

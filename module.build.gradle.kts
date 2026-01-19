@@ -13,7 +13,7 @@ buildscript {
     }
 }
 
-import com.android.build.gradle.BaseExtension
+import com . android . build . gradle . BaseExtension
 
 val isBuildModule: String by project
 
@@ -30,17 +30,17 @@ apply(plugin = "org.jetbrains.kotlin.android")
 // configure<BaseExtension> fails if looked up by type. Use getByName("android") instead.
 (extensions.getByName("android") as BaseExtension).apply {
     val libs = rootProject.extensions.getByType<VersionCatalogsExtension>().named("libs")
-    
+
     compileSdkVersion(libs.findVersion("android-compileSdk").get().requiredVersion.toInt())
     buildToolsVersion(libs.findVersion("android-buildTools").get().requiredVersion)
 
     defaultConfig {
         minSdkVersion(libs.findVersion("android-minSdk").get().requiredVersion.toInt())
         targetSdkVersion(libs.findVersion("android-targetSdk").get().requiredVersion.toInt())
-        
+
         if (isBuildModule.toBoolean()) {
-             versionCode(libs.findVersion("android-versionCode").get().requiredVersion.toInt())
-             versionName(libs.findVersion("android-versionName").get().requiredVersion)
+            versionCode(libs.findVersion("android-versionCode").get().requiredVersion.toInt())
+            versionName(libs.findVersion("android-versionName").get().requiredVersion)
         }
 
         consumerProguardFiles("consumer-rules.pro")
@@ -56,11 +56,17 @@ apply(plugin = "org.jetbrains.kotlin.android")
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 

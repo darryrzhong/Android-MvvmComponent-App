@@ -20,8 +20,6 @@ import com.zhpan.bannerview.constants.TransformerStyle
 import com.zhpan.bannerview.holder.HolderCreator
 import com.zhpan.bannerview.utils.BannerUtils
 import com.zhpan.indicator.enums.IndicatorSlideMode
-
-import java.util.ArrayList
 import java.util.Random
 
 class GuideActivity : BaseDataActivity(), HolderCreator<CustomPageViewHolder> {
@@ -30,9 +28,20 @@ class GuideActivity : BaseDataActivity(), HolderCreator<CustomPageViewHolder> {
     private var tv_describe: TextView? = null
     private var btn_start: TextView? = null
 
-    private val des = arrayOf("在这里\n你可以听到周围人的心声", "在这里\nTA会在下一秒遇见你", "在这里\n不再错过可以改变你一生的人")
+    private val des = arrayOf(
+        "在这里\n你可以听到周围人的心声",
+        "在这里\nTA会在下一秒遇见你",
+        "在这里\n不再错过可以改变你一生的人"
+    )
 
-    private val transforms = intArrayOf(TransformerStyle.NONE, TransformerStyle.ACCORDION, TransformerStyle.STACK, TransformerStyle.DEPTH, TransformerStyle.ROTATE, TransformerStyle.SCALE_IN)
+    private val transforms = intArrayOf(
+        TransformerStyle.NONE,
+        TransformerStyle.ACCORDION,
+        TransformerStyle.STACK,
+        TransformerStyle.DEPTH,
+        TransformerStyle.ROTATE,
+        TransformerStyle.SCALE_IN
+    )
 
     private val data: List<CustomBean>
         get() {
@@ -49,14 +58,14 @@ class GuideActivity : BaseDataActivity(), HolderCreator<CustomPageViewHolder> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity_guide)
-        
+
         tv_describe = findViewById(R.id.tv_describe)
         btn_start = findViewById(R.id.btn_start)
-        
+
         ImmersionBar.with(this)
-                .titleBar(findViewById<View>(R.id.top_view))
-                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-                .init()
+            .titleBar(findViewById<View>(R.id.top_view))
+            .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+            .init()
         setupViewPager()
         updateUI(0)
         mViewPager.create(data)
@@ -65,23 +74,28 @@ class GuideActivity : BaseDataActivity(), HolderCreator<CustomPageViewHolder> {
     private fun setupViewPager() {
         mViewPager = findViewById(R.id.viewpager)
         mViewPager.setAutoPlay(false)
-                .setCanLoop(false)
-                .setPageTransformerStyle(transforms[Random().nextInt(6)])
-                .setScrollDuration(ANIMATION_DURATION)
-                .setIndicatorMargin(0, 0, 0, resources.getDimension(R.dimen.main_dp_100).toInt())
-                .setIndicatorGap(resources.getDimension(R.dimen.main_dp_10).toInt())
-                .setIndicatorColor(ContextCompat.getColor(this, android.R.color.white),
-                        ContextCompat.getColor(this, R.color.main_white_alpha_75))
-                .setIndicatorSlideMode(IndicatorSlideMode.SMOOTH)
-                .setIndicatorRadius(resources.getDimension(R.dimen.main_dp_3).toInt(), resources.getDimension(R.dimen.main_dp_4_5).toInt())
-                .setOnPageChangeListener(object : OnPageChangeListenerAdapter() {
-                    override fun onPageSelected(position: Int) {
-                        BannerUtils.log("position:$position")
-                        updateUI(position)
-                    }
-                })
-                .setHolderCreator(this)
-                .create(data)
+            .setCanLoop(false)
+            .setPageTransformerStyle(transforms[Random().nextInt(6)])
+            .setScrollDuration(ANIMATION_DURATION)
+            .setIndicatorMargin(0, 0, 0, resources.getDimension(R.dimen.main_dp_100).toInt())
+            .setIndicatorGap(resources.getDimension(R.dimen.main_dp_10).toInt())
+            .setIndicatorColor(
+                ContextCompat.getColor(this, android.R.color.white),
+                ContextCompat.getColor(this, R.color.main_white_alpha_75)
+            )
+            .setIndicatorSlideMode(IndicatorSlideMode.SMOOTH)
+            .setIndicatorRadius(
+                resources.getDimension(R.dimen.main_dp_3).toInt(),
+                resources.getDimension(R.dimen.main_dp_4_5).toInt()
+            )
+            .setOnPageChangeListener(object : OnPageChangeListenerAdapter() {
+                override fun onPageSelected(position: Int) {
+                    BannerUtils.log("position:$position")
+                    updateUI(position)
+                }
+            })
+            .setHolderCreator(this)
+            .create(data)
     }
 
     fun onClick(view: View) {
@@ -103,8 +117,8 @@ class GuideActivity : BaseDataActivity(), HolderCreator<CustomPageViewHolder> {
         if (position == mViewPager.list.size - 1 && btn_start?.visibility == View.GONE) {
             btn_start?.visibility = View.VISIBLE
             ObjectAnimator
-                    .ofFloat(btn_start, "alpha", 0f, 1f)
-                    .setDuration(ANIMATION_DURATION.toLong()).start()
+                .ofFloat(btn_start, "alpha", 0f, 1f)
+                .setDuration(ANIMATION_DURATION.toLong()).start()
         } else {
             btn_start?.visibility = View.GONE
         }
@@ -112,7 +126,13 @@ class GuideActivity : BaseDataActivity(), HolderCreator<CustomPageViewHolder> {
 
     override fun createViewHolder(): CustomPageViewHolder {
         val customPageViewHolder = CustomPageViewHolder()
-        customPageViewHolder.setOnSubViewClickListener { _, position -> Toast.makeText(this, "Logo Clicked,Item: $position", Toast.LENGTH_SHORT).show() }
+        customPageViewHolder.setOnSubViewClickListener { _, position ->
+            Toast.makeText(
+                this,
+                "Logo Clicked,Item: $position",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
         return customPageViewHolder
     }
 

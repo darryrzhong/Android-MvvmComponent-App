@@ -11,16 +11,15 @@ import com.alibaba.android.arouter.facade.template.IProvider;
  * @author darryrzhoong
  * @since 2020-01-27
  */
-public interface IAppInfoService extends IProvider
-{
+public interface IAppInfoService extends IProvider {
     String APP_INFO_SERVICE_NAME = "app_info_service";
-    
+
     String getApplicationName();
-    
+
     String getApplicationVersionName();
-    
+
     String getApplicationVersionCode();
-    
+
     boolean getApplicationDebug();
 
 }

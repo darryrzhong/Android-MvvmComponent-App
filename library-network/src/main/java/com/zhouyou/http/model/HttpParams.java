@@ -159,6 +159,20 @@ public class HttpParams implements Serializable {
         return MediaType.parse(contentType);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (ConcurrentHashMap.Entry<String, String> entry : urlParamsMap.entrySet()) {
+            if (result.length() > 0) result.append("&");
+            result.append(entry.getKey()).append("=").append(entry.getValue());
+        }
+        for (ConcurrentHashMap.Entry<String, List<FileWrapper>> entry : fileParamsMap.entrySet()) {
+            if (result.length() > 0) result.append("&");
+            result.append(entry.getKey()).append("=").append(entry.getValue());
+        }
+        return result.toString();
+    }
+
     /**
      * 文件类型的包装类
      */
@@ -185,19 +199,5 @@ public class HttpParams implements Serializable {
         public String toString() {
             return "FileWrapper{" + "countent=" + file + ", fileName='" + fileName + ", contentType=" + contentType + ", fileSize=" + fileSize + '}';
         }
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        for (ConcurrentHashMap.Entry<String, String> entry : urlParamsMap.entrySet()) {
-            if (result.length() > 0) result.append("&");
-            result.append(entry.getKey()).append("=").append(entry.getValue());
-        }
-        for (ConcurrentHashMap.Entry<String, List<FileWrapper>> entry : fileParamsMap.entrySet()) {
-            if (result.length() > 0) result.append("&");
-            result.append(entry.getKey()).append("=").append(entry.getValue());
-        }
-        return result.toString();
     }
 }

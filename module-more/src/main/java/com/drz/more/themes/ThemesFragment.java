@@ -1,13 +1,14 @@
 package com.drz.more.themes;
 
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.drz.base.fragment.MvvmLazyFragment;
 import com.drz.more.R;
 import com.drz.more.databinding.MoreFragmentThemesBinding;
 import com.drz.more.themes.adapter.ThemesFragmentPageAdapter;
 import com.drz.more.themes.bean.Tabs;
 import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
 
@@ -20,13 +21,14 @@ import java.util.ArrayList;
  * @author darryrzhoong
  * @since 2020-02-22
  */
-public class ThemesFragment extends MvvmLazyFragment<MoreFragmentThemesBinding, ThemeFragmentViewModel> implements IThemeView{
+public class ThemesFragment extends MvvmLazyFragment<MoreFragmentThemesBinding, ThemeFragmentViewModel> implements IThemeView {
 
     private ThemesFragmentPageAdapter adapter;
 
-    public static ThemesFragment newInstance(){
+    public static ThemesFragment newInstance() {
         return new ThemesFragment();
     }
+
     @Override
     public int getLayoutId() {
         return R.layout.more_fragment_themes;
@@ -82,9 +84,9 @@ public class ThemesFragment extends MvvmLazyFragment<MoreFragmentThemesBinding, 
     public void onDataLoaded(ArrayList<Tabs> tabs) {
         adapter.setData(tabs);
         viewDataBinding.tabLayout.removeAllTabs();
-        for (Tabs tabs1 : tabs){
+        for (Tabs tabs1 : tabs) {
             viewDataBinding.tabLayout.addTab(viewDataBinding.tabLayout.newTab().setText(tabs1.getName()));
         }
-        viewDataBinding.tabLayout.scrollTo(0,0);
+        viewDataBinding.tabLayout.scrollTo(0, 0);
     }
 }

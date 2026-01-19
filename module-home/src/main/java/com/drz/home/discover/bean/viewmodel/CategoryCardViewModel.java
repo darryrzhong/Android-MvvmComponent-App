@@ -12,10 +12,9 @@ import com.drz.common.contract.BaseCustomViewModel;
  * @author darryrzhoong
  * @since 2020-02-15
  */
-public class CategoryCardViewModel extends BaseCustomViewModel
-{
+public class CategoryCardViewModel extends BaseCustomViewModel {
     public String title;
-    
+
     public String actionTitle;
-    
+
 }

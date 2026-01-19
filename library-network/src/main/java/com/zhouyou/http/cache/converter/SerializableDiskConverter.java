@@ -31,13 +31,13 @@ import java.lang.reflect.Type;
  * <p>描述：序列化对象的转换器</p>
  * 1.使用改转换器，对象&对象中的其它所有对象都必须是要实现Serializable接口（序列化）<br>
  * 优点：<br>
- *   速度快<br>
+ * 速度快<br>
  * 《-------骚年，自己根据实际需求选择吧！！！------------》<br>
  * 作者： zhouyou<br>
  * 日期： 2016/12/24 17:35<br>
  * 版本： v2.0<br>
  */
-@SuppressWarnings(value={"unchecked", "deprecation"})
+@SuppressWarnings(value = {"unchecked", "deprecation"})
 public class SerializableDiskConverter implements IDiskConverter {
 
     @Override

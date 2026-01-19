@@ -1,6 +1,6 @@
 package com.drz.community.attention;
 
-import java.util.ArrayList;
+import android.text.TextUtils;
 
 import com.drz.base.model.BasePagingModel;
 import com.drz.base.utils.GsonUtils;
@@ -12,7 +12,7 @@ import com.zhouyou.http.cache.model.CacheMode;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
-import android.text.TextUtils;
+import java.util.ArrayList;
 
 import io.reactivex.disposables.Disposable;
 
@@ -33,18 +33,18 @@ public class AttentionModel<T> extends BasePagingModel<T> {
     @Override
     protected void load() {
         disposable = EasyHttp.get("http://baobab.kaiyanapp.com/api/v6/community/tab/follow")
-               .cacheKey(getClass().getSimpleName())
-               .execute(new SimpleCallBack<String>() {
-                   @Override
-                   public void onError(ApiException e) {
-                       loadFail(e.getMessage(),isRefresh);
-                   }
+                .cacheKey(getClass().getSimpleName())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        loadFail(e.getMessage(), isRefresh);
+                    }
 
-                   @Override
-                   public void onSuccess(String s) {
-                       parseData(s);
-                   }
-               });
+                    @Override
+                    public void onSuccess(String s) {
+                        parseData(s);
+                    }
+                });
     }
 
 
@@ -54,7 +54,7 @@ public class AttentionModel<T> extends BasePagingModel<T> {
                 .execute(new SimpleCallBack<String>() {
                     @Override
                     public void onError(ApiException e) {
-                        loadFail(e.getMessage(),isRefresh);
+                        loadFail(e.getMessage(), isRefresh);
                     }
 
                     @Override
@@ -67,10 +67,10 @@ public class AttentionModel<T> extends BasePagingModel<T> {
 
     private void parseData(String data) {
 
-        AttentionCardBean attentionCardBean = GsonUtils.fromLocalJson(data,AttentionCardBean.class);
+        AttentionCardBean attentionCardBean = GsonUtils.fromLocalJson(data, AttentionCardBean.class);
         ArrayList<BaseCustomViewModel> viewModels = new ArrayList<>();
         nextPageUrl = attentionCardBean.getNextPageUrl();
-        for (int i=0;i<attentionCardBean.getItemList().size();i++){
+        for (int i = 0; i < attentionCardBean.getItemList().size(); i++) {
             AttentionCardBean.ItemListBean itemListBean = attentionCardBean.getItemList().get(i);
             AttentionCardViewModel cardViewModel = new AttentionCardViewModel();
             cardViewModel.avatarUrl = itemListBean.getData().getHeader().getIcon();
@@ -90,7 +90,7 @@ public class AttentionModel<T> extends BasePagingModel<T> {
             cardViewModel.videoId = itemListBean.getData().getContent().getData().getId();
             viewModels.add(cardViewModel);
         }
-        loadSuccess((T) viewModels,viewModels.size() == 0,isRefresh);
+        loadSuccess((T) viewModels, viewModels.size() == 0, isRefresh);
     }
 
     @Override
@@ -100,19 +100,18 @@ public class AttentionModel<T> extends BasePagingModel<T> {
         EasyHttp.cancelSubscription(disposable1);
     }
 
-    public void refresh(){
+    public void refresh() {
         isRefresh = true;
         load();
     }
 
 
-
-    public void loadMore(){
+    public void loadMore() {
         isRefresh = false;
-        if (!TextUtils.isEmpty(nextPageUrl)){
+        if (!TextUtils.isEmpty(nextPageUrl)) {
             loadMore(nextPageUrl);
-        }else {
-            loadSuccess(null,true,isRefresh);
+        } else {
+            loadSuccess(null, true, isRefresh);
         }
     }
 

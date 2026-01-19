@@ -18,9 +18,9 @@ public class ParamUtil {
         Bundle params = new Bundle();
         params.putString(service_name, name);
         params.putString(method_name, methodName);
-        if (args != null && args.length >0) {
+        if (args != null && args.length > 0) {
             params.putInt(method_args_count, args.length);
-            for (int i = 0; i< args.length; i++) {
+            for (int i = 0; i < args.length; i++) {
                 BundleCompat.putObject(params, String.valueOf(i), args[i]);
             }
         }
@@ -32,7 +32,7 @@ public class ParamUtil {
         int maxKey = extras.getInt(method_args_count);
         if (maxKey > 0) {
             params = new Object[maxKey];
-            for(int i = 0; i< maxKey; i++) {
+            for (int i = 0; i < maxKey; i++) {
                 params[i] = extras.get(String.valueOf(i));
             }
         }

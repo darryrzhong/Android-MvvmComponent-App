@@ -12,7 +12,7 @@ import java.util.List;
  * @author darryrzhoong
  * @since 2020-02-21
  */
-public class VideoSmallCard implements Serializable{
+public class VideoSmallCard implements Serializable {
 
     /**
      * type : videoSmallCard
@@ -97,7 +97,7 @@ public class VideoSmallCard implements Serializable{
          * titlePgc : null
          * descriptionPgc : null
          * remark : 互相看不爽，那就直接掐架吧！
-         遇到欠扁的人，来场花式掐架吧
+         * 遇到欠扁的人，来场花式掐架吧
          * ifLimitVideo : false
          * searchWeight : 0
          * brandWebsiteInfo : null

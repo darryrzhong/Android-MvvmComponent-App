@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.drz.common.utils.DateTimeUtils"/>
+
+        <import type="com.drz.common.utils.DateTimeUtils" />
+
         <variable
             name="viewModel"
             type="com.drz.home.nominate.bean.viewmodel.VideoCardViewModel" />
@@ -20,8 +22,8 @@
             android:layout_width="0dp"
             android:layout_height="120dp"
             android:layout_marginStart="10dp"
-            android:scaleType="fitXY"
             android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,9 +39,9 @@
             android:background="@drawable/home_shape_video_time_bg"
             android:gravity="center"
             android:padding="5dp"
-            android:textSize="13sp"
             android:text="@{DateTimeUtils.format(viewModel.videoTime)}"
             android:textColor="@color/common_colorWhite"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_video_cover"
             app:layout_constraintEnd_toEndOf="@+id/iv_video_cover"
             tools:text="03:16" />
@@ -53,10 +55,10 @@
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textSize="13sp"
-            android:textStyle="bold"
             android:text="@{viewModel.title}"
             android:textColor="@android:color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_video_cover"
             app:layout_constraintTop_toTopOf="@+id/iv_video_cover"
@@ -70,10 +72,10 @@
             android:layout_marginBottom="10dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{viewModel.description}"
             android:textColor="@color/common_color_small_text"
             android:textSize="11sp"
             android:textStyle="bold"
-            android:text="@{viewModel.description}"
             app:layout_constraintBottom_toBottomOf="@+id/iv_video_cover"
             app:layout_constraintEnd_toStartOf="@+id/iv_share"
             app:layout_constraintStart_toEndOf="@+id/iv_video_cover"

@@ -46,11 +46,6 @@ import javax.net.ssl.X509TrustManager;
  */
 public class HttpsUtils {
 
-    public static class SSLParams {
-        public SSLSocketFactory sSLSocketFactory;
-        public X509TrustManager trustManager;
-    }
-
     public static SSLParams getSslSocketFactory(InputStream bksFile, String password, InputStream[] certificates) {
         SSLParams sslParams = new SSLParams();
         try {
@@ -139,6 +134,11 @@ public class HttpsUtils {
             }
         }
         return null;
+    }
+
+    public static class SSLParams {
+        public SSLSocketFactory sSLSocketFactory;
+        public X509TrustManager trustManager;
     }
 
     private static class UnSafeTrustManager implements X509TrustManager {

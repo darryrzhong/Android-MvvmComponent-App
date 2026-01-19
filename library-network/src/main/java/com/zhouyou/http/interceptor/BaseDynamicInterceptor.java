@@ -16,6 +16,8 @@
 
 package com.zhouyou.http.interceptor;
 
+import static com.zhouyou.http.utils.HttpUtil.UTF8;
+
 import com.zhouyou.http.utils.HttpLog;
 import com.zhouyou.http.utils.HttpUtil;
 import com.zhouyou.http.utils.Utils;
@@ -38,8 +40,6 @@ import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static com.zhouyou.http.utils.HttpUtil.UTF8;
-
 /**
  * <p>描述：动态拦截器</p>
  * 主要功能是针对参数：<br>
@@ -51,7 +51,7 @@ import static com.zhouyou.http.utils.HttpUtil.UTF8;
  * 日期： 2017/5/3 15:32 <br>
  * 版本： v1.0<br>
  */
-@SuppressWarnings(value={"unchecked", "deprecation"})
+@SuppressWarnings(value = {"unchecked", "deprecation"})
 public abstract class BaseDynamicInterceptor<R extends BaseDynamicInterceptor> implements Interceptor {
     private HttpUrl httpUrl;
 

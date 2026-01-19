@@ -14,7 +14,7 @@ import java.util.List;
  * @author darryrzhoong
  * @since 2020-02-15
  */
-public class SubjectCardBean  extends BaseCustomViewModel implements Serializable {
+public class SubjectCardBean extends BaseCustomViewModel implements Serializable {
 
     /**
      * type : columnCardList

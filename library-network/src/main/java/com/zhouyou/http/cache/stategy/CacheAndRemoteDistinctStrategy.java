@@ -38,8 +38,8 @@ import okio.ByteString;
 public final class CacheAndRemoteDistinctStrategy extends BaseStrategy {
     @Override
     public <T> Observable<CacheResult<T>> execute(RxCache rxCache, String key, long time, Observable<T> source, Type type) {
-        Observable<CacheResult<T>> cache = loadCache(rxCache, type, key, time,true);
-        Observable<CacheResult<T>> remote = loadRemote(rxCache, key, source,false);
+        Observable<CacheResult<T>> cache = loadCache(rxCache, type, key, time, true);
+        Observable<CacheResult<T>> remote = loadRemote(rxCache, key, source, false);
         return Observable.concat(cache, remote)
                 .filter(new Predicate<CacheResult<T>>() {
                     @Override
@@ -49,7 +49,7 @@ public final class CacheAndRemoteDistinctStrategy extends BaseStrategy {
                 }).distinctUntilChanged(new Function<CacheResult<T>, String>() {
                     @Override
                     public String apply(@NonNull CacheResult<T> tCacheResult) throws Exception {
-                        return  ByteString.of(tCacheResult.data.toString().getBytes()).md5().hex();
+                        return ByteString.of(tCacheResult.data.toString().getBytes()).md5().hex();
                     }
                 });
     }

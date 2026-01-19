@@ -51,17 +51,6 @@ public class HttpLoggingInterceptor implements Interceptor {
     private String tag;
     private boolean isLogEnable = false;
 
-    public enum Level {
-        NONE,       //不打印log
-        BASIC,      //只打印 请求首行 和 响应首行
-        HEADERS,    //打印请求和响应的所有 Header
-        BODY        //所有数据全部打印
-    }
-
-    public void log(String message) {
-        logger.log(java.util.logging.Level.INFO, message);
-    }
-
     public HttpLoggingInterceptor(String tag) {
         this.tag = tag;
         logger = Logger.getLogger(tag);
@@ -73,14 +62,39 @@ public class HttpLoggingInterceptor implements Interceptor {
         logger = Logger.getLogger(tag);
     }
 
-    public HttpLoggingInterceptor setLevel(Level level) {
-        if (level == null) throw new NullPointerException("level == null. Use Level.NONE instead.");
-        this.level = level;
-        return this;
+    /**
+     * Returns true if the body in question probably contains human readable text. Uses a small sample
+     * of code points to detect unicode control characters commonly used in binary file signatures.
+     */
+    static boolean isPlaintext(MediaType mediaType) {
+        if (mediaType == null) return false;
+        if (mediaType.type() != null && mediaType.type().equals("text")) {
+            return true;
+        }
+        String subtype = mediaType.subtype();
+        if (subtype != null) {
+            subtype = subtype.toLowerCase();
+            if (subtype.contains("x-www-form-urlencoded") ||
+                    subtype.contains("json") ||
+                    subtype.contains("xml") ||
+                    subtype.contains("html")) //
+                return true;
+        }
+        return false;
+    }
+
+    public void log(String message) {
+        logger.log(java.util.logging.Level.INFO, message);
     }
 
     public Level getLevel() {
         return level;
+    }
+
+    public HttpLoggingInterceptor setLevel(Level level) {
+        if (level == null) throw new NullPointerException("level == null. Use Level.NONE instead.");
+        this.level = level;
+        return this;
     }
 
     @Override
@@ -119,7 +133,7 @@ public class HttpLoggingInterceptor implements Interceptor {
         Protocol protocol = connection != null ? connection.protocol() : Protocol.HTTP_1_1;
 
         try {
-            String requestStartMessage = "--> " + request.method() + ' ' + URLDecoder.decode(request.url().url().toString(),UTF8.name()) + ' ' + protocol;
+            String requestStartMessage = "--> " + request.method() + ' ' + URLDecoder.decode(request.url().url().toString(), UTF8.name()) + ' ' + protocol;
             log(requestStartMessage);
 
             if (logHeaders) {
@@ -153,7 +167,7 @@ public class HttpLoggingInterceptor implements Interceptor {
         boolean logHeaders = (level == Level.BODY || level == Level.HEADERS);
 
         try {
-            log("<-- " + clone.code() + ' ' + clone.message() + ' ' +URLDecoder.decode(clone.request().url().url().toString(),UTF8.name()) + " (" + tookMs + "ms）");
+            log("<-- " + clone.code() + ' ' + clone.message() + ' ' + URLDecoder.decode(clone.request().url().url().toString(), UTF8.name()) + " (" + tookMs + "ms）");
             if (logHeaders) {
                 log(" ");
                 Headers headers = clone.headers();
@@ -181,27 +195,6 @@ public class HttpLoggingInterceptor implements Interceptor {
         return response;
     }
 
-    /**
-     * Returns true if the body in question probably contains human readable text. Uses a small sample
-     * of code points to detect unicode control characters commonly used in binary file signatures.
-     */
-    static boolean isPlaintext(MediaType mediaType) {
-        if (mediaType == null) return false;
-        if (mediaType.type() != null && mediaType.type().equals("text")) {
-            return true;
-        }
-        String subtype = mediaType.subtype();
-        if (subtype != null) {
-            subtype = subtype.toLowerCase();
-            if (subtype.contains("x-www-form-urlencoded") ||
-                    subtype.contains("json") ||
-                    subtype.contains("xml") ||
-                    subtype.contains("html")) //
-                return true;
-        }
-        return false;
-    }
-
     private void bodyToString(Request request) {
         try {
             final Request copy = request.newBuilder().build();
@@ -213,7 +206,7 @@ public class HttpLoggingInterceptor implements Interceptor {
                 charset = contentType.charset(UTF8);
             }
             String result = buffer.readString(charset);
-            log("\tbody:" + URLDecoder.decode(replacer(result),UTF8.name()));
+            log("\tbody:" + URLDecoder.decode(replacer(result), UTF8.name()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -233,5 +226,12 @@ public class HttpLoggingInterceptor implements Interceptor {
 
     public void e(java.lang.Throwable t) {
         if (isLogEnable) t.printStackTrace();
+    }
+
+    public enum Level {
+        NONE,       //不打印log
+        BASIC,      //只打印 请求首行 和 响应首行
+        HEADERS,    //打印请求和响应的所有 Header
+        BODY        //所有数据全部打印
     }
 }

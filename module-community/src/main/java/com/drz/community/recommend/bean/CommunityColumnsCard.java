@@ -11,9 +11,7 @@ import java.util.List;
  * @author darryrzhoong
  * @since 2020-02-17
  */
-public class CommunityColumnsCard
-{
-
+public class CommunityColumnsCard {
 
 
     /**
@@ -314,8 +312,8 @@ public class CommunityColumnsCard
                  * id : 404951
                  * title :
                  * description : #手机摄影 #iPhone #apple store #室内 #天空
-
-                 苹果店的设计风格一向是比较简约大气，线条流畅，光线很通透明亮，那些有着旋转楼梯的店，楼梯上方的围栏，在下方仰望天空时，可以看到一条优美的弧线，透过明亮的玻璃看到的天空也是很特别。
+                 * <p>
+                 * 苹果店的设计风格一向是比较简约大气，线条流畅，光线很通透明亮，那些有着旋转楼梯的店，楼梯上方的围栏，在下方仰望天空时，可以看到一条优美的弧线，透过明亮的玻璃看到的天空也是很特别。
                  * library : DEFAULT
                  * tags : [{"id":930,"name":"摄影师日常","actionUrl":"eyepetizer://tag/930/?title=%E6%91%84%E5%BD%B1%E5%B8%88%E6%97%A5%E5%B8%B8","adTrack":null,"desc":"透过镜头，我看到了更加真实的世界","bgPicture":"http://img.kaiyanapp.com/586d2cdc4a807eb84bed71fc523ed24b.jpeg?imageMogr2/quality/60/format/jpg","headerImage":"http://img.kaiyanapp.com/586d2cdc4a807eb84bed71fc523ed24b.jpeg?imageMogr2/quality/60/format/jpg","tagRecType":"NORMAL","childTagList":null,"childTagIdList":null,"haveReward":false,"ifNewest":false,"newestEndTime":null,"communityIndex":2}]
                  * consumption : {"collectionCount":15,"shareCount":0,"replyCount":0,"realCollectionCount":0}
@@ -347,7 +345,6 @@ public class CommunityColumnsCard
                  * releaseTime : 1581919981000
                  * urlsWithWatermark : ["http://img.kaiyanapp.com/0-d5373079682c49a9eff4c9fd5db6feb7.jpeg?watermark/3/image/aHR0cHM6Ly9pbWcua2FpeWFuYXBwLmNvbS93YXRlck1hcmtJbWFnZS5wbmc=/dissolve/100/gravity/SouthEast/dx/5/dy/69/ws/0.05/text/QHNreXdhbGs=/font/6buR5L2T/fontsize/1140/dissolve/60/fill/I0ZGRkZGRg==/gravity/SouthEast/dx/20/dy/9"]
                  */
-
 
 
                 private String dataType;
@@ -704,7 +701,6 @@ public class CommunityColumnsCard
                 }
 
                 public static class OwnerBean {
-
 
 
                     /**

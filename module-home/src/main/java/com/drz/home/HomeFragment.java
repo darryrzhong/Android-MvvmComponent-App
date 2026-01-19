@@ -6,16 +6,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.drz.base.fragment.MvvmLazyFragment;
 import com.drz.base.viewmodel.IMvvmBaseViewModel;
 import com.drz.common.router.RouterFragmentPath;
-import com.drz.home.databinding.HomeFragmentHomeBinding;
-import com.google.android.material.tabs.TabLayout;
 import com.drz.home.adapter.HomeFragmentPageAdapter;
 import com.drz.home.daily.DailyFragment;
+import com.drz.home.databinding.HomeFragmentHomeBinding;
 import com.drz.home.discover.DisCoverFragment;
 import com.drz.home.nominate.NominateFragment;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +47,7 @@ public class HomeFragment extends MvvmLazyFragment<HomeFragmentHomeBinding, IMvv
     }
 
 
-    private void initView()
-    {
+    private void initView() {
         pageAdapter = new HomeFragmentPageAdapter(getChildFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_SET_USER_VISIBLE_HINT);
         viewDataBinding.vpHomeContent.setAdapter(pageAdapter);
@@ -59,24 +57,20 @@ public class HomeFragment extends MvvmLazyFragment<HomeFragmentHomeBinding, IMvv
                 new TabLayout.TabLayoutOnPageChangeListener(
                         viewDataBinding.tabLayout));
         viewDataBinding.tabLayout
-                .addOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
-                {
+                .addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                     @Override
-                    public void onTabSelected(TabLayout.Tab tab)
-                    {
+                    public void onTabSelected(TabLayout.Tab tab) {
                         viewDataBinding.vpHomeContent
                                 .setCurrentItem(tab.getPosition());
                     }
 
                     @Override
-                    public void onTabUnselected(TabLayout.Tab tab)
-                    {
+                    public void onTabUnselected(TabLayout.Tab tab) {
 
                     }
 
                     @Override
-                    public void onTabReselected(TabLayout.Tab tab)
-                    {
+                    public void onTabReselected(TabLayout.Tab tab) {
 
                     }
                 });
@@ -91,26 +85,22 @@ public class HomeFragment extends MvvmLazyFragment<HomeFragmentHomeBinding, IMvv
     }
 
     @Override
-    public int getLayoutId()
-    {
+    public int getLayoutId() {
         return R.layout.home_fragment_home;
     }
 
     @Override
-    public int getBindingVariable()
-    {
+    public int getBindingVariable() {
         return 0;
     }
 
     @Override
-    protected IMvvmBaseViewModel getViewModel()
-    {
+    protected IMvvmBaseViewModel getViewModel() {
         return null;
     }
 
     @Override
-    protected void onRetryBtnClick()
-    {
+    protected void onRetryBtnClick() {
 
     }
 

@@ -12,7 +12,6 @@ import com.drz.common.contract.BaseCustomViewModel;
  * @author darryrzhoong
  * @since 2020-02-15
  */
-public class ContentBannerViewModel extends BaseCustomViewModel
-{
+public class ContentBannerViewModel extends BaseCustomViewModel {
     public String bannerUrl;
 }

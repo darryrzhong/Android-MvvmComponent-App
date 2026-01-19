@@ -1,9 +1,9 @@
 package com.drz.more.message;
 
-import java.util.List;
-
 import com.drz.base.activity.IBasePagingView;
 import com.drz.common.contract.BaseCustomViewModel;
+
+import java.util.List;
 
 /**
  * 应用模块:
@@ -16,8 +16,9 @@ import com.drz.common.contract.BaseCustomViewModel;
  */
 public interface IMessageView extends IBasePagingView {
     /**
-     * @param data 数据
+     * @param data        数据
      * @param isFirstPage 是否是第一页
-     * */
+     *
+     */
     void onDataLoaded(List<BaseCustomViewModel> data, boolean isFirstPage);
 }

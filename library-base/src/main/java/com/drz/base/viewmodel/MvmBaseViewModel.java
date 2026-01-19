@@ -16,58 +16,48 @@ import java.lang.ref.WeakReference;
  * @author darryrzhoong
  * @since 2020-01-27
  */
-public  abstract class MvmBaseViewModel<V, M extends SuperBaseModel> extends ViewModel
-    implements IMvvmBaseViewModel<V>
-{
-    
-    private Reference<V> mUiRef;
-    
+public abstract class MvmBaseViewModel<V, M extends SuperBaseModel> extends ViewModel
+        implements IMvvmBaseViewModel<V> {
+
     protected M model;
-    
+    private Reference<V> mUiRef;
+
     @Override
-    public void attachUi(V view)
-    {
+    public void attachUi(V view) {
         mUiRef = new WeakReference<>(view);
     }
-    
+
     @Override
-    public V getPageView()
-    {
-        if (null == mUiRef)
-        {
+    public V getPageView() {
+        if (null == mUiRef) {
             return null;
         }
-        if (null != mUiRef.get())
-        {
+        if (null != mUiRef.get()) {
             return mUiRef.get();
         }
         return null;
     }
-    
+
     @Override
-    public boolean isUiAttach()
-    {
+    public boolean isUiAttach() {
         return null != mUiRef && null != mUiRef.get();
     }
-    
+
     @Override
-    public void detachUi()
-    {
-        if (null != mUiRef)
-        {
+    public void detachUi() {
+        if (null != mUiRef) {
             mUiRef.clear();
             mUiRef = null;
         }
-        if (null != model)
-        {
+        if (null != model) {
             model.cancel();
         }
     }
 
 
-    protected void loadData(){
+    protected void loadData() {
 
     }
 
-    protected  abstract void initModel();
+    protected abstract void initModel();
 }

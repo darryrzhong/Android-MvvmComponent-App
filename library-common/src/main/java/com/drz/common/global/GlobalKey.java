@@ -9,9 +9,10 @@ package com.drz.common.global;
  * @author darryrzhoong
  * @since 2020-02-25
  */
-public class GlobalKey
-{
-    /** 用户信息 */
+public class GlobalKey {
+    /**
+     * 用户信息
+     */
     public static final String USER_INFO = "user_info";
-    
+
 }

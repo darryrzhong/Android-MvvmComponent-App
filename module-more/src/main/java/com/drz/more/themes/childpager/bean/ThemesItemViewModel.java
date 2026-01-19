@@ -11,12 +11,11 @@ import com.drz.common.contract.BaseCustomViewModel;
  * @author darryrzhoong
  * @since 2020-02-23
  */
-public class ThemesItemViewModel extends BaseCustomViewModel
-{
+public class ThemesItemViewModel extends BaseCustomViewModel {
     public String coverUrl;
-    
+
     public String title;
-    
+
     public String description;
-    
+
 }

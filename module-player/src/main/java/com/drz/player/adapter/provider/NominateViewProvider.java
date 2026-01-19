@@ -1,6 +1,10 @@
 package com.drz.player.adapter.provider;
 
 import android.content.Intent;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.drz.base.livedatabus.LiveDatabus;
@@ -10,9 +14,6 @@ import com.drz.player.R;
 import com.drz.player.VideoPlayerActivity;
 import com.drz.player.bean.viewmodel.VideoCardViewModel;
 import com.drz.player.databinding.PlayerItemVideoCardWhiteViewBinding;
-
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,39 +27,32 @@ import org.jetbrains.annotations.NotNull;
  * @author darryrzhoong
  * @since 2020-02-21
  */
-public class NominateViewProvider extends BaseItemProvider<BaseCustomViewModel>
-{
+public class NominateViewProvider extends BaseItemProvider<BaseCustomViewModel> {
     @Override
-    public int getItemViewType()
-    {
+    public int getItemViewType() {
         return IVideoItemType.NOMINATE_VIEW;
     }
-    
+
     @Override
-    public int getLayoutId()
-    {
+    public int getLayoutId() {
         return R.layout.player_item_video_card_white_view;
     }
-    
+
     @Override
     public void onViewHolderCreated(@NotNull BaseViewHolder viewHolder,
-        int viewType)
-    {
+                                    int viewType) {
         DataBindingUtil.bind(viewHolder.itemView);
     }
-    
+
     @Override
     public void convert(@NotNull BaseViewHolder baseViewHolder,
-        @Nullable BaseCustomViewModel baseCustomViewModel)
-    {
-        if (baseCustomViewModel == null)
-        {
+                        @Nullable BaseCustomViewModel baseCustomViewModel) {
+        if (baseCustomViewModel == null) {
             return;
         }
         PlayerItemVideoCardWhiteViewBinding binding = baseViewHolder.getBinding();
-        if (binding != null)
-        {
-            VideoCardViewModel cardViewModel = (VideoCardViewModel)baseCustomViewModel;
+        if (binding != null) {
+            VideoCardViewModel cardViewModel = (VideoCardViewModel) baseCustomViewModel;
             binding.ivVideoCover.setOnClickListener(v -> {
                 VideoHeaderBean headerBean = new VideoHeaderBean(
                         cardViewModel.title, cardViewModel.description,
@@ -67,7 +61,7 @@ public class NominateViewProvider extends BaseItemProvider<BaseCustomViewModel>
                         cardViewModel.authorUrl, cardViewModel.nickName,
                         cardViewModel.userDescription, cardViewModel.playerUrl,
                         cardViewModel.blurredUrl, cardViewModel.videoId);
-                LiveDatabus.getInstance().withSticky("player",VideoHeaderBean.class).setValue(headerBean);
+                LiveDatabus.getInstance().withSticky("player", VideoHeaderBean.class).setValue(headerBean);
                 getContext().startActivity(new Intent(getContext(), VideoPlayerActivity.class));
             });
             binding.setViewModel(cardViewModel);

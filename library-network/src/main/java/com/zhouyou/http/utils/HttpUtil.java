@@ -27,6 +27,7 @@ import java.util.Map;
  */
 public class HttpUtil {
     public static final Charset UTF8 = Charset.forName("UTF-8");
+
     public static String createUrlFromParams(String url, Map<String, String> params) {
         try {
             StringBuilder sb = new StringBuilder();

@@ -25,18 +25,15 @@ import java.util.Map;
 public class MmkvHelper {
     private static MMKV mmkv;
 
-    private MmkvHelper(){
+    private MmkvHelper() {
         mmkv = MMKV.defaultMMKV();
     }
 
-    public static MmkvHelper getInstance(){
+    public static MmkvHelper getInstance() {
         return MmkvHolder.INSTANCE;
     }
-    private static class MmkvHolder{
-        private static final MmkvHelper INSTANCE = new MmkvHelper();
-    }
 
-    public  MMKV getMmkv() {
+    public MMKV getMmkv() {
         return mmkv;
     }
 
@@ -46,17 +43,13 @@ public class MmkvHelper {
      * @param key 标识
      * @param map 数据集合
      */
-    public   void saveInfo(String key, Map<String, Object> map)
-    {
+    public void saveInfo(String key, Map<String, Object> map) {
         Gson gson = new Gson();
         JSONArray mJsonArray = new JSONArray();
         JSONObject object = null;
-        try
-        {
+        try {
             object = new JSONObject(gson.toJson(map));
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         mJsonArray.put(object);
@@ -68,31 +61,24 @@ public class MmkvHelper {
      *
      * @param key 标识
      */
-    public   Map<String, String> getInfo(String key)
-    {
+    public Map<String, String> getInfo(String key) {
         Map<String, String> itemMap = new HashMap<>();
         String result = mmkv.decodeString(key, "");
-        try
-        {
+        try {
             JSONArray array = new JSONArray(result);
-            for (int i = 0; i < array.length(); i++)
-            {
+            for (int i = 0; i < array.length(); i++) {
                 JSONObject itemObject = array.getJSONObject(i);
 
                 JSONArray names = itemObject.names();
-                if (names != null)
-                {
-                    for (int j = 0; j < names.length(); j++)
-                    {
+                if (names != null) {
+                    for (int j = 0; j < names.length(); j++) {
                         String name = names.getString(j);
                         String value = itemObject.getString(name);
                         itemMap.put(name, value);
                     }
                 }
             }
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
 
         }
         return itemMap;
@@ -103,23 +89,22 @@ public class MmkvHelper {
      *
      */
 
-    public   <T> T getObject(String key, Class<T> t)
-    {
+    public <T> T getObject(String key, Class<T> t) {
         String str = mmkv.decodeString(key, null);
-        if (!TextUtils.isEmpty(str))
-        {
+        if (!TextUtils.isEmpty(str)) {
             return new GsonBuilder().create().fromJson(str, t);
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    public void putObject(String key, Object object)
-    {
+    public void putObject(String key, Object object) {
         String jsonString = new GsonBuilder().create().toJson(object);
         mmkv.encode(key, jsonString);
+    }
+
+    private static class MmkvHolder {
+        private static final MmkvHelper INSTANCE = new MmkvHelper();
     }
 
 }

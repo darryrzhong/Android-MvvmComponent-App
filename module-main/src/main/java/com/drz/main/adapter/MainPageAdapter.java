@@ -18,22 +18,24 @@ import java.util.List;
  * @since 2020-02-26
  */
 public class MainPageAdapter extends FragmentPagerAdapter {
-    private List<Fragment> fragments ;
+    private List<Fragment> fragments;
+
     public MainPageAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
 
-    public void setData(List<Fragment> data){
-        if (fragments == null){
+    public void setData(List<Fragment> data) {
+        if (fragments == null) {
             fragments = new ArrayList<>();
         }
         fragments.addAll(data);
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        if (fragments != null && fragments.size() > 0){
+        if (fragments != null && fragments.size() > 0) {
             return fragments.get(position);
         }
         return null;
@@ -41,7 +43,7 @@ public class MainPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        if (fragments != null && fragments.size() > 0){
+        if (fragments != null && fragments.size() > 0) {
             return fragments.size();
         }
         return 0;

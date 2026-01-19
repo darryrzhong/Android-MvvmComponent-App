@@ -38,7 +38,7 @@ public interface IDiskConverter {
      * 读取
      *
      * @param source 输入流
-     * @param type  读取数据后要转换的数据类型
+     * @param type   读取数据后要转换的数据类型
      *               这里没有用泛型T或者Tyepe来做，是因为本框架决定的一些问题，泛型会丢失
      * @return
      */

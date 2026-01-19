@@ -34,28 +34,24 @@ import java.util.List;
  */
 @Route(path = RouterFragmentPath.User.PAGER_USER)
 public class UserFragment
-    extends MvvmBaseFragment<UserFragmentLayoutBinding, IMvvmBaseViewModel>
-{
-    
+        extends MvvmBaseFragment<UserFragmentLayoutBinding, IMvvmBaseViewModel> {
+
     private RecyclerAdapter adapter;
-    
+
     @Override
-    public int getLayoutId()
-    {
+    public int getLayoutId() {
         return R.layout.user_fragment_layout;
     }
-    
+
     @Override
     public void onViewCreated(@NonNull View view,
-        @Nullable Bundle savedInstanceState)
-    {
+                              @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
         initData();
     }
-    
-    private void initData()
-    {
+
+    private void initData() {
         List<String> items = new ArrayList<>();
         items.add("我的关注");
         items.add("我的收藏");
@@ -66,45 +62,47 @@ public class UserFragment
         adapter.setNewData(items);
     }
 
-    private void start(Context context){
-        startActivity(new Intent(context,LoginActivity.class));
+    private void start(Context context) {
+        startActivity(new Intent(context, LoginActivity.class));
     }
-    
-    private void initView()
-    {
+
+    private void initView() {
         Glide.with(getContext()).load(getContext().getDrawable(R.drawable.avatar))
                 .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                 .into(viewDataBinding.ivAvatar);
         viewDataBinding.rvTables.setHasFixedSize(true);
         viewDataBinding.rvTables
-            .setLayoutManager(new LinearLayoutManager(getContext()));
+                .setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new RecyclerAdapter();
         adapter.setFooterView(getFooterView());
         viewDataBinding.rvTables.setAdapter(adapter);
-        viewDataBinding.ivMore.setOnClickListener(v -> {start(getContext());});
-        viewDataBinding.tvLike.setOnClickListener(v -> {start(getContext());});
-        viewDataBinding.tvReply.setOnClickListener(v -> {start(getContext());});
+        viewDataBinding.ivMore.setOnClickListener(v -> {
+            start(getContext());
+        });
+        viewDataBinding.tvLike.setOnClickListener(v -> {
+            start(getContext());
+        });
+        viewDataBinding.tvReply.setOnClickListener(v -> {
+            start(getContext());
+        });
     }
 
     private View getFooterView() {
-        return LayoutInflater.from(getContext()).inflate(R.layout.user_item_footer_view,viewDataBinding.rvTables,false);
+        return LayoutInflater.from(getContext()).inflate(R.layout.user_item_footer_view, viewDataBinding.rvTables, false);
     }
 
     @Override
-    public int getBindingVariable()
-    {
+    public int getBindingVariable() {
         return 0;
     }
-    
+
     @Override
-    protected IMvvmBaseViewModel getViewModel()
-    {
+    protected IMvvmBaseViewModel getViewModel() {
         return null;
     }
-    
+
     @Override
-    protected void onRetryBtnClick()
-    {
-        
+    protected void onRetryBtnClick() {
+
     }
 }

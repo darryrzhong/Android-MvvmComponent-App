@@ -18,13 +18,11 @@ import java.util.ArrayList;
  * @since 2020-02-22
  */
 public class ThemeFragmentViewModel
-    extends MvmBaseViewModel<IThemeView, ThemeModel>
-    implements IModelListener<ArrayList<Tabs>>
-{
-    
+        extends MvmBaseViewModel<IThemeView, ThemeModel>
+        implements IModelListener<ArrayList<Tabs>> {
+
     @Override
-    protected void initModel()
-    {
+    protected void initModel() {
         model = new ThemeModel();
         model.register(this);
         model.getCacheDataAndLoad();
@@ -33,32 +31,25 @@ public class ThemeFragmentViewModel
     @Override
     public void detachUi() {
         super.detachUi();
-        if (model != null){
+        if (model != null) {
             model.unRegister(this);
         }
     }
 
     @Override
-    public void onLoadFinish(BaseModel model, ArrayList<Tabs> data)
-    {
-        if (getPageView() != null)
-        {
-            if (data != null)
-            {
+    public void onLoadFinish(BaseModel model, ArrayList<Tabs> data) {
+        if (getPageView() != null) {
+            if (data != null) {
                 getPageView().onDataLoaded(data);
-            }
-            else
-            {
+            } else {
                 getPageView().showEmpty();
             }
         }
     }
-    
+
     @Override
-    public void onLoadFail(BaseModel model, String prompt)
-    {
-        if (getPageView() != null)
-        {
+    public void onLoadFail(BaseModel model, String prompt) {
+        if (getPageView() != null) {
             getPageView().showFailure(prompt);
         }
     }

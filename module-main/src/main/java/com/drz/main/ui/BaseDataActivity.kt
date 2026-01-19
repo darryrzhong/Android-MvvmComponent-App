@@ -1,10 +1,7 @@
 package com.drz.main.ui
 
-import androidx.appcompat.app.AppCompatActivity
-
 import android.os.Bundle
-
-import java.util.ArrayList
+import androidx.appcompat.app.AppCompatActivity
 
 abstract class BaseDataActivity : AppCompatActivity() {
 

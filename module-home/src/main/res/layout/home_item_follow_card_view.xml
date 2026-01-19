@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.drz.common.utils.DateTimeUtils"/>
+
+        <import type="com.drz.common.utils.DateTimeUtils" />
+
         <variable
             name="viewModel"
             type="com.drz.home.nominate.bean.viewmodel.FollowCardViewModel" />
@@ -16,11 +18,11 @@
 
         <ImageView
             android:id="@+id/iv_video_cover"
+            imageUrl="@{viewModel.coverUrl}"
             android:layout_width="0dp"
             android:layout_height="220dp"
+            android:layout_margin="10dp"
             android:scaleType="fitXY"
-           android:layout_margin="10dp"
-            imageUrl="@{viewModel.coverUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -43,10 +45,10 @@
 
         <ImageView
             android:id="@+id/iv_author"
+            imageCircleUrl="@{viewModel.authorUrl}"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:scaleType="fitXY"
-            imageCircleUrl="@{viewModel.authorUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/iv_video_cover"
             app:layout_constraintTop_toBottomOf="@+id/iv_video_cover"
@@ -71,21 +73,21 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lines="1"
+                android:text="@{viewModel.title}"
                 android:textColor="@android:color/black"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:text="@{viewModel.title}"
                 tools:text="2020 奥斯卡吐槽大会，小金人将花落谁家?" />
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:id="@+id/tv_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@{viewModel.description}"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:text="@{viewModel.description}"
                 tools:text="凯拉特  /  #影视" />
         </LinearLayout>
 

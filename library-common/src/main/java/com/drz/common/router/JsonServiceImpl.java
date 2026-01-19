@@ -19,12 +19,11 @@ import java.lang.reflect.Type;
  * @since 2020-02-27
  */
 @Route(path = "/video/json")
-public class JsonServiceImpl implements SerializationService
-{
+public class JsonServiceImpl implements SerializationService {
 
     @Override
     public <T> T json2Object(String input, Class<T> clazz) {
-        return GsonUtils.fromLocalJson(input,clazz);
+        return GsonUtils.fromLocalJson(input, clazz);
     }
 
     @Override
@@ -34,7 +33,7 @@ public class JsonServiceImpl implements SerializationService
 
     @Override
     public <T> T parseObject(String input, Type clazz) {
-        return GsonUtils.fromLocalJson(input,clazz);
+        return GsonUtils.fromLocalJson(input, clazz);
     }
 
     @Override

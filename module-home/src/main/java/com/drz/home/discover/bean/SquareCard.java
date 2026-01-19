@@ -13,12 +13,6 @@ import java.io.Serializable;
  */
 public class SquareCard implements Serializable {
 
-    public SquareCard(String title, String image, String actionUrl) {
-        this.title = title;
-        this.image = image;
-        this.actionUrl = actionUrl;
-    }
-
     /**
      * dataType : SquareCard
      * id : 14
@@ -31,10 +25,14 @@ public class SquareCard implements Serializable {
      */
 
 
-
     private String title;
     private String image;
     private String actionUrl;
+    public SquareCard(String title, String image, String actionUrl) {
+        this.title = title;
+        this.image = image;
+        this.actionUrl = actionUrl;
+    }
 
     public String getTitle() {
         return title;

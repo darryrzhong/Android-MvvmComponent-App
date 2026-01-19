@@ -10,9 +10,11 @@ import io.reactivex.Observable;
  */
 public class Optional<T> {
     Observable<T> obs;
+
     public Optional(Observable<T> obs) {
         this.obs = obs;
     }
+
     public static <T> Optional<T> of(T value) {
         if (value == null) {
             throw new NullPointerException();

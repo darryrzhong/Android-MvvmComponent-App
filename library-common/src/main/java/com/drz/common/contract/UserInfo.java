@@ -1,8 +1,8 @@
 package com.drz.common.contract;
 
-import java.io.Serializable;
-
 import androidx.annotation.NonNull;
+
+import java.io.Serializable;
 
 /**
  * 应用模块:
@@ -13,58 +13,43 @@ import androidx.annotation.NonNull;
  * @author darryrzhoong
  * @since 2020-01-27
  */
-public class UserInfo implements Serializable
-{
+public class UserInfo implements Serializable {
     @NonNull
     private String uuid;
-    
+
     private String birthday;
-    
+
     private String sex;
-    
+
     private String accessToken;
-    
+
     private String refreshToken;
-    
+
     // 到期时间
     private String tokenExpireTime;
-    
+
     private int type;
-    
+
     private String name;
-    
+
     private String email;
-    
+
     private String phone;
-    
+
     private String signature;
-    
+
     private String avatarRemoteUrl;
-    
+
     private ThirdAccount[] thirdAccounts;
-    
+
     private String regionId;
 
-    public class ThirdAccount implements Serializable {
-        public String avatarUrl;
-        public String nickName;
-        public String openId;
-        public int thirdType;
-        public String token;
-        public String unionId;
-        public String email;
-    }
-
-    private UserInfo(){
+    private UserInfo() {
         throw new UnsupportedOperationException("Do not instantiate");
     }
 
-    public static UserInfo getInstance(){
+    public static UserInfo getInstance() {
         return UserHolder.INSTANCE;
-    }
-
-    private static class UserHolder{
-        private static  final UserInfo INSTANCE =  new UserInfo();
     }
 
     @NonNull
@@ -178,6 +163,20 @@ public class UserInfo implements Serializable
 
     public void setRegionId(String regionId) {
         this.regionId = regionId;
+    }
+
+    private static class UserHolder {
+        private static final UserInfo INSTANCE = new UserInfo();
+    }
+
+    public class ThirdAccount implements Serializable {
+        public String avatarUrl;
+        public String nickName;
+        public String openId;
+        public int thirdType;
+        public String token;
+        public String unionId;
+        public String email;
     }
 
 }

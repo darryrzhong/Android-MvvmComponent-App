@@ -1,14 +1,14 @@
 package com.drz.common.utils;
 
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
+import android.text.format.Time;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
-import android.text.format.DateFormat;
-import android.text.format.DateUtils;
-import android.text.format.Time;
 
 /**
  * <b>类名称：</b> DateTimeUtils <br/>
@@ -365,8 +365,8 @@ public class DateTimeUtils {
                 try {
                     String utcTime = loginInfo[1];
                     beiJingTime = DateTimeUtils.getUserZoneString(utcTime, "HH:mm", null);
-                    String repaceTimeStr = "#"+utcTime+"#";
-                    beiJingTime = message.replace(repaceTimeStr,beiJingTime);
+                    String repaceTimeStr = "#" + utcTime + "#";
+                    beiJingTime = message.replace(repaceTimeStr, beiJingTime);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -377,8 +377,9 @@ public class DateTimeUtils {
 
     /**
      * @param duration 秒钟
-     * */
-    public static String format(int duration){
+     *
+     */
+    public static String format(int duration) {
 
         String second = "";
         String minute = "";
@@ -396,7 +397,7 @@ public class DateTimeUtils {
         } else {
             minute = String.valueOf(mm);//分钟
         }
-        time = minute +":"+ second;
+        time = minute + ":" + second;
 
         return time;
 

@@ -9,17 +9,22 @@ package com.drz.common.config;
  * @author darryrzhoong
  * @since 2020-02-25
  */
-public class ModuleLifecycleReflexs
-{
-    /** 基础库 */
+public class ModuleLifecycleReflexs {
+    /**
+     * 基础库
+     */
     private static final String BaseInit = "com.drz.common.CommonModuleInit";
-    
-    /** main组件库 */
-    private static final String MainInit =
-        "com.drz.main.application.MainModuleInit";
 
-    /**用户组件初始化*/
+    /**
+     * main组件库
+     */
+    private static final String MainInit =
+            "com.drz.main.application.MainModuleInit";
+
+    /**
+     * 用户组件初始化
+     */
     private static final String UserInit = "com.drz.user.UserModuleInit";
-    
-    public static String[] initModuleNames = {BaseInit, MainInit,UserInit};
+
+    public static String[] initModuleNames = {BaseInit, MainInit, UserInit};
 }

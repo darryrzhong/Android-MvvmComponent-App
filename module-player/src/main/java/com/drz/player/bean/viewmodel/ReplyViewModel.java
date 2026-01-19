@@ -11,15 +11,14 @@ import com.drz.common.contract.BaseCustomViewModel;
  * @author darryrzhoong
  * @since 2020-02-21
  */
-public class ReplyViewModel extends BaseCustomViewModel
-{
+public class ReplyViewModel extends BaseCustomViewModel {
     public String avatar;
-    
+
     public String nickName;
-    
+
     public String replyMessage;
-    
+
     public long releaseTime;
-    
+
     public int likeCount;
 }

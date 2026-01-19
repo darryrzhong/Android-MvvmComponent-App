@@ -14,64 +14,54 @@ import com.drz.common.IModuleInit;
  * @author darryrzhoong
  * @since 2020-02-25
  */
-public class ModuleLifecycleConfig
-{
-    
-    private ModuleLifecycleConfig()
-    {
-        
+public class ModuleLifecycleConfig {
+
+    private ModuleLifecycleConfig() {
+
     }
-    
-    private static class SingleHolder
-    {
-        private static ModuleLifecycleConfig instance =
-            new ModuleLifecycleConfig();
-    }
-    
-    public static ModuleLifecycleConfig getInstance()
-    {
+
+    public static ModuleLifecycleConfig getInstance() {
         return SingleHolder.instance;
     }
-    
-    /** 优先初始化 */
-    public void initModuleAhead(@Nullable BaseApplication application)
-    {
-        for (String moduleName : ModuleLifecycleReflexs.initModuleNames)
-        {
-            try
-            {
+
+    /**
+     * 优先初始化
+     */
+    public void initModuleAhead(@Nullable BaseApplication application) {
+        for (String moduleName : ModuleLifecycleReflexs.initModuleNames) {
+            try {
                 Class<?> clazz = Class.forName(moduleName);
-                IModuleInit init = (IModuleInit)clazz.newInstance();
+                IModuleInit init = (IModuleInit) clazz.newInstance();
                 init.onInitAhead(application);
-            }
-            catch (ClassNotFoundException | InstantiationException
-                | IllegalAccessException e)
-            {
+            } catch (ClassNotFoundException | InstantiationException
+                     | IllegalAccessException e) {
                 e.printStackTrace();
             }
-            
+
         }
-        
+
     }
-    
-    /** 后初始化 */
-    public void initModuleLow(@Nullable BaseApplication application)
-    {
-        for (String moduleName : ModuleLifecycleReflexs.initModuleNames)
-        {
-            try
-            {
+
+    /**
+     * 后初始化
+     */
+    public void initModuleLow(@Nullable BaseApplication application) {
+        for (String moduleName : ModuleLifecycleReflexs.initModuleNames) {
+            try {
                 Class<?> clazz = Class.forName(moduleName);
-                IModuleInit init = (IModuleInit)clazz.newInstance();
+                IModuleInit init = (IModuleInit) clazz.newInstance();
                 // 调用初始化方法
                 init.onInitLow(application);
-            }
-            catch (ClassNotFoundException | InstantiationException
-                | IllegalAccessException e)
-            {
+            } catch (ClassNotFoundException | InstantiationException
+                     | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
     }
-    
+
+    private static class SingleHolder {
+        private static ModuleLifecycleConfig instance =
+                new ModuleLifecycleConfig();
+    }
+
 }

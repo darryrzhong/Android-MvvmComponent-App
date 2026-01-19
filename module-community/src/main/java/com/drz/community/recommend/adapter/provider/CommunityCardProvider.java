@@ -1,8 +1,5 @@
 package com.drz.community.recommend.adapter.provider;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
@@ -14,6 +11,9 @@ import com.drz.common.contract.BaseCustomViewModel;
 import com.drz.community.R;
 import com.drz.community.databinding.CommunityItemCommunityViewBinding;
 import com.drz.community.recommend.bean.viewmodel.CloumnsCardViewModel;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 应用模块:
@@ -42,19 +42,19 @@ public class CommunityCardProvider extends BaseItemProvider<BaseCustomViewModel>
 
     @Override
     public void convert(@NotNull BaseViewHolder baseViewHolder, @Nullable BaseCustomViewModel baseCustomViewModel) {
-          if (baseCustomViewModel == null){
-              return;
-          }
+        if (baseCustomViewModel == null) {
+            return;
+        }
         CommunityItemCommunityViewBinding binding = baseViewHolder.getBinding();
-          if (binding != null){
-              ViewGroup.LayoutParams layoutParams = binding.ivCoverBg.getLayoutParams();
-              CloumnsCardViewModel viewModel = (CloumnsCardViewModel) baseCustomViewModel;
-              int itemWidth = ScreenUtils.getScreenWidth() / 2;
-             float scale = (itemWidth+0f)/viewModel.imgWidth;
-             layoutParams.height = (int) (viewModel.imgHeight*scale);
-             binding.ivCoverBg.setLayoutParams(layoutParams);
-              binding.setViewModel(viewModel);
-              binding.executePendingBindings();
-          }
+        if (binding != null) {
+            ViewGroup.LayoutParams layoutParams = binding.ivCoverBg.getLayoutParams();
+            CloumnsCardViewModel viewModel = (CloumnsCardViewModel) baseCustomViewModel;
+            int itemWidth = ScreenUtils.getScreenWidth() / 2;
+            float scale = (itemWidth + 0f) / viewModel.imgWidth;
+            layoutParams.height = (int) (viewModel.imgHeight * scale);
+            binding.ivCoverBg.setLayoutParams(layoutParams);
+            binding.setViewModel(viewModel);
+            binding.executePendingBindings();
+        }
     }
 }

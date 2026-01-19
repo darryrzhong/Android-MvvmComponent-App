@@ -9,7 +9,6 @@ package com.drz.base.model;
  * @author darryrzhoong
  * @since 2020-01-27
  */
-public interface IBaseModelListener
-{
-    
+public interface IBaseModelListener {
+
 }

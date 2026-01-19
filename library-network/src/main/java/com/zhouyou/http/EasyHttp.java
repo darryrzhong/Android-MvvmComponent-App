@@ -79,12 +79,13 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  * 版本： v1.0<br>
  */
 public final class EasyHttp {
-    private static Application sContext;
     public static final int DEFAULT_MILLISECONDS = 60000;             //默认的超时时间
+    public static final int DEFAULT_CACHE_NEVER_EXPIRE = -1;          //缓存过期时间，默认永久缓存
     private static final int DEFAULT_RETRY_COUNT = 3;                 //默认重试次数
     private static final int DEFAULT_RETRY_INCREASEDELAY = 0;         //默认重试叠加时间
     private static final int DEFAULT_RETRY_DELAY = 500;               //默认重试延时
-    public static final int DEFAULT_CACHE_NEVER_EXPIRE = -1;          //缓存过期时间，默认永久缓存
+    private static Application sContext;
+    private volatile static EasyHttp singleton = null;
     private Cache mCache = null;                                      //Okhttp缓存对象
     private CacheMode mCacheMode = CacheMode.NO_CACHE;                //缓存类型
     private long mCacheTime = -1;                                     //缓存时间
@@ -100,7 +101,6 @@ public final class EasyHttp {
     private Retrofit.Builder retrofitBuilder;                         //Retrofit请求Builder
     private RxCache.Builder rxCacheBuilder;                           //RxCache请求的Builder
     private CookieManger cookieJar;                                   //Cookie管理
-    private volatile static EasyHttp singleton = null;
 
     private EasyHttp() {
         okHttpClientBuilder = new OkHttpClient.Builder();
@@ -180,6 +180,235 @@ public final class EasyHttp {
     }
 
     /**
+     * 获取全局的cookie实例
+     */
+    public static CookieManger getCookieJar() {
+        return getInstance().cookieJar;
+    }
+
+    /**
+     * 超时重试次数
+     */
+    public static int getRetryCount() {
+        return getInstance().mRetryCount;
+    }
+
+    /**
+     * 超时重试次数
+     */
+    public EasyHttp setRetryCount(int retryCount) {
+        if (retryCount < 0) throw new IllegalArgumentException("retryCount must > 0");
+        mRetryCount = retryCount;
+        return this;
+    }
+
+    /**
+     * 超时重试延迟时间
+     */
+    public static int getRetryDelay() {
+        return getInstance().mRetryDelay;
+    }
+
+    /**
+     * 超时重试延迟时间
+     */
+    public EasyHttp setRetryDelay(int retryDelay) {
+        if (retryDelay < 0) throw new IllegalArgumentException("retryDelay must > 0");
+        mRetryDelay = retryDelay;
+        return this;
+    }
+
+    /**
+     * 超时重试延迟叠加时间
+     */
+    public static int getRetryIncreaseDelay() {
+        return getInstance().mRetryIncreaseDelay;
+    }
+
+    /**
+     * 超时重试延迟叠加时间
+     */
+    public EasyHttp setRetryIncreaseDelay(int retryIncreaseDelay) {
+        if (retryIncreaseDelay < 0)
+            throw new IllegalArgumentException("retryIncreaseDelay must > 0");
+        mRetryIncreaseDelay = retryIncreaseDelay;
+        return this;
+    }
+
+    /**
+     * 获取全局的缓存模式
+     */
+    public static CacheMode getCacheMode() {
+        return getInstance().mCacheMode;
+    }
+
+    /**
+     * 全局的缓存模式
+     */
+    public EasyHttp setCacheMode(CacheMode cacheMode) {
+        mCacheMode = cacheMode;
+        return this;
+    }
+
+    /**
+     * 获取全局的缓存过期时间
+     */
+    public static long getCacheTime() {
+        return getInstance().mCacheTime;
+    }
+
+    /**
+     * 全局的缓存过期时间
+     */
+    public EasyHttp setCacheTime(long cacheTime) {
+        if (cacheTime <= -1) cacheTime = DEFAULT_CACHE_NEVER_EXPIRE;
+        mCacheTime = cacheTime;
+        return this;
+    }
+
+    /**
+     * 获取全局的缓存大小
+     */
+    public static long getCacheMaxSize() {
+        return getInstance().mCacheMaxSize;
+    }
+
+    /**
+     * 全局的缓存大小,默认50M
+     */
+    public EasyHttp setCacheMaxSize(long maxSize) {
+        mCacheMaxSize = maxSize;
+        return this;
+    }
+
+    /**
+     * 获取缓存的路劲
+     */
+    public static File getCacheDirectory() {
+        return getInstance().mCacheDirectory;
+    }
+
+    /**
+     * 全局设置缓存的路径，默认是应用包下面的缓存
+     */
+    public EasyHttp setCacheDirectory(File directory) {
+        mCacheDirectory = Utils.checkNotNull(directory, "directory == null");
+        rxCacheBuilder.diskDir(directory);
+        return this;
+    }
+
+    /**
+     * 获取OkHttp的缓存<br>
+     */
+    public static Cache getHttpCache() {
+        return getInstance().mCache;
+    }
+
+    /**
+     * 全局设置OkHttp的缓存,默认是3天
+     */
+    public EasyHttp setHttpCache(Cache cache) {
+        this.mCache = cache;
+        return this;
+    }
+
+    /**
+     * 获取全局baseurl
+     */
+    public static String getBaseUrl() {
+        return getInstance().mBaseUrl;
+    }
+
+    /**
+     * 全局设置baseurl
+     */
+    public EasyHttp setBaseUrl(String baseUrl) {
+        mBaseUrl = Utils.checkNotNull(baseUrl, "baseUrl == null");
+        return this;
+    }
+
+    /**
+     * get请求
+     */
+    public static GetRequest get(String url) {
+        return new GetRequest(url);
+    }
+
+    /**
+     * post请求
+     */
+    public static PostRequest post(String url) {
+        return new PostRequest(url);
+    }
+
+    /**
+     * delete请求
+     */
+    public static DeleteRequest delete(String url) {
+
+        return new DeleteRequest(url);
+    }
+
+    /**
+     * 自定义请求
+     */
+    public static CustomRequest custom() {
+        return new CustomRequest();
+    }
+
+    public static DownloadRequest downLoad(String url) {
+        return new DownloadRequest(url);
+    }
+
+    public static PutRequest put(String url) {
+        return new PutRequest(url);
+    }
+
+    /**
+     * 取消订阅
+     */
+    public static void cancelSubscription(Disposable disposable) {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
+    }
+
+    /**
+     * 清空缓存
+     */
+    public static void clearCache() {
+        getRxCache().clear().compose(RxUtil.<Boolean>io_main())
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(@NonNull Boolean aBoolean) throws Exception {
+                        HttpLog.i("clearCache success!!!");
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        HttpLog.i("clearCache err!!!");
+                    }
+                });
+    }
+
+    /**
+     * 移除缓存（key）
+     */
+    public static void removeCache(String key) {
+        getRxCache().remove(key).compose(RxUtil.<Boolean>io_main()).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(@NonNull Boolean aBoolean) throws Exception {
+                HttpLog.i("removeCache success!!!");
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@NonNull Throwable throwable) throws Exception {
+                HttpLog.i("removeCache err!!!");
+            }
+        });
+    }
+
+    /**
      * 调试模式,默认打开所有的异常调试
      */
     public EasyHttp debug(String tag) {
@@ -193,8 +422,8 @@ public final class EasyHttp {
      * 并不是框架错误,如果不想每次打印,这里可以关闭异常显示
      */
     public EasyHttp debug(String tag, boolean isPrintException) {
-        String tempTag = TextUtils.isEmpty(tag)?"RxEasyHttp_":tag;
-        if(isPrintException){
+        String tempTag = TextUtils.isEmpty(tag) ? "RxEasyHttp_" : tag;
+        if (isPrintException) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(tempTag, isPrintException);
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             okHttpClientBuilder.addInterceptor(loggingInterceptor);
@@ -205,18 +434,6 @@ public final class EasyHttp {
         HttpLog.allowI = isPrintException;
         HttpLog.allowV = isPrintException;
         return this;
-    }
-
-    /**
-     * 此类是用于主机名验证的基接口。 在握手期间，如果 URL 的主机名和服务器的标识主机名不匹配，
-     * 则验证机制可以回调此接口的实现程序来确定是否应该允许此连接。策略可以是基于证书的或依赖于其他验证方案。
-     * 当验证 URL 主机名使用的默认规则失败时使用这些回调。如果主机名是可接受的，则返回 true
-     */
-    public class DefaultHostnameVerifier implements HostnameVerifier {
-        @Override
-        public boolean verify(String hostname, SSLSession session) {
-            return true;
-        }
     }
 
     /**
@@ -255,13 +472,6 @@ public final class EasyHttp {
     }
 
     /**
-     * 获取全局的cookie实例
-     */
-    public static CookieManger getCookieJar() {
-        return getInstance().cookieJar;
-    }
-
-    /**
      * 全局读取超时时间
      */
     public EasyHttp setReadTimeOut(long readTimeOut) {
@@ -286,101 +496,6 @@ public final class EasyHttp {
     }
 
     /**
-     * 超时重试次数
-     */
-    public EasyHttp setRetryCount(int retryCount) {
-        if (retryCount < 0) throw new IllegalArgumentException("retryCount must > 0");
-        mRetryCount = retryCount;
-        return this;
-    }
-
-    /**
-     * 超时重试次数
-     */
-    public static int getRetryCount() {
-        return getInstance().mRetryCount;
-    }
-
-    /**
-     * 超时重试延迟时间
-     */
-    public EasyHttp setRetryDelay(int retryDelay) {
-        if (retryDelay < 0) throw new IllegalArgumentException("retryDelay must > 0");
-        mRetryDelay = retryDelay;
-        return this;
-    }
-
-    /**
-     * 超时重试延迟时间
-     */
-    public static int getRetryDelay() {
-        return getInstance().mRetryDelay;
-    }
-
-    /**
-     * 超时重试延迟叠加时间
-     */
-    public EasyHttp setRetryIncreaseDelay(int retryIncreaseDelay) {
-        if (retryIncreaseDelay < 0)
-            throw new IllegalArgumentException("retryIncreaseDelay must > 0");
-        mRetryIncreaseDelay = retryIncreaseDelay;
-        return this;
-    }
-
-    /**
-     * 超时重试延迟叠加时间
-     */
-    public static int getRetryIncreaseDelay() {
-        return getInstance().mRetryIncreaseDelay;
-    }
-
-    /**
-     * 全局的缓存模式
-     */
-    public EasyHttp setCacheMode(CacheMode cacheMode) {
-        mCacheMode = cacheMode;
-        return this;
-    }
-
-    /**
-     * 获取全局的缓存模式
-     */
-    public static CacheMode getCacheMode() {
-        return getInstance().mCacheMode;
-    }
-
-    /**
-     * 全局的缓存过期时间
-     */
-    public EasyHttp setCacheTime(long cacheTime) {
-        if (cacheTime <= -1) cacheTime = DEFAULT_CACHE_NEVER_EXPIRE;
-        mCacheTime = cacheTime;
-        return this;
-    }
-
-    /**
-     * 获取全局的缓存过期时间
-     */
-    public static long getCacheTime() {
-        return getInstance().mCacheTime;
-    }
-
-    /**
-     * 全局的缓存大小,默认50M
-     */
-    public EasyHttp setCacheMaxSize(long maxSize) {
-        mCacheMaxSize = maxSize;
-        return this;
-    }
-
-    /**
-     * 获取全局的缓存大小
-     */
-    public static long getCacheMaxSize() {
-        return getInstance().mCacheMaxSize;
-    }
-
-    /**
      * 全局设置缓存的版本，默认为1，缓存的版本号
      */
     public EasyHttp setCacheVersion(int cacheersion) {
@@ -391,42 +506,11 @@ public final class EasyHttp {
     }
 
     /**
-     * 全局设置缓存的路径，默认是应用包下面的缓存
-     */
-    public EasyHttp setCacheDirectory(File directory) {
-        mCacheDirectory = Utils.checkNotNull(directory, "directory == null");
-        rxCacheBuilder.diskDir(directory);
-        return this;
-    }
-
-    /**
-     * 获取缓存的路劲
-     */
-    public static File getCacheDirectory() {
-        return getInstance().mCacheDirectory;
-    }
-
-    /**
      * 全局设置缓存的转换器
      */
     public EasyHttp setCacheDiskConverter(IDiskConverter converter) {
         rxCacheBuilder.diskConverter(Utils.checkNotNull(converter, "converter == null"));
         return this;
-    }
-
-    /**
-     * 全局设置OkHttp的缓存,默认是3天
-     */
-    public EasyHttp setHttpCache(Cache cache) {
-        this.mCache = cache;
-        return this;
-    }
-
-    /**
-     * 获取OkHttp的缓存<br>
-     */
-    public static Cache getHttpCache() {
-        return getInstance().mCache;
     }
 
     /**
@@ -534,99 +618,14 @@ public final class EasyHttp {
     }
 
     /**
-     * 全局设置baseurl
+     * 此类是用于主机名验证的基接口。 在握手期间，如果 URL 的主机名和服务器的标识主机名不匹配，
+     * 则验证机制可以回调此接口的实现程序来确定是否应该允许此连接。策略可以是基于证书的或依赖于其他验证方案。
+     * 当验证 URL 主机名使用的默认规则失败时使用这些回调。如果主机名是可接受的，则返回 true
      */
-    public EasyHttp setBaseUrl(String baseUrl) {
-        mBaseUrl = Utils.checkNotNull(baseUrl, "baseUrl == null");
-        return this;
-    }
-
-    /**
-     * 获取全局baseurl
-     */
-    public static String getBaseUrl() {
-        return getInstance().mBaseUrl;
-    }
-
-    /**
-     * get请求
-     */
-    public static GetRequest get(String url) {
-        return new GetRequest(url);
-    }
-
-    /**
-     * post请求
-     */
-    public static PostRequest post(String url) {
-        return new PostRequest(url);
-    }
-
-
-    /**
-     * delete请求
-     */
-    public static DeleteRequest delete(String url) {
-
-        return new DeleteRequest(url);
-    }
-
-    /**
-     * 自定义请求
-     */
-    public static CustomRequest custom() {
-        return new CustomRequest();
-    }
-
-    public static DownloadRequest downLoad(String url) {
-        return new DownloadRequest(url);
-    }
-
-    public static PutRequest put(String url) {
-        return new PutRequest(url);
-    }
-
-    /**
-     * 取消订阅
-     */
-    public static void cancelSubscription(Disposable disposable) {
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
+    public class DefaultHostnameVerifier implements HostnameVerifier {
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
         }
-    }
-
-    /**
-     * 清空缓存
-     */
-    public static void clearCache() {
-        getRxCache().clear().compose(RxUtil.<Boolean>io_main())
-                .subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(@NonNull Boolean aBoolean) throws Exception {
-                        HttpLog.i("clearCache success!!!");
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(@NonNull Throwable throwable) throws Exception {
-                        HttpLog.i("clearCache err!!!");
-                    }
-                });
-    }
-
-    /**
-     * 移除缓存（key）
-     */
-    public static void removeCache(String key) {
-        getRxCache().remove(key).compose(RxUtil.<Boolean>io_main()).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(@NonNull Boolean aBoolean) throws Exception {
-                HttpLog.i("removeCache success!!!");
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(@NonNull Throwable throwable) throws Exception {
-                    HttpLog.i("removeCache err!!!");
-            }
-        });
     }
 }

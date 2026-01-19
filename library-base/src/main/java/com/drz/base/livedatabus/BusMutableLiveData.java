@@ -22,21 +22,22 @@ import java.util.Map;
  */
 public class BusMutableLiveData<T> extends MutableLiveData<T> {
 
-    private Map<Observer,Observer> observerMap = new HashMap<>();
+    private Map<Observer, Observer> observerMap = new HashMap<>();
+
     @Override
     public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
         super.observe(owner, observer);
         try {
             hook(observer);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void observeForever(@NonNull Observer<? super T> observer) {
-        if (!observerMap.containsKey(observer)){
-            observerMap.put(observer,new ObserverWrapper(observer));
+        if (!observerMap.containsKey(observer)) {
+            observerMap.put(observer, new ObserverWrapper(observer));
         }
         super.observeForever(observerMap.get(observer));
     }
@@ -44,9 +45,9 @@ public class BusMutableLiveData<T> extends MutableLiveData<T> {
     @Override
     public void removeObserver(@NonNull Observer<? super T> observer) {
         Observer realObserver = null;
-        if (observerMap.containsKey(observer)){
+        if (observerMap.containsKey(observer)) {
             realObserver = observerMap.remove(observer);
-        }else {
+        } else {
             realObserver = observer;
         }
         super.removeObserver(realObserver);
@@ -54,8 +55,10 @@ public class BusMutableLiveData<T> extends MutableLiveData<T> {
 
     /**
      * hook源码实现,拦截订阅之前的事件
+     *
      * @param observer observer
-     * */
+     *
+     */
     private void hook(Observer<? super T> observer) throws Exception {
         //get wrapper's version
         Class<LiveData> classLiveData = LiveData.class;

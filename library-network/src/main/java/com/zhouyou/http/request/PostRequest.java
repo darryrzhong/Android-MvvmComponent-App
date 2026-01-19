@@ -44,7 +44,7 @@ import okhttp3.ResponseBody;
  * 日期： 2017/4/28 14:29 <br>
  * 版本： v1.0<br>
  */
-@SuppressWarnings(value={"unchecked", "deprecation"})
+@SuppressWarnings(value = {"unchecked", "deprecation"})
 public class PostRequest extends BaseBodyRequest<PostRequest> {
     public PostRequest(String url) {
         super(url);
@@ -95,7 +95,7 @@ public class PostRequest extends BaseBodyRequest<PostRequest> {
 
     private <T> Observable<CacheResult<T>> toObservable(Observable observable, CallBackProxy<? extends ApiResult<T>, T> proxy) {
         return observable.map(new ApiResultFunc(proxy != null ? proxy.getType() : new TypeToken<ResponseBody>() {
-        }.getType()))
+                }.getType()))
                 .compose(isSyncRequest ? RxUtil._main() : RxUtil._io_main())
                 .compose(rxCache.transformer(cacheMode, proxy.getCallBack().getType()))
                 .retryWhen(new RetryExceptionFunc(retryCount, retryDelay, retryIncreaseDelay));

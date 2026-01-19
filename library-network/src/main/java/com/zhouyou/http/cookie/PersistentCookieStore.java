@@ -99,13 +99,13 @@ public class PersistentCookieStore {
         if (!cookies.containsKey(url.host())) {
             cookies.put(url.host(), new ConcurrentHashMap<String, Cookie>());
         }
-       // 删除已经有的.
+        // 删除已经有的.
         if (cookies.containsKey(url.host())) {
             cookies.get(url.host()).remove(name);
         }
         // 添加新的进去
         cookies.get(url.host()).put(name, cookie);
-       // 是否保存到 SP 中
+        // 是否保存到 SP 中
         if (cookie.persistent()) {
             SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
             prefsWriter.putString(url.host(), TextUtils.join(",", cookies.get(url.host()).keySet()));

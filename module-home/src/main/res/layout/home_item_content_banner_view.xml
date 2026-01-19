@@ -3,24 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.drz.home.discover.bean.viewmodel.ContentBannerViewModel" />
     </data>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="220dp">
+        android:layout_height="220dp"
+        android:orientation="vertical">
+
         <ImageView
-            android:layout_margin="10dp"
-            imageUrl="@{viewModel.bannerUrl}"
-            android:scaleType="fitXY"
-            tools:background="@drawable/common_tools_iv_bg"
             android:id="@+id/iv_top_banner"
+            imageUrl="@{viewModel.bannerUrl}"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:scaleType="fitXY"
+            tools:background="@drawable/common_tools_iv_bg" />
+
     </LinearLayout>
-    
+
 </layout>

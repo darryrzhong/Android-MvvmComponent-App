@@ -25,41 +25,38 @@ import androidx.annotation.RequiresApi;
  * @author darryrzhoong
  * @since 2020-02-21
  */
-public class ScreenAutoAdapter
-{
+public class ScreenAutoAdapter {
     /**
      * 屏幕适配的基准
      */
     private static final int MATCH_BASE_WIDTH = 0;
-    
+
     private static final int MATCH_BASE_HEIGHT = 1;
-    
+
     /**
      * 适配单位
      */
     private static final int MATCH_UNIT_DP = 0;
-    
+
     private static final int MATCH_UNIT_PT = 1;
-    
+
     /**
      * 适配信息
      */
     private static MatchInfo sMatchInfo;
-    
+
     /**
      * Activity 生命周期检测
      */
     private static Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks;
-    
+
     /**
      * 初始化
      *
      * @param application 需要在application中初始化
      */
-    public static void setup(@NonNull
-    final Application application)
-    {
-        
+    public static void setup(@NonNull final Application application) {
+
         /*
          * //获取屏幕分辨率信息的三种方法 //第一种 DisplayMetrics metrics = new DisplayMetrics();
          * Display display = activity.getWindowManager().getDefaultDisplay();
@@ -67,12 +64,11 @@ public class ScreenAutoAdapter
          * activity.getResources().getDisplayMetrics(); //第三种
          * Resources.getSystem().getDisplayMetrics();
          */
-        
+
         // 注意这个是获取系统的displayMetrics
         final DisplayMetrics displayMetrics =
-            application.getResources().getDisplayMetrics();
-        if (sMatchInfo == null)
-        {
+                application.getResources().getDisplayMetrics();
+        if (sMatchInfo == null) {
             // 记录系统的原始值
             sMatchInfo = new MatchInfo();
             sMatchInfo.setScreenWidth(displayMetrics.widthPixels);
@@ -85,218 +81,175 @@ public class ScreenAutoAdapter
         // 添加字体变化的监听
         // 调用 Application#registerComponentCallbacks 注册下 onConfigurationChanged
         // 监听即可。
-        application.registerComponentCallbacks(new ComponentCallbacks()
-        {
+        application.registerComponentCallbacks(new ComponentCallbacks() {
             @Override
-            public void onConfigurationChanged(Configuration newConfig)
-            {
+            public void onConfigurationChanged(Configuration newConfig) {
                 // 字体改变后,将 appScaledDensity 重新赋值
-                if (newConfig != null && newConfig.fontScale > 0)
-                {
+                if (newConfig != null && newConfig.fontScale > 0) {
                     float scaledDensity = displayMetrics.scaledDensity;
                     sMatchInfo.setAppScaledDensity(scaledDensity);
                 }
             }
-            
+
             @Override
-            public void onLowMemory()
-            {
-                
+            public void onLowMemory() {
+
             }
         });
     }
-    
+
     /**
      * 在 application 中全局激活适配（也可单独使用 match() 方法在指定页面中配置适配）
      */
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    public static void register(@NonNull
-    final Application application, final float designSize, final int matchBase,
-        final int matchUnit)
-    {
-        if (mActivityLifecycleCallbacks == null)
-        {
+    public static void register(@NonNull final Application application, final float designSize, final int matchBase,
+                                final int matchUnit) {
+        if (mActivityLifecycleCallbacks == null) {
             mActivityLifecycleCallbacks =
-                new Application.ActivityLifecycleCallbacks()
-                {
-                    @Override
-                    public void onActivityCreated(Activity activity,
-                        Bundle savedInstanceState)
-                    {
-                        if (activity != null)
-                        {
-                            match(activity, designSize, matchBase, matchUnit);
+                    new Application.ActivityLifecycleCallbacks() {
+                        @Override
+                        public void onActivityCreated(Activity activity,
+                                                      Bundle savedInstanceState) {
+                            if (activity != null) {
+                                match(activity, designSize, matchBase, matchUnit);
+                            }
                         }
-                    }
-                    
-                    @Override
-                    public void onActivityStarted(Activity activity)
-                    {
-                        
-                    }
-                    
-                    @Override
-                    public void onActivityResumed(Activity activity)
-                    {
-                        
-                    }
-                    
-                    @Override
-                    public void onActivityPaused(Activity activity)
-                    {
-                        
-                    }
-                    
-                    @Override
-                    public void onActivityStopped(Activity activity)
-                    {
-                        
-                    }
-                    
-                    @Override
-                    public void onActivitySaveInstanceState(Activity activity,
-                        Bundle outState)
-                    {
-                        
-                    }
-                    
-                    @Override
-                    public void onActivityDestroyed(Activity activity)
-                    {
-                        
-                    }
-                };
+
+                        @Override
+                        public void onActivityStarted(Activity activity) {
+
+                        }
+
+                        @Override
+                        public void onActivityResumed(Activity activity) {
+
+                        }
+
+                        @Override
+                        public void onActivityPaused(Activity activity) {
+
+                        }
+
+                        @Override
+                        public void onActivityStopped(Activity activity) {
+
+                        }
+
+                        @Override
+                        public void onActivitySaveInstanceState(Activity activity,
+                                                                Bundle outState) {
+
+                        }
+
+                        @Override
+                        public void onActivityDestroyed(Activity activity) {
+
+                        }
+                    };
             application.registerActivityLifecycleCallbacks(
-                mActivityLifecycleCallbacks);
+                    mActivityLifecycleCallbacks);
         }
     }
-    
+
     /**
      * 全局取消所有的适配
      */
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    public static void unregister(@NonNull
-    final Application application, @NonNull int... matchUnit)
-    {
-        if (mActivityLifecycleCallbacks != null)
-        {
+    public static void unregister(@NonNull final Application application, @NonNull int... matchUnit) {
+        if (mActivityLifecycleCallbacks != null) {
             application.unregisterActivityLifecycleCallbacks(
-                mActivityLifecycleCallbacks);
+                    mActivityLifecycleCallbacks);
             mActivityLifecycleCallbacks = null;
         }
-        for (int unit : matchUnit)
-        {
+        for (int unit : matchUnit) {
             cancelMatch(application, unit);
         }
     }
-    
+
     /**
      * 适配屏幕（放在 Activity 的 setContentView() 之前执行）
      *
-     * @param context 上下文
+     * @param context    上下文
      * @param designSize 设计图的尺寸
      */
-    public static void match(@NonNull
-    final Context context, final float designSize)
-    {
+    public static void match(@NonNull final Context context, final float designSize) {
         match(context, designSize, MATCH_BASE_WIDTH, MATCH_UNIT_DP);
     }
-    
+
     /**
      * 适配屏幕（放在 Activity 的 setContentView() 之前执行）
      *
-     * @param context 上下文
+     * @param context    上下文
      * @param designSize 设计图的尺寸
-     * @param matchBase 适配基准
+     * @param matchBase  适配基准
      */
-    public static void match(@NonNull
-    final Context context, final float designSize, int matchBase)
-    {
+    public static void match(@NonNull final Context context, final float designSize, int matchBase) {
         match(context, designSize, matchBase, MATCH_UNIT_DP);
     }
-    
+
     /**
      * 适配屏幕（放在 Activity 的 setContentView() 之前执行）
      *
-     * @param context 上下文
+     * @param context    上下文
      * @param designSize 设计图的尺寸
-     * @param matchBase 适配基准
-     * @param matchUnit 使用的适配单位
+     * @param matchBase  适配基准
+     * @param matchUnit  使用的适配单位
      */
-    private static void match(@NonNull
-    final Context context, final float designSize, int matchBase, int matchUnit)
-    {
-        if (designSize == 0)
-        {
+    private static void match(@NonNull final Context context, final float designSize, int matchBase, int matchUnit) {
+        if (designSize == 0) {
             throw new UnsupportedOperationException(
-                "The designSize cannot be equal to 0");
+                    "The designSize cannot be equal to 0");
         }
-        if (matchUnit == MATCH_UNIT_DP)
-        {
+        if (matchUnit == MATCH_UNIT_DP) {
             matchByDP(context, designSize, matchBase);
-        }
-        else if (matchUnit == MATCH_UNIT_PT)
-        {
+        } else if (matchUnit == MATCH_UNIT_PT) {
             matchByPT(context, designSize, matchBase);
         }
     }
-    
+
     /**
      * 重置适配信息，取消适配
      */
-    public static void cancelMatch(@NonNull
-    final Context context)
-    {
+    public static void cancelMatch(@NonNull final Context context) {
         cancelMatch(context, MATCH_UNIT_DP);
         cancelMatch(context, MATCH_UNIT_PT);
     }
-    
+
     /**
      * 重置适配信息，取消适配
      *
-     * @param context 上下文
+     * @param context   上下文
      * @param matchUnit 需要取消适配的单位
      */
-    private static void cancelMatch(@NonNull
-    final Context context, int matchUnit)
-    {
-        if (sMatchInfo != null)
-        {
+    private static void cancelMatch(@NonNull final Context context, int matchUnit) {
+        if (sMatchInfo != null) {
             final DisplayMetrics displayMetrics =
-                context.getResources().getDisplayMetrics();
-            if (matchUnit == MATCH_UNIT_DP)
-            {
-                if (displayMetrics.density != sMatchInfo.getAppDensity())
-                {
+                    context.getResources().getDisplayMetrics();
+            if (matchUnit == MATCH_UNIT_DP) {
+                if (displayMetrics.density != sMatchInfo.getAppDensity()) {
                     displayMetrics.density = sMatchInfo.getAppDensity();
                 }
-                if (displayMetrics.densityDpi != sMatchInfo.getAppDensityDpi())
-                {
+                if (displayMetrics.densityDpi != sMatchInfo.getAppDensityDpi()) {
                     displayMetrics.densityDpi =
-                        (int)sMatchInfo.getAppDensityDpi();
+                            (int) sMatchInfo.getAppDensityDpi();
                 }
                 if (displayMetrics.scaledDensity != sMatchInfo
-                    .getAppScaledDensity())
-                {
+                        .getAppScaledDensity()) {
                     displayMetrics.scaledDensity =
-                        sMatchInfo.getAppScaledDensity();
+                            sMatchInfo.getAppScaledDensity();
                 }
-            }
-            else if (matchUnit == MATCH_UNIT_PT)
-            {
-                if (displayMetrics.xdpi != sMatchInfo.getAppXdpi())
-                {
+            } else if (matchUnit == MATCH_UNIT_PT) {
+                if (displayMetrics.xdpi != sMatchInfo.getAppXdpi()) {
                     displayMetrics.xdpi = sMatchInfo.getAppXdpi();
                 }
             }
         }
     }
-    
-    public static MatchInfo getMatchInfo()
-    {
+
+    public static MatchInfo getMatchInfo() {
         return sMatchInfo;
     }
-    
+
     /**
      * 使用 dp 作为适配单位（适合在新项目中使用，在老项目中使用会对原来既有的 dp 值产生影响） <br>
      * <ul>
@@ -306,36 +259,29 @@ public class ScreenAutoAdapter
      * <li>px = dp * (dpi / 160)</li>
      * </ul>
      *
-     * @param context 上下文
+     * @param context    上下文
      * @param designSize 设计图的宽/高（单位: dp）
-     * @param base 适配基准
+     * @param base       适配基准
      */
-    private static void matchByDP(@NonNull
-    final Context context, final float designSize, int base)
-    {
+    private static void matchByDP(@NonNull final Context context, final float designSize, int base) {
         final float targetDensity;
-        if (base == MATCH_BASE_WIDTH)
-        {
+        if (base == MATCH_BASE_WIDTH) {
             targetDensity = sMatchInfo.getScreenWidth() * 1f / designSize;
-        }
-        else if (base == MATCH_BASE_HEIGHT)
-        {
+        } else if (base == MATCH_BASE_HEIGHT) {
             targetDensity = sMatchInfo.getScreenHeight() * 1f / designSize;
-        }
-        else
-        {
+        } else {
             targetDensity = sMatchInfo.getScreenWidth() * 1f / designSize;
         }
-        final int targetDensityDpi = (int)(targetDensity * 160);
+        final int targetDensityDpi = (int) (targetDensity * 160);
         final float targetScaledDensity = targetDensity
-            * (sMatchInfo.getAppScaledDensity() / sMatchInfo.getAppDensity());
+                * (sMatchInfo.getAppScaledDensity() / sMatchInfo.getAppDensity());
         final DisplayMetrics displayMetrics =
-            context.getResources().getDisplayMetrics();
+                context.getResources().getDisplayMetrics();
         displayMetrics.density = targetDensity;
         displayMetrics.densityDpi = targetDensityDpi;
         displayMetrics.scaledDensity = targetScaledDensity;
     }
-    
+
     /**
      * 使用 pt 作为适配单位（因为 pt 比较冷门，新老项目皆适合使用；也可作为 dp 适配的补充， 在需要同时适配宽度和高度时，使用 pt 来适配
      * dp 未适配的宽度或高度） <br/>
@@ -343,108 +289,88 @@ public class ScreenAutoAdapter
      * pt 转 px 算法: pt * metrics.xdpi * (1.0f/72)
      * </p>
      *
-     * @param context 上下文
+     * @param context    上下文
      * @param designSize 设计图的宽/高（单位: pt）
-     * @param base 适配基准
+     * @param base       适配基准
      */
-    private static void matchByPT(@NonNull
-    final Context context, final float designSize, int base)
-    {
+    private static void matchByPT(@NonNull final Context context, final float designSize, int base) {
         final float targetXdpi;
-        if (base == MATCH_BASE_WIDTH)
-        {
+        if (base == MATCH_BASE_WIDTH) {
             targetXdpi = sMatchInfo.getScreenWidth() * 72f / designSize;
-        }
-        else if (base == MATCH_BASE_HEIGHT)
-        {
+        } else if (base == MATCH_BASE_HEIGHT) {
             targetXdpi = sMatchInfo.getScreenHeight() * 72f / designSize;
-        }
-        else
-        {
+        } else {
             targetXdpi = sMatchInfo.getScreenWidth() * 72f / designSize;
         }
         final DisplayMetrics displayMetrics =
-            context.getResources().getDisplayMetrics();
+                context.getResources().getDisplayMetrics();
         displayMetrics.xdpi = targetXdpi;
     }
-    
+
     /**
      * 适配信息
      */
-    private static class MatchInfo
-    {
-        
+    private static class MatchInfo {
+
         private int screenWidth;
-        
+
         private int screenHeight;
-        
+
         private float appDensity;
-        
+
         private float appDensityDpi;
-        
+
         private float appScaledDensity;
-        
+
         private float appXdpi;
-        
-        int getScreenWidth()
-        {
+
+        int getScreenWidth() {
             return screenWidth;
         }
-        
-        void setScreenWidth(int screenWidth)
-        {
+
+        void setScreenWidth(int screenWidth) {
             this.screenWidth = screenWidth;
         }
-        
-        int getScreenHeight()
-        {
+
+        int getScreenHeight() {
             return screenHeight;
         }
-        
-        void setScreenHeight(int screenHeight)
-        {
+
+        void setScreenHeight(int screenHeight) {
             this.screenHeight = screenHeight;
         }
-        
-        float getAppDensity()
-        {
+
+        float getAppDensity() {
             return appDensity;
         }
-        
-        void setAppDensity(float appDensity)
-        {
+
+        void setAppDensity(float appDensity) {
             this.appDensity = appDensity;
         }
-        
-        float getAppDensityDpi()
-        {
+
+        float getAppDensityDpi() {
             return appDensityDpi;
         }
-        
-        void setAppDensityDpi(float appDensityDpi)
-        {
+
+        void setAppDensityDpi(float appDensityDpi) {
             this.appDensityDpi = appDensityDpi;
         }
-        
-        float getAppScaledDensity()
-        {
+
+        float getAppScaledDensity() {
             return appScaledDensity;
         }
-        
-        void setAppScaledDensity(float appScaledDensity)
-        {
+
+        void setAppScaledDensity(float appScaledDensity) {
             this.appScaledDensity = appScaledDensity;
         }
-        
-        float getAppXdpi()
-        {
+
+        float getAppXdpi() {
             return appXdpi;
         }
-        
-        void setAppXdpi(float appXdpi)
-        {
+
+        void setAppXdpi(float appXdpi) {
             this.appXdpi = appXdpi;
         }
     }
-    
+
 }

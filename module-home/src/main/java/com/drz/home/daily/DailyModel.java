@@ -1,11 +1,6 @@
 package com.drz.home.daily;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.text.TextUtils;
 
 import com.drz.base.model.BasePagingModel;
 import com.drz.base.utils.GsonUtils;
@@ -19,7 +14,12 @@ import com.zhouyou.http.cache.model.CacheMode;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
-import android.text.TextUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
@@ -32,30 +32,25 @@ import io.reactivex.disposables.Disposable;
  * @author darryrzhoong
  * @since 2020-02-14
  */
-public class DailyModel<T> extends BasePagingModel<T>
-{
+public class DailyModel<T> extends BasePagingModel<T> {
 
     private Disposable disposable;
 
     @Override
-    protected void load()
-    {
+    protected void load() {
         disposable = EasyHttp.get("/api/v5/index/tab/feed")
-              .cacheKey(getClass().getSimpleName())
-              .execute(new SimpleCallBack<String>()
-              {
-                  @Override
-                  public void onError(ApiException e)
-                  {
-                      loadFail(e.getMessage(), isRefresh);
-                  }
+                .cacheKey(getClass().getSimpleName())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        loadFail(e.getMessage(), isRefresh);
+                    }
 
-                  @Override
-                  public void onSuccess(String s)
-                  {
-                      parseJson(s);
-                  }
-              });
+                    @Override
+                    public void onSuccess(String s) {
+                        parseJson(s);
+                    }
+                });
     }
 
     @Override
@@ -64,120 +59,103 @@ public class DailyModel<T> extends BasePagingModel<T>
         EasyHttp.cancelSubscription(disposable);
     }
 
-    public void loadMore(String nextPageUrl)
-    {
+    public void loadMore(String nextPageUrl) {
         EasyHttp.get(nextPageUrl)
-            .cacheMode(CacheMode.NO_CACHE)
-            .execute(new SimpleCallBack<String>()
-            {
-                @Override
-                public void onError(ApiException e)
-                {
-                    loadFail(e.getMessage(), isRefresh);
-                }
-                
-                @Override
-                public void onSuccess(String s)
-                {
-                    parseJson(s);
-                }
-            });
+                .cacheMode(CacheMode.NO_CACHE)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        loadFail(e.getMessage(), isRefresh);
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        parseJson(s);
+                    }
+                });
     }
-    
-    public void refresh()
-    {
+
+    public void refresh() {
         isRefresh = true;
         load();
-        
+
     }
-    
-    public void loadMore()
-    {
+
+    public void loadMore() {
         isRefresh = false;
-        if (!TextUtils.isEmpty(nextPageUrl))
-        {
+        if (!TextUtils.isEmpty(nextPageUrl)) {
             loadMore(nextPageUrl);
-        }
-        else
-        {
+        } else {
             loadSuccess(null, true, isRefresh);
         }
     }
-    
+
     /**
      * 解析json 数据
-     * 
+     *
      * @param s json字符串
      */
-    private void parseJson(String s)
-    {
+    private void parseJson(String s) {
         List<BaseCustomViewModel> viewModels = new ArrayList<>();
         JSONObject jsonObject = null;
-        try
-        {
+        try {
             jsonObject = new JSONObject(s);
             nextPageUrl = jsonObject.optString("nextPageUrl", "");
             JSONArray itemList = jsonObject.optJSONArray("itemList");
-            if (itemList != null)
-            {
-                for (int i = 0; i < itemList.length(); i++)
-                {
+            if (itemList != null) {
+                for (int i = 0; i < itemList.length(); i++) {
                     JSONObject ccurrentObject = itemList.getJSONObject(i);
-                    switch (ccurrentObject.optString("type"))
-                    {
+                    switch (ccurrentObject.optString("type")) {
                         case "textCard":
                             TextCardBean textCardBean = GsonUtils.fromLocalJson(
-                                ccurrentObject.toString(),
-                                TextCardBean.class);
-                            if (textCardBean.getData().getText().equals("今日社区精选")){
+                                    ccurrentObject.toString(),
+                                    TextCardBean.class);
+                            if (textCardBean.getData().getText().equals("今日社区精选")) {
                                 break;
                             }
                             SingleTitleViewModel viewModel =
-                                new SingleTitleViewModel();
+                                    new SingleTitleViewModel();
                             viewModel.title = textCardBean.getData().getText();
                             viewModels.add(viewModel);
                             break;
                         case "followCard":
                             FollowCardBean followCardBean = GsonUtils
-                                .fromLocalJson(ccurrentObject.toString(),
-                                    FollowCardBean.class);
+                                    .fromLocalJson(ccurrentObject.toString(),
+                                            FollowCardBean.class);
                             paresFollowCard(viewModels, followCardBean);
                         default:
                             break;
                     }
                 }
-                loadSuccess((T)viewModels, viewModels.size() == 0, isRefresh);
+                loadSuccess((T) viewModels, viewModels.size() == 0, isRefresh);
             }
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        
+
     }
-    
+
     private void paresFollowCard(List<BaseCustomViewModel> viewModels,
-        FollowCardBean cardBean)
-    {
+                                 FollowCardBean cardBean) {
         FollowCardViewModel followCardViewModel = new FollowCardViewModel();
         followCardViewModel.coverUrl =
-            cardBean.getData().getContent().getData().getCover().getDetail();
+                cardBean.getData().getContent().getData().getCover().getDetail();
         followCardViewModel.videoTime =
-            cardBean.getData().getContent().getData().getDuration();
+                cardBean.getData().getContent().getData().getDuration();
         followCardViewModel.authorUrl =
-            cardBean.getData().getContent().getData().getAuthor().getIcon();
+                cardBean.getData().getContent().getData().getAuthor().getIcon();
         followCardViewModel.description =
-            cardBean.getData().getContent().getData().getAuthor().getName()
-                + " / #"
-                + cardBean.getData().getContent().getData().getCategory();
+                cardBean.getData().getContent().getData().getAuthor().getName()
+                        + " / #"
+                        + cardBean.getData().getContent().getData().getCategory();
         followCardViewModel.title =
-            cardBean.getData().getContent().getData().getTitle();
-      followCardViewModel.video_description = cardBean.getData().getContent().getData().getDescription();
-      followCardViewModel.userDescription = cardBean.getData().getContent().getData().getAuthor().getDescription();
-      followCardViewModel.playerUrl = cardBean.getData().getContent().getData().getPlayUrl();
-      followCardViewModel.blurredUrl = cardBean.getData().getContent().getData().getCover().getBlurred();
-      followCardViewModel.videoId = cardBean.getData().getContent().getData().getId();
+                cardBean.getData().getContent().getData().getTitle();
+        followCardViewModel.video_description = cardBean.getData().getContent().getData().getDescription();
+        followCardViewModel.userDescription = cardBean.getData().getContent().getData().getAuthor().getDescription();
+        followCardViewModel.playerUrl = cardBean.getData().getContent().getData().getPlayUrl();
+        followCardViewModel.blurredUrl = cardBean.getData().getContent().getData().getCover().getBlurred();
+        followCardViewModel.videoId = cardBean.getData().getContent().getData().getId();
         viewModels.add(followCardViewModel);
     }
-    
+
 }

@@ -16,6 +16,8 @@
 
 package com.zhouyou.http.subsciber;
 
+import static com.zhouyou.http.utils.Utils.isNetworkAvailable;
+
 import android.content.Context;
 
 import com.zhouyou.http.exception.ApiException;
@@ -25,8 +27,6 @@ import java.lang.ref.WeakReference;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
-
-import static com.zhouyou.http.utils.Utils.isNetworkAvailable;
 
 /**
  * <p>描述：订阅的基类</p>
@@ -39,8 +39,14 @@ import static com.zhouyou.http.utils.Utils.isNetworkAvailable;
  */
 public abstract class BaseSubscriber<T> extends DisposableObserver<T> {
     public WeakReference<Context> contextWeakReference;
-    
+
     public BaseSubscriber() {
+    }
+
+    public BaseSubscriber(Context context) {
+        if (context != null) {
+            contextWeakReference = new WeakReference<>(context);
+        }
     }
 
     @Override
@@ -49,13 +55,6 @@ public abstract class BaseSubscriber<T> extends DisposableObserver<T> {
         if (contextWeakReference != null && contextWeakReference.get() != null && !isNetworkAvailable(contextWeakReference.get())) {
             //Toast.makeText(context, "无网络，读取缓存数据", Toast.LENGTH_SHORT).show();
             onComplete();
-        }
-    }
-
-
-    public BaseSubscriber(Context context) {
-        if (context != null) {
-            contextWeakReference = new WeakReference<>(context);
         }
     }
 

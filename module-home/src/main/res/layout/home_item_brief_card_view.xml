@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.drz.home.discover.bean.viewmodel.BriefCardViewModel" />
@@ -15,15 +16,15 @@
 
         <ImageView
             android:id="@+id/iv_cover"
-            tools:background="@drawable/common_tools_iv_bg"
+            imageUrl="@{viewModel.coverUrl}"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:scaleType="fitXY"
             android:layout_marginStart="10dp"
-            imageUrl="@{viewModel.coverUrl}"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/common_tools_iv_bg" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -71,8 +72,8 @@
             android:layout_marginEnd="10dp"
             android:background="@drawable/home_shape_border_btn_bg"
             android:gravity="center"
-            android:textSize="11sp"
             android:text="+关注"
+            android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_cover"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_cover" />

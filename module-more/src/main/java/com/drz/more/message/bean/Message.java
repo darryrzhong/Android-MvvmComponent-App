@@ -53,10 +53,10 @@ public class Message implements Serializable {
          * id : 0
          * title : 今天最值得关注的 5 件全球新鲜事
          * content : 柏林｜柏林电影节开幕：蔡明亮、贾樟柯参展;
-         伦敦｜4月将举行首个穆斯林骄傲游行;
-         印度 | 为特朗普建了一堵墙隐藏贫民窟;
-         时尚｜八位设计师和Moncler2020天才计划;
-         设计 | 2020日本平面设计师协会公布三大奖获奖作品;
+         * 伦敦｜4月将举行首个穆斯林骄傲游行;
+         * 印度 | 为特朗普建了一堵墙隐藏贫民窟;
+         * 时尚｜八位设计师和Moncler2020天才计划;
+         * 设计 | 2020日本平面设计师协会公布三大奖获奖作品;
          * date : 1582348713000
          * actionUrl : eyepetizer://webview/?title=%e6%af%8f%e6%97%a5%e8%b5%84%e8%ae%af%e7%b2%be%e9%80%89&url=https%3a%2f%2fwww.kaiyanapp.com%2fnew_article.html%3fnid%3d1521%26shareable%3dtrue
          * icon : http://img.wdjimg.com/image/video/418d281e65bf010c38c7b07bdd7b6a94_0_0.png

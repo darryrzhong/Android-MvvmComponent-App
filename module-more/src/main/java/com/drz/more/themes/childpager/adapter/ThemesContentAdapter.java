@@ -1,7 +1,6 @@
 package com.drz.more.themes.childpager.adapter;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import androidx.databinding.DataBindingUtil;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -9,7 +8,8 @@ import com.drz.common.contract.BaseCustomViewModel;
 import com.drz.more.databinding.MoreItemThemesViewBinding;
 import com.drz.more.themes.childpager.bean.ThemesItemViewModel;
 
-import androidx.databinding.DataBindingUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 应用模块:
@@ -33,11 +33,11 @@ public class ThemesContentAdapter extends BaseQuickAdapter<BaseCustomViewModel, 
 
     @Override
     protected void convert(@NotNull BaseViewHolder baseViewHolder, @Nullable BaseCustomViewModel baseCustomViewModel) {
-        if (baseCustomViewModel == null){
+        if (baseCustomViewModel == null) {
             return;
         }
         MoreItemThemesViewBinding binding = baseViewHolder.getBinding();
-        if (binding != null){
+        if (binding != null) {
             binding.setViewModel((ThemesItemViewModel) baseCustomViewModel);
             binding.executePendingBindings();
         }

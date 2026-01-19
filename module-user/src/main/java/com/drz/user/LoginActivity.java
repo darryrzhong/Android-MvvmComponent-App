@@ -1,12 +1,12 @@
 package com.drz.user;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -22,17 +22,16 @@ import com.drz.user.databinding.UserActivityLoginBinding;
 @Route(path = RouterActivityPath.User.PAGER_LOGIN)
 public class LoginActivity extends AppCompatActivity {
 
-    private UserActivityLoginBinding binding;
-    private AnimatorSet animatorSet;
-
     @Autowired(name = ServicesConfig.User.LONGING_SERVICE)
     ILoginService iLoginService;
+    private UserActivityLoginBinding binding;
+    private AnimatorSet animatorSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ARouter.getInstance().inject(this);
-        binding = DataBindingUtil.setContentView(this,R.layout.user_activity_login);
+        binding = DataBindingUtil.setContentView(this, R.layout.user_activity_login);
         initView();
         initData();
     }
@@ -41,12 +40,13 @@ public class LoginActivity extends AppCompatActivity {
         //模拟登录
         iLoginService.saveStatus(false);
     }
+
     private void initView() {
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(binding.loginBgImage1, "alpha", 1.0f, 0f);
         ObjectAnimator animator2 = ObjectAnimator.ofFloat(binding.loginBgImage2, "alpha", 0f, 1.0f);
         ObjectAnimator animatorScale1 = ObjectAnimator.ofFloat(binding.loginBgImage1, "scaleX", 1.0f, 1.3f);
         ObjectAnimator animatorScale2 = ObjectAnimator.ofFloat(binding.loginBgImage1, "scaleY", 1.0f, 1.3f);
-       AnimatorSet  animatorSet1 = new AnimatorSet();
+        AnimatorSet animatorSet1 = new AnimatorSet();
         animatorSet1.setDuration(5000);
         animatorSet1.play(animator1).with(animator2).with(animatorScale1).with(animatorScale2);
         animatorSet1.addListener(new Animator.AnimatorListener() {
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-       animatorSet.start();
+        animatorSet.start();
 
     }
 

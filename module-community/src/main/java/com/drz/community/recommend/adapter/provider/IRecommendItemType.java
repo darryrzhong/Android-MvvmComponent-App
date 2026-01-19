@@ -12,12 +12,14 @@ package com.drz.community.recommend.adapter.provider;
 public interface IRecommendItemType {
     /**
      * 话题卡片
-     * */
+     *
+     */
     int SQUARE_CARD_VIEW = 1;
 
     /**
      * 社区推荐
-     * */
+     *
+     */
     int COMMUNITY_CARD_VIEW = 2;
 
 }

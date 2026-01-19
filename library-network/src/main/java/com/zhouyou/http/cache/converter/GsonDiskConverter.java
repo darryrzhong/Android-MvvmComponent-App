@@ -56,7 +56,7 @@ import java.util.ConcurrentModificationException;
  * 日期： 2016/12/24 17:35<br>
  * 版本： v2.0<br>
  */
-@SuppressWarnings(value={"unchecked", "deprecation"})
+@SuppressWarnings(value = {"unchecked", "deprecation"})
 public class GsonDiskConverter implements IDiskConverter {
     private Gson gson = new Gson();
 
@@ -77,11 +77,12 @@ public class GsonDiskConverter implements IDiskConverter {
             JsonReader jsonReader = gson.newJsonReader(new InputStreamReader(source));
             value = (T) adapter.read(jsonReader);
             //value = gson.fromJson(new InputStreamReader(source), type);
-        } catch (JsonIOException | IOException| ConcurrentModificationException | JsonSyntaxException e) {
+        } catch (JsonIOException | IOException | ConcurrentModificationException |
+                 JsonSyntaxException e) {
             HttpLog.e(e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             HttpLog.e(e.getMessage());
-        }finally {
+        } finally {
             Utils.close(source);
         }
         return value;
@@ -95,9 +96,10 @@ public class GsonDiskConverter implements IDiskConverter {
             sink.write(bytes, 0, bytes.length);
             sink.flush();
             return true;
-        } catch (JsonIOException | JsonSyntaxException | ConcurrentModificationException| IOException e) {
+        } catch (JsonIOException | JsonSyntaxException | ConcurrentModificationException |
+                 IOException e) {
             HttpLog.e(e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             HttpLog.e(e.getMessage());
         } finally {
             Utils.close(sink);

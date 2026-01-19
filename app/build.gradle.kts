@@ -14,7 +14,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.drz.mvvmcomponent"
-    
+
     signingConfigs {
         create("release") {
             if (keystoreProperties["keyAlias"] != null) {
@@ -51,7 +51,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             if (keystoreProperties["keyAlias"] != null) {
                 signingConfig = signingConfigs.getByName("release")
             }
@@ -85,10 +88,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
-    
+
     annotationProcessor(libs.arouter.compiler)
     annotationProcessor(libs.glide.compiler)
-    
+
     val isBuildModule: String by project
     if (isBuildModule.toBoolean()) {
         implementation(project(":library-base"))

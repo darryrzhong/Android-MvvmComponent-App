@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
 
     </data>
@@ -21,6 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:id="@+id/login_bg_image2"
                 android:layout_width="match_parent"
@@ -40,10 +41,10 @@
             android:id="@+id/bt_login"
             android:layout_width="100dp"
             android:layout_height="40dp"
+            android:layout_marginBottom="100dp"
             android:alpha="0.8"
             android:background="@drawable/user_shape_login_bg"
             android:text="登录"
-            android:layout_marginBottom="100dp"
             android:textColor="@color/common_colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/bt_regist"

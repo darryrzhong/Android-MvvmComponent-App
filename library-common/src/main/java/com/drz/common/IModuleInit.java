@@ -11,12 +11,15 @@ import com.drz.base.base.BaseApplication;
  * @author darryrzhoong
  * @since 2020-02-25
  */
-public interface IModuleInit
-{
-    /** 需要优先初始化的 */
+public interface IModuleInit {
+    /**
+     * 需要优先初始化的
+     */
     boolean onInitAhead(BaseApplication application);
-    
-    /** 可以后初始化的 */
+
+    /**
+     * 可以后初始化的
+     */
     boolean onInitLow(BaseApplication application);
-    
+
 }

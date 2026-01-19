@@ -1,11 +1,7 @@
 package com.drz.home.nominate;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.drz.base.model.BasePagingModel;
 import com.drz.base.utils.GsonUtils;
@@ -23,8 +19,12 @@ import com.zhouyou.http.cache.model.CacheMode;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
-import android.text.TextUtils;
-import android.util.Log;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
@@ -37,51 +37,43 @@ import io.reactivex.disposables.Disposable;
  * @author darryrzhoong
  * @since 2020-02-10
  */
-public class NominateModel<T> extends BasePagingModel<T>
-{
+public class NominateModel<T> extends BasePagingModel<T> {
 
     private Disposable disposable;
     private Disposable disposable1;
 
     @Override
-    protected void load()
-    {
+    protected void load() {
         disposable = EasyHttp.get("/api/v5/index/tab/allRec")
-            .cacheKey(getClass().getSimpleName())
-            .execute(new SimpleCallBack<String>()
-            {
-                @Override
-                public void onError(ApiException e)
-                {
-                    loadFail(e.getMessage(), isRefresh);
-                }
-                
-                @Override
-                public void onSuccess(String s)
-                {
-                    parseJson(s);
-                }
-            });
+                .cacheKey(getClass().getSimpleName())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        loadFail(e.getMessage(), isRefresh);
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        parseJson(s);
+                    }
+                });
     }
 
-    public void loadMore(String url){
+    public void loadMore(String url) {
         disposable1 = EasyHttp.get(url)
-                 .cacheMode(CacheMode.NO_CACHE)
-                 .execute(new SimpleCallBack<String>()
-                 {
-                     @Override
-                     public void onError(ApiException e)
-                     {
-                         loadFail(e.getMessage(), isRefresh);
-                     }
+                .cacheMode(CacheMode.NO_CACHE)
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        loadFail(e.getMessage(), isRefresh);
+                    }
 
-                     @Override
-                     public void onSuccess(String s)
-                     {
-                         parseJson(s);
-                         Log.d("NominateModel", s);
-                     }
-                 });
+                    @Override
+                    public void onSuccess(String s) {
+                        parseJson(s);
+                        Log.d("NominateModel", s);
+                    }
+                });
     }
 
     @Override
@@ -93,120 +85,108 @@ public class NominateModel<T> extends BasePagingModel<T>
 
     /**
      * 解析数据
-     * 
+     *
      * @param s json字符串
      */
-    private void parseJson(String s)
-    {
+    private void parseJson(String s) {
         List<BaseCustomViewModel> viewModels = new ArrayList<>();
-        try
-        {
+        try {
             JSONObject jsonObject = new JSONObject(s);
             nextPageUrl = jsonObject.optString("nextPageUrl", "");
             JSONArray itemList = jsonObject.optJSONArray("itemList");
-            if (itemList != null)
-            {
-                for (int i = 0; i < itemList.length(); i++)
-                {
+            if (itemList != null) {
+                for (int i = 0; i < itemList.length(); i++) {
                     JSONObject ccurrentObject = itemList.getJSONObject(i);
-                    switch (ccurrentObject.optString("type"))
-                    {
+                    switch (ccurrentObject.optString("type")) {
                         case "squareCardCollection":
                             SquareCardCollectionBean squareCardCollectionBean =
-                                GsonUtils.fromLocalJson(
-                                    ccurrentObject.toString(),
-                                    SquareCardCollectionBean.class);
+                                    GsonUtils.fromLocalJson(
+                                            ccurrentObject.toString(),
+                                            SquareCardCollectionBean.class);
                             paresCollectionCard(viewModels,
-                                squareCardCollectionBean);
+                                    squareCardCollectionBean);
                             break;
                         case "textCard":
                             TextCardBean textCardBean = GsonUtils.fromLocalJson(
-                                ccurrentObject.toString(),
-                                TextCardBean.class);
+                                    ccurrentObject.toString(),
+                                    TextCardBean.class);
                             SingleTitleViewModel viewModel =
-                                new SingleTitleViewModel();
+                                    new SingleTitleViewModel();
                             viewModel.title = textCardBean.getData().getText();
                             viewModels.add(viewModel);
                             break;
                         case "videoSmallCard":
                             VideoSmallCardBean videoSmallCardBean = GsonUtils
-                                .fromLocalJson(ccurrentObject.toString(),
-                                    VideoSmallCardBean.class);
+                                    .fromLocalJson(ccurrentObject.toString(),
+                                            VideoSmallCardBean.class);
                             paresVideoCard(viewModels, videoSmallCardBean);
                             break;
                         case "followCard":
                             FollowCardBean followCardBean = GsonUtils
-                                .fromLocalJson(ccurrentObject.toString(),
-                                    FollowCardBean.class);
+                                    .fromLocalJson(ccurrentObject.toString(),
+                                            FollowCardBean.class);
                             paresFollowCard(viewModels, followCardBean);
                             break;
                         default:
                             break;
-                        
+
                     }
                 }
-                loadSuccess((T)viewModels, viewModels.size() == 0, isRefresh);
+                loadSuccess((T) viewModels, viewModels.size() == 0, isRefresh);
             }
-            
-        }
-        catch (JSONException e)
-        {
+
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
-    
-    public void refresh()
-    {
+
+    public void refresh() {
         isRefresh = true;
         load();
     }
-    
-    public void loadMore()
-    {
+
+    public void loadMore() {
         isRefresh = false;
-        if (!TextUtils.isEmpty(nextPageUrl)){
+        if (!TextUtils.isEmpty(nextPageUrl)) {
             loadMore(nextPageUrl);
-        }else {
-            loadSuccess(null,true,isRefresh);
+        } else {
+            loadSuccess(null, true, isRefresh);
         }
     }
-    
+
     private void paresCollectionCard(List<BaseCustomViewModel> viewModels,
-        SquareCardCollectionBean squareCardCollectionBean)
-    {
+                                     SquareCardCollectionBean squareCardCollectionBean) {
         TitleViewModel titleLeftAndRightViewModel = new TitleViewModel();
         titleLeftAndRightViewModel.title =
-            squareCardCollectionBean.getData().getHeader().getTitle();
+                squareCardCollectionBean.getData().getHeader().getTitle();
         titleLeftAndRightViewModel.actionTitle =
-            squareCardCollectionBean.getData().getHeader().getRightText();
+                squareCardCollectionBean.getData().getHeader().getRightText();
         viewModels.add(titleLeftAndRightViewModel);
         // 解析精选视频
         for (int i1 = 0; i1 < squareCardCollectionBean.getData()
-            .getItemList()
-            .size(); i1++)
-        {
+                .getItemList()
+                .size(); i1++) {
             paresFollowCard(viewModels,
-                squareCardCollectionBean.getData().getItemList().get(i1));
+                    squareCardCollectionBean.getData().getItemList().get(i1));
         }
     }
-    
+
     private void paresFollowCard(List<BaseCustomViewModel> viewModelList,
-        FollowCardBean cardBean)
-    {
+                                 FollowCardBean cardBean) {
         FollowCardViewModel followCardViewModel = new FollowCardViewModel();
         followCardViewModel.coverUrl =
-            cardBean.getData().getContent().getData().getCover().getDetail();
+                cardBean.getData().getContent().getData().getCover().getDetail();
         followCardViewModel.videoTime =
-            cardBean.getData().getContent().getData().getDuration();
+                cardBean.getData().getContent().getData().getDuration();
         followCardViewModel.authorUrl =
-            cardBean.getData().getContent().getData().getAuthor().getIcon();
+                cardBean.getData().getContent().getData().getAuthor().getIcon();
         followCardViewModel.description =
-            cardBean.getData().getContent().getData().getAuthor().getName()
-                + " / #"
-                + cardBean.getData().getContent().getData().getCategory();
+                cardBean.getData().getContent().getData().getAuthor().getName()
+                        + " / #"
+                        + cardBean.getData().getContent().getData().getCategory();
         followCardViewModel.title =
-            cardBean.getData().getContent().getData().getTitle();
+                cardBean.getData().getContent().getData().getTitle();
         followCardViewModel.nickName = cardBean.getData().getContent().getData().getAuthor().getName();
         followCardViewModel.video_description = cardBean.getData().getContent().getData().getDescription();
         followCardViewModel.userDescription = cardBean.getData().getContent().getData().getAuthor().getDescription();
@@ -215,19 +195,18 @@ public class NominateModel<T> extends BasePagingModel<T>
         followCardViewModel.videoId = cardBean.getData().getContent().getData().getId();
         viewModelList.add(followCardViewModel);
     }
-    
+
     private void paresVideoCard(List<BaseCustomViewModel> viewModels,
-        VideoSmallCardBean videoSmallCardBean)
-    {
+                                VideoSmallCardBean videoSmallCardBean) {
         VideoCardViewModel videoCardViewModel = new VideoCardViewModel();
         videoCardViewModel.coverUrl =
-            videoSmallCardBean.getData().getCover().getDetail();
+                videoSmallCardBean.getData().getCover().getDetail();
         videoCardViewModel.videoTime =
-            videoSmallCardBean.getData().getDuration();
+                videoSmallCardBean.getData().getDuration();
         videoCardViewModel.title = videoSmallCardBean.getData().getTitle();
         videoCardViewModel.description =
-            videoSmallCardBean.getData().getAuthor().getName() + " / # "
-                + videoSmallCardBean.getData().getCategory();
+                videoSmallCardBean.getData().getAuthor().getName() + " / # "
+                        + videoSmallCardBean.getData().getCategory();
         videoCardViewModel.authorUrl = videoSmallCardBean.getData().getAuthor().getIcon();
         videoCardViewModel.userDescription = videoSmallCardBean.getData().getAuthor().getDescription();
         videoCardViewModel.nickName = videoSmallCardBean.getData().getAuthor().getName();
@@ -239,5 +218,5 @@ public class NominateModel<T> extends BasePagingModel<T>
         videoCardViewModel.shareCount = videoSmallCardBean.getData().getConsumption().getShareCount();
         viewModels.add(videoCardViewModel);
     }
-    
+
 }

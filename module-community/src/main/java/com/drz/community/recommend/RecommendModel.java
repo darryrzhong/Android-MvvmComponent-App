@@ -1,11 +1,6 @@
 package com.drz.community.recommend;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.text.TextUtils;
 
 import com.drz.base.model.BasePagingModel;
 import com.drz.base.utils.GsonUtils;
@@ -18,7 +13,12 @@ import com.zhouyou.http.cache.model.CacheMode;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
-import android.text.TextUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
@@ -31,160 +31,136 @@ import io.reactivex.disposables.Disposable;
  * @author darryrzhoong
  * @since 2020-02-16
  */
-public class RecommendModel<T> extends BasePagingModel<T>
-{
-    
+public class RecommendModel<T> extends BasePagingModel<T> {
+
     private Disposable disposable;
-    
+
     private Disposable disposable1;
-    
+
     @Override
-    protected void load()
-    {
+    protected void load() {
         disposable =
-            EasyHttp.get("http://baobab.kaiyanapp.com/api/v7/community/tab/rec")
-                .cacheKey(getClass().getSimpleName())
-                .execute(new SimpleCallBack<String>()
-                {
+                EasyHttp.get("http://baobab.kaiyanapp.com/api/v7/community/tab/rec")
+                        .cacheKey(getClass().getSimpleName())
+                        .execute(new SimpleCallBack<String>() {
+                            @Override
+                            public void onError(ApiException e) {
+                                loadFail(e.getMessage(), isRefresh);
+                            }
+
+                            @Override
+                            public void onSuccess(String s) {
+                                parseJson(s);
+                            }
+                        });
+    }
+
+    private void loadMore(String nextPageUrl) {
+        disposable1 = EasyHttp.get(nextPageUrl)
+                .cacheMode(CacheMode.NO_CACHE)
+                .execute(new SimpleCallBack<String>() {
                     @Override
-                    public void onError(ApiException e)
-                    {
+                    public void onError(ApiException e) {
                         loadFail(e.getMessage(), isRefresh);
                     }
-                    
+
                     @Override
-                    public void onSuccess(String s)
-                    {
+                    public void onSuccess(String s) {
                         parseJson(s);
                     }
                 });
     }
-    
-    private void loadMore(String nextPageUrl)
-    {
-        disposable1 = EasyHttp.get(nextPageUrl)
-            .cacheMode(CacheMode.NO_CACHE)
-            .execute(new SimpleCallBack<String>()
-            {
-                @Override
-                public void onError(ApiException e)
-                {
-                    loadFail(e.getMessage(), isRefresh);
-                }
-                
-                @Override
-                public void onSuccess(String s)
-                {
-                    parseJson(s);
-                }
-            });
-    }
-    
+
     @Override
-    public void cancel()
-    {
+    public void cancel() {
         super.cancel();
         EasyHttp.cancelSubscription(disposable);
         EasyHttp.cancelSubscription(disposable1);
     }
-    
-    public void loadMore()
-    {
+
+    public void loadMore() {
         isRefresh = false;
-        if (!TextUtils.isEmpty(nextPageUrl))
-        {
+        if (!TextUtils.isEmpty(nextPageUrl)) {
             loadMore(nextPageUrl);
-        }
-        else
-        {
+        } else {
             loadSuccess(null, true, isRefresh);
         }
     }
-    
-    public void refresh()
-    {
+
+    public void refresh() {
         isRefresh = true;
         load();
     }
-    
-    private void parseJson(String s)
-    {
+
+    private void parseJson(String s) {
         List<BaseCustomViewModel> viewModels = new ArrayList<>();
         JSONObject jsonObject = null;
-        try
-        {
+        try {
             jsonObject = new JSONObject(s);
             nextPageUrl = jsonObject.optString("nextPageUrl", "");
             JSONArray itemList = jsonObject.optJSONArray("itemList");
-            if (itemList != null)
-            {
-                for (int i = 0; i < itemList.length(); i++)
-                {
+            if (itemList != null) {
+                for (int i = 0; i < itemList.length(); i++) {
                     JSONObject ccurrentObject = itemList.getJSONObject(i);
-                    switch (ccurrentObject.optString("type"))
-                    {
+                    switch (ccurrentObject.optString("type")) {
                         case "horizontalScrollCard":
                             HorizontalScrollCard scrollCard = GsonUtils
-                                .fromLocalJson(ccurrentObject.toString(),
-                                    HorizontalScrollCard.class);
+                                    .fromLocalJson(ccurrentObject.toString(),
+                                            HorizontalScrollCard.class);
                             viewModels.add(scrollCard);
                             break;
                         case "communityColumnsCard":
                             CommunityColumnsCard communityColumnsCard =
-                                GsonUtils.fromLocalJson(
-                                    ccurrentObject.toString(),
-                                    CommunityColumnsCard.class);
+                                    GsonUtils.fromLocalJson(
+                                            ccurrentObject.toString(),
+                                            CommunityColumnsCard.class);
                             parseCard(viewModels, communityColumnsCard);
                             break;
                         default:
                             break;
                     }
                 }
-                loadSuccess((T)viewModels, viewModels.size() == 0, isRefresh);
+                loadSuccess((T) viewModels, viewModels.size() == 0, isRefresh);
             }
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        
+
     }
-    
+
     private void parseCard(List<BaseCustomViewModel> viewModels,
-        CommunityColumnsCard columnsCard)
-    {
+                           CommunityColumnsCard columnsCard) {
         CloumnsCardViewModel cardViewModel = new CloumnsCardViewModel();
-        if (columnsCard != null)
-        {
+        if (columnsCard != null) {
             cardViewModel.coverUrl = columnsCard.getData()
-                .getContent()
-                .getData()
-                .getCover()
-                .getFeed();
+                    .getContent()
+                    .getData()
+                    .getCover()
+                    .getFeed();
             cardViewModel.description =
-                columnsCard.getData().getContent().getData().getDescription();
+                    columnsCard.getData().getContent().getData().getDescription();
             cardViewModel.nickName = columnsCard.getData()
-                .getContent()
-                .getData()
-                .getOwner()
-                .getNickname();
+                    .getContent()
+                    .getData()
+                    .getOwner()
+                    .getNickname();
             cardViewModel.avatarUrl = columnsCard.getData()
-                .getContent()
-                .getData()
-                .getOwner()
-                .getAvatar();
+                    .getContent()
+                    .getData()
+                    .getOwner()
+                    .getAvatar();
             cardViewModel.collectionCount = columnsCard.getData()
-                .getContent()
-                .getData()
-                .getConsumption()
-                .getCollectionCount();
+                    .getContent()
+                    .getData()
+                    .getConsumption()
+                    .getCollectionCount();
             cardViewModel.imgWidth =
-                columnsCard.getData().getContent().getData().getWidth();
+                    columnsCard.getData().getContent().getData().getWidth();
             cardViewModel.imgHeight =
-                columnsCard.getData().getContent().getData().getHeight();
+                    columnsCard.getData().getContent().getData().getHeight();
             viewModels.add(cardViewModel);
         }
-        
+
     }
-    
+
 }

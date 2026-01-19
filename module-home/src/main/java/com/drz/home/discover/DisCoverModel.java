@@ -1,12 +1,5 @@
 package com.drz.home.discover;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.drz.base.model.BaseModel;
 import com.drz.base.utils.GsonUtils;
 import com.drz.common.contract.BaseCustomViewModel;
@@ -26,6 +19,13 @@ import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -37,70 +37,60 @@ import io.reactivex.disposables.Disposable;
  * @author darryrzhoong
  * @since 2020-02-15
  */
-public class DisCoverModel<T> extends BaseModel<T>
-{
+public class DisCoverModel<T> extends BaseModel<T> {
     public static final String DEFAULT_URL =
-        "http://baobab.kaiyanapp.com/api/v7/index/tab/discovery?udid=fa53872206ed42e3857755c2756ab683fc22d64a&vc=591&vn=6.2.1&size=720X1280&deviceModel=Che1-CL20&first_channel=eyepetizer_zhihuiyun_market&last_channel=eyepetizer_zhihuiyun_market&system_version_code=19";
+            "http://baobab.kaiyanapp.com/api/v7/index/tab/discovery?udid=fa53872206ed42e3857755c2756ab683fc22d64a&vc=591&vn=6.2.1&size=720X1280&deviceModel=Che1-CL20&first_channel=eyepetizer_zhihuiyun_market&last_channel=eyepetizer_zhihuiyun_market&system_version_code=19";
     private Disposable disposable;
 
     @Override
-    protected void load()
-    {
+    protected void load() {
         disposable = EasyHttp.get(DEFAULT_URL)
-              .cacheKey(getClass().getSimpleName())
-              .execute(new SimpleCallBack<String>()
-              {
-                  @Override
-                  public void onError(ApiException e)
-                  {
-                      loadFail(e.getMessage());
-                  }
+                .cacheKey(getClass().getSimpleName())
+                .execute(new SimpleCallBack<String>() {
+                    @Override
+                    public void onError(ApiException e) {
+                        loadFail(e.getMessage());
+                    }
 
-                  @Override
-                  public void onSuccess(String s)
-                  {
-                      parseJson(s);
-                  }
-              });
+                    @Override
+                    public void onSuccess(String s) {
+                        parseJson(s);
+                    }
+                });
     }
-    
-    private void parseJson(String s)
-    {
+
+    private void parseJson(String s) {
         List<BaseCustomViewModel> viewModels = new ArrayList<>();
-        try
-        {
+        try {
             JSONObject jsonObject = new JSONObject(s);
             JSONArray itemList = jsonObject.optJSONArray("itemList");
-            if (itemList != null)
-            {
-                for (int i = 0; i < itemList.length(); i++)
-                {
+            if (itemList != null) {
+                for (int i = 0; i < itemList.length(); i++) {
                     JSONObject ccurrentObject = itemList.getJSONObject(i);
-                    switch (ccurrentObject.optString("type"))
-                    {
+                    switch (ccurrentObject.optString("type")) {
                         case "horizontalScrollCard":
-                            TopBannerBean topBannerBean = GsonUtils.fromLocalJson(ccurrentObject.toString(),TopBannerBean.class);
+                            TopBannerBean topBannerBean = GsonUtils.fromLocalJson(ccurrentObject.toString(), TopBannerBean.class);
                             TopBannerViewModel topBannerViewModel = new TopBannerViewModel();
                             topBannerViewModel.bannerUrl = topBannerBean.getData().getItemList().get(0).getData().getImage();
                             viewModels.add(topBannerViewModel);
                             break;
                         case "specialSquareCardCollection":
-                            CategoryCardBean categoryCardBean = GsonUtils.fromLocalJson(ccurrentObject.toString(),CategoryCardBean.class);
+                            CategoryCardBean categoryCardBean = GsonUtils.fromLocalJson(ccurrentObject.toString(), CategoryCardBean.class);
                             viewModels.add(categoryCardBean);
                             break;
                         case "columnCardList":
-                            SubjectCardBean subjectCardBean = GsonUtils.fromLocalJson(ccurrentObject.toString(),SubjectCardBean.class);
+                            SubjectCardBean subjectCardBean = GsonUtils.fromLocalJson(ccurrentObject.toString(), SubjectCardBean.class);
                             viewModels.add(subjectCardBean);
                             break;
                         case "textCard":
-                            TextCardbean textCardbean = GsonUtils.fromLocalJson(ccurrentObject.toString(),TextCardbean.class);
+                            TextCardbean textCardbean = GsonUtils.fromLocalJson(ccurrentObject.toString(), TextCardbean.class);
                             TitleViewModel titleViewModel = new TitleViewModel();
                             titleViewModel.title = textCardbean.getData().getText();
                             titleViewModel.actionTitle = textCardbean.getData().getRightText();
                             viewModels.add(titleViewModel);
                             break;
                         case "banner":
-                            BannerBean bannerBean = GsonUtils.fromLocalJson(ccurrentObject.toString(),BannerBean.class);
+                            BannerBean bannerBean = GsonUtils.fromLocalJson(ccurrentObject.toString(), BannerBean.class);
                             ContentBannerViewModel bannerViewModel = new ContentBannerViewModel();
                             bannerViewModel.bannerUrl = bannerBean.getData().getImage();
                             viewModels.add(bannerViewModel);
@@ -112,32 +102,29 @@ public class DisCoverModel<T> extends BaseModel<T>
                             paresVideoCard(viewModels, videoSmallCardBean);
                             break;
                         case "briefCard":
-                            BriefCard briefCard = GsonUtils.fromLocalJson(ccurrentObject.toString(),BriefCard.class);
+                            BriefCard briefCard = GsonUtils.fromLocalJson(ccurrentObject.toString(), BriefCard.class);
                             BriefCardViewModel briefCardViewModel = new BriefCardViewModel();
                             briefCardViewModel.coverUrl = briefCard.getData().getIcon();
                             briefCardViewModel.title = briefCard.getData().getTitle();
                             briefCardViewModel.description = briefCard.getData().getDescription();
                             viewModels.add(briefCardViewModel);
                             break;
-                            default:
-                                break;
+                        default:
+                            break;
                     }
                 }
                 loadSuccess((T) viewModels);
             }
 
-            
-        }
-        catch (JSONException e)
-        {
+
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        
+
     }
 
     private void paresVideoCard(List<BaseCustomViewModel> viewModels,
-                                VideoSmallCardBean videoSmallCardBean)
-    {
+                                VideoSmallCardBean videoSmallCardBean) {
         VideoCardViewModel videoCardViewModel = new VideoCardViewModel();
         videoCardViewModel.coverUrl =
                 videoSmallCardBean.getData().getCover().getDetail();

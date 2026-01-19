@@ -16,31 +16,24 @@ import java.util.Map;
  * @author darryrzhoong
  * @since 2020-02-07
  */
-public class LiveDatabus
-{
-    
+public class LiveDatabus {
+
     /**
      * 粘性事件集合
      */
     private final Map<String, MutableLiveData> stickyBus;
-    
+
     /**
      * 普通事件结合
      */
     private final Map<String, BusMutableLiveData> bus;
-    
-    private LiveDatabus()
-    {
+
+    private LiveDatabus() {
         stickyBus = new HashMap<>();
         bus = new HashMap<>();
     }
-    
-    private static class singleHolder
-    {
-        private static final LiveDatabus SINGLE_BUS = new LiveDatabus();
-    }
 
-    public static LiveDatabus getInstance(){
+    public static LiveDatabus getInstance() {
         return singleHolder.SINGLE_BUS;
     }
 
@@ -52,7 +45,7 @@ public class LiveDatabus
         if (!bus.containsKey(key)) {
             bus.put(key, new BusMutableLiveData<T>());
         }
-        return  bus.get(key);
+        return bus.get(key);
     }
 
     public MutableLiveData<Object> withSticky(String key) {
@@ -63,7 +56,11 @@ public class LiveDatabus
         if (!stickyBus.containsKey(key)) {
             stickyBus.put(key, new MutableLiveData<T>());
         }
-        return  stickyBus.get(key);
+        return stickyBus.get(key);
+    }
+
+    private static class singleHolder {
+        private static final LiveDatabus SINGLE_BUS = new LiveDatabus();
     }
 
 

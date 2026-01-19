@@ -1,9 +1,9 @@
 package com.drz.more.themes.childpager;
 
-import java.util.ArrayList;
-
 import com.drz.base.activity.IBasePagingView;
 import com.drz.common.contract.BaseCustomViewModel;
+
+import java.util.ArrayList;
 
 /**
  * 应用模块:
@@ -17,8 +17,10 @@ import com.drz.common.contract.BaseCustomViewModel;
 public interface IThemeContentView extends IBasePagingView {
     /**
      * 数据加载完成
-     * @param viewModels data
+     *
+     * @param viewModels  data
      * @param isFirstPage 是否是第一页数据
-     * */
+     *
+     */
     void onDataLoaded(ArrayList<BaseCustomViewModel> viewModels, boolean isFirstPage);
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.drz.home.nominate.bean.viewmodel.TitleViewModel" />
@@ -18,9 +19,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:text="@{viewModel.title}"
             android:textColor="@android:color/black"
             android:textSize="18sp"
-            android:text="@{viewModel.title}"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,9 +34,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:drawableEnd="@drawable/common_action_right"
+            android:text="@{viewModel.actionTitle}"
             android:textColor="@android:color/darker_gray"
             android:textSize="13sp"
-            android:text="@{viewModel.actionTitle}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

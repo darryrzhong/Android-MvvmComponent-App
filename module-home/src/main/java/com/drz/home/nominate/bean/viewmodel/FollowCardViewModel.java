@@ -12,17 +12,16 @@ import com.drz.common.contract.BaseCustomViewModel;
  * @author darryrzhoong
  * @since 2020-02-12
  */
-public class FollowCardViewModel extends BaseCustomViewModel
-{
-    
+public class FollowCardViewModel extends BaseCustomViewModel {
+
     public String coverUrl;
-    
+
     public int videoTime;
-    
+
     public String authorUrl;
-    
+
     public String description;
-    
+
     public String title;
 
     public String video_description;
@@ -42,9 +41,6 @@ public class FollowCardViewModel extends BaseCustomViewModel
 
     // 分享
     public int shareCount;
-    
-    
 
-    
-    
+
 }

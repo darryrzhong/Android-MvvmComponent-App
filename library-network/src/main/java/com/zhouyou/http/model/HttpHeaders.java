@@ -74,14 +74,9 @@ public class HttpHeaders implements Serializable {
     public static final String HEAD_KEY_COOKIE2 = "Cookie2";
     public static final String HEAD_KEY_SET_COOKIE = "Set-Cookie";
     public static final String HEAD_KEY_SET_COOKIE2 = "Set-Cookie2";
-
-    public LinkedHashMap<String, String> headersMap;
     private static String acceptLanguage;
     private static String userAgent;
-
-    private void init() {
-        headersMap = new LinkedHashMap<>();
-    }
+    public LinkedHashMap<String, String> headersMap;
 
     public HttpHeaders() {
         init();
@@ -90,58 +85,6 @@ public class HttpHeaders implements Serializable {
     public HttpHeaders(String key, String value) {
         init();
         put(key, value);
-    }
-
-    public void put(String key, String value) {
-        if (key != null && value != null) {
-            headersMap.remove(key);
-            headersMap.put(key, value);
-        }
-    }
-
-    public void put(HttpHeaders headers) {
-        if (headers != null) {
-            if (headers.headersMap != null && !headers.headersMap.isEmpty()){
-               Set<Map.Entry<String, String>> set = headers.headersMap.entrySet();
-                for (Map.Entry<String, String> map : set) {
-                    headersMap.remove(map.getKey());
-                    headersMap.put(map.getKey(),map.getValue());
-                }
-            }
-                
-        }
-    }
-
-    public boolean isEmpty() {
-        return headersMap.isEmpty();
-    }
-
-    public String get(String key) {
-        return headersMap.get(key);
-    }
-
-    public String remove(String key) {
-        return headersMap.remove(key);
-    }
-
-    public void clear() {
-        headersMap.clear();
-    }
-
-    public Set<String> getNames() {
-        return headersMap.keySet();
-    }
-
-    public final String toJSONString() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            for (Map.Entry<String, String> entry : headersMap.entrySet()) {
-                jsonObject.put(entry.getKey(), entry.getValue());
-            }
-        } catch (JSONException e) {
-            HttpLog.e(e);
-        }
-        return jsonObject.toString();
     }
 
     public static long getDate(String gmtTime) {
@@ -179,10 +122,6 @@ public class HttpHeaders implements Serializable {
         else return null;
     }
 
-    public static void setAcceptLanguage(String language) {
-        acceptLanguage = language;
-    }
-
     /**
      * Accept-Language: zh-CN,zh;q=0.8
      */
@@ -200,8 +139,8 @@ public class HttpHeaders implements Serializable {
         return acceptLanguage;
     }
 
-    public static void setUserAgent(String agent) {
-        userAgent = agent;
+    public static void setAcceptLanguage(String language) {
+        acceptLanguage = language;
     }
 
     /**
@@ -264,6 +203,10 @@ public class HttpHeaders implements Serializable {
         return userAgent;
     }
 
+    public static void setUserAgent(String agent) {
+        userAgent = agent;
+    }
+
     public static long parseGMTToMillis(String gmtTime) throws ParseException {
         if (TextUtils.isEmpty(gmtTime)) return 0;
         SimpleDateFormat formatter = new SimpleDateFormat(FORMAT_HTTP_DATA, Locale.US);
@@ -277,6 +220,62 @@ public class HttpHeaders implements Serializable {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_HTTP_DATA, Locale.US);
         simpleDateFormat.setTimeZone(GMT_TIME_ZONE);
         return simpleDateFormat.format(date);
+    }
+
+    private void init() {
+        headersMap = new LinkedHashMap<>();
+    }
+
+    public void put(String key, String value) {
+        if (key != null && value != null) {
+            headersMap.remove(key);
+            headersMap.put(key, value);
+        }
+    }
+
+    public void put(HttpHeaders headers) {
+        if (headers != null) {
+            if (headers.headersMap != null && !headers.headersMap.isEmpty()) {
+                Set<Map.Entry<String, String>> set = headers.headersMap.entrySet();
+                for (Map.Entry<String, String> map : set) {
+                    headersMap.remove(map.getKey());
+                    headersMap.put(map.getKey(), map.getValue());
+                }
+            }
+
+        }
+    }
+
+    public boolean isEmpty() {
+        return headersMap.isEmpty();
+    }
+
+    public String get(String key) {
+        return headersMap.get(key);
+    }
+
+    public String remove(String key) {
+        return headersMap.remove(key);
+    }
+
+    public void clear() {
+        headersMap.clear();
+    }
+
+    public Set<String> getNames() {
+        return headersMap.keySet();
+    }
+
+    public final String toJSONString() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            for (Map.Entry<String, String> entry : headersMap.entrySet()) {
+                jsonObject.put(entry.getKey(), entry.getValue());
+            }
+        } catch (JSONException e) {
+            HttpLog.e(e);
+        }
+        return jsonObject.toString();
     }
 
     @Override

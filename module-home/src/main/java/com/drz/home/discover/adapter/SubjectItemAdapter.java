@@ -1,14 +1,14 @@
 package com.drz.home.discover.adapter;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import androidx.databinding.DataBindingUtil;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.drz.home.databinding.HomeItemCategoryItemSubjectCardViewBinding;
 import com.drz.home.discover.bean.SquareCard;
 
-import androidx.databinding.DataBindingUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 应用模块:
@@ -20,33 +20,27 @@ import androidx.databinding.DataBindingUtil;
  * @since 2020-02-15
  */
 public class SubjectItemAdapter
-    extends BaseQuickAdapter<SquareCard, BaseViewHolder>
-{
-    
-    public SubjectItemAdapter(int layoutResId)
-    {
+        extends BaseQuickAdapter<SquareCard, BaseViewHolder> {
+
+    public SubjectItemAdapter(int layoutResId) {
         super(layoutResId);
     }
-    
+
     @Override
     protected void onItemViewHolderCreated(@NotNull BaseViewHolder viewHolder,
-        int viewType)
-    {
+                                           int viewType) {
         DataBindingUtil.bind(viewHolder.itemView);
     }
-    
+
     @Override
     protected void convert(@NotNull BaseViewHolder baseViewHolder,
-        @Nullable SquareCard squareCard)
-    {
-        if (squareCard == null)
-        {
+                           @Nullable SquareCard squareCard) {
+        if (squareCard == null) {
             return;
         }
         HomeItemCategoryItemSubjectCardViewBinding binding =
-            baseViewHolder.getBinding();
-        if (binding != null)
-        {
+                baseViewHolder.getBinding();
+        if (binding != null) {
             binding.setViewModel(squareCard);
             binding.executePendingBindings();
         }

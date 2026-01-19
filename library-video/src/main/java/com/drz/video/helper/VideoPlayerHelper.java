@@ -1,9 +1,9 @@
 package com.drz.video.helper;
 
+import android.view.View;
+
 import com.drz.video.views.CoverVideoPlayerView;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
-
-import android.view.View;
 
 /**
  * 应用模块:
@@ -21,7 +21,8 @@ public class VideoPlayerHelper {
 
     /**
      * 播放前初始化配置
-     * */
+     *
+     */
     public static void optionPlayer(final CoverVideoPlayerView gsyVideoPlayer, String url, boolean cache, String title) {
         //增加title
         gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);

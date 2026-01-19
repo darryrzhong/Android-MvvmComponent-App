@@ -36,14 +36,13 @@ import okhttp3.ResponseBody;
  * 日期： 2017/4/28 17:20 <br>
  * 版本： v1.0<br>
  */
-@SuppressWarnings(value={"unchecked", "deprecation"})
+@SuppressWarnings(value = {"unchecked", "deprecation"})
 public class DownloadRequest extends BaseRequest<DownloadRequest> {
+    private String savePath;
+    private String saveName;
     public DownloadRequest(String url) {
         super(url);
     }
-
-    private String savePath;
-    private String saveName;
 
     /**
      * 下载文件路径<br>
@@ -65,17 +64,17 @@ public class DownloadRequest extends BaseRequest<DownloadRequest> {
 
     public <T> Disposable execute(CallBack<T> callBack) {
         return (Disposable) build().generateRequest().compose(new ObservableTransformer<ResponseBody, ResponseBody>() {
-            @Override
-            public ObservableSource<ResponseBody> apply(@NonNull Observable<ResponseBody> upstream) {
-                if (isSyncRequest) {
-                    return upstream;//.observeOn(AndroidSchedulers.mainThread());
-                } else {
-                    return upstream.subscribeOn(Schedulers.io())
-                            .unsubscribeOn(Schedulers.io())
-                            .observeOn(Schedulers.computation());
-                }
-            }
-        }).compose(new HandleErrTransformer()).retryWhen(new RetryExceptionFunc(retryCount, retryDelay, retryIncreaseDelay))
+                    @Override
+                    public ObservableSource<ResponseBody> apply(@NonNull Observable<ResponseBody> upstream) {
+                        if (isSyncRequest) {
+                            return upstream;//.observeOn(AndroidSchedulers.mainThread());
+                        } else {
+                            return upstream.subscribeOn(Schedulers.io())
+                                    .unsubscribeOn(Schedulers.io())
+                                    .observeOn(Schedulers.computation());
+                        }
+                    }
+                }).compose(new HandleErrTransformer()).retryWhen(new RetryExceptionFunc(retryCount, retryDelay, retryIncreaseDelay))
                 .subscribeWith(new DownloadSubscriber(context, savePath, saveName, callBack));
     }
 

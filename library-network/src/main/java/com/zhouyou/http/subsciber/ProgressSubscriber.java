@@ -46,7 +46,7 @@ public abstract class ProgressSubscriber<T> extends BaseSubscriber<T> implements
     /**
      * 默认不显示弹出框，不可以取消
      *
-     * @param context  上下文
+     * @param context 上下文
      */
     public ProgressSubscriber(Context context) {
         super(context);
@@ -56,7 +56,7 @@ public abstract class ProgressSubscriber<T> extends BaseSubscriber<T> implements
     /**
      * 自定义加载进度框
      *
-     * @param context 上下文
+     * @param context        上下文
      * @param progressDialog 自定义对话框
      */
     public ProgressSubscriber(Context context, IProgressDialog progressDialog) {
@@ -68,10 +68,10 @@ public abstract class ProgressSubscriber<T> extends BaseSubscriber<T> implements
     /**
      * 自定义加载进度框,可以设置是否显示弹出框，是否可以取消
      *
-     * @param context 上下文 
+     * @param context        上下文
      * @param progressDialog 对话框
-     * @param isShowProgress  是否显示对话框
-     * @param isCancel  对话框是否可以取消
+     * @param isShowProgress 是否显示对话框
+     * @param isCancel       对话框是否可以取消
      */
     public ProgressSubscriber(Context context, IProgressDialog progressDialog, boolean isShowProgress, boolean isCancel) {
         super(context);

@@ -1,9 +1,9 @@
 package com.drz.community.recommend;
 
-import java.util.ArrayList;
-
 import com.drz.base.activity.IBasePagingView;
 import com.drz.common.contract.BaseCustomViewModel;
+
+import java.util.ArrayList;
 
 /**
  * 应用模块:

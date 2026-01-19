@@ -104,7 +104,7 @@ public abstract class BaseStrategy implements IStrategy {
                 .flatMap(new Function<T, ObservableSource<CacheResult<T>>>() {
                     @Override
                     public ObservableSource<CacheResult<T>> apply(final @NonNull T t) throws Exception {
-                        return  rxCache.save(key, t).map(new Function<Boolean, CacheResult<T>>() {
+                        return rxCache.save(key, t).map(new Function<Boolean, CacheResult<T>>() {
                             @Override
                             public CacheResult<T> apply(@NonNull Boolean aBoolean) throws Exception {
                                 HttpLog.i("save status => " + aBoolean);

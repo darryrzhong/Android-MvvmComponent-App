@@ -12,7 +12,6 @@ import com.drz.common.contract.BaseCustomViewModel;
  * @author darryrzhoong
  * @since 2020-02-12
  */
-public class SingleTitleViewModel extends BaseCustomViewModel
-{
+public class SingleTitleViewModel extends BaseCustomViewModel {
     public String title;
 }

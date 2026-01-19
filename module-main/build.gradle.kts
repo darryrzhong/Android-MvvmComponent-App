@@ -12,7 +12,7 @@ configure<BaseExtension> {
             applicationId = "com.drz.main"
         }
     }
-    
+
     resourcePrefix = "main_"
 }
 
@@ -26,10 +26,10 @@ dependencies {
     add("testImplementation", libs.junit)
     add("androidTestImplementation", libs.androidx.test.ext.junit)
     add("androidTestImplementation", libs.androidx.test.espresso.core)
-    
+
     add("annotationProcessor", libs.arouter.compiler)
     add("annotationProcessor", libs.glide.compiler)
-    
+
     add("api", project(":library-common"))
     add("api", libs.pager.bottom.tab.strip)
     add("api", libs.androidx.core.ktx)

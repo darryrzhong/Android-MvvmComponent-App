@@ -36,7 +36,8 @@ public class MethodRouter {
     public static Bundle routerToInstance(Bundle extras) {
 
         String name = extras.getString(ParamUtil.service_name);
-        String methodName = extras.getString(ParamUtil.method_name);;
+        String methodName = extras.getString(ParamUtil.method_name);
+        ;
 
         Object service = ServicePool.getService(name);
         Object result = null;

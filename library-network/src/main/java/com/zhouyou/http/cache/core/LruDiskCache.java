@@ -33,11 +33,11 @@ import java.lang.reflect.Type;
  * 作者： zhouyou<br>
  * 日期： 2016/12/24 10:35<br>
  * 版本： v2.0<br>
- *
+ * <p>
  * 修改者： zhouyou<br>
  * 日期： 2016/01/07 10:35<br>
- *  1.为了更好的扩展功能，统一使用BasicCache<br>
- *  2.将来做内存管理也可以继承BasicCache来统一处理<br>
+ * 1.为了更好的扩展功能，统一使用BasicCache<br>
+ * 2.将来做内存管理也可以继承BasicCache来统一处理<br>
  */
 public class LruDiskCache extends BaseCache {
     private IDiskConverter mDiskConverter;
@@ -67,7 +67,7 @@ public class LruDiskCache extends BaseCache {
             InputStream source = edit.newInputStream(0);
             T value;
             if (source != null) {
-                value = mDiskConverter.load(source,type);
+                value = mDiskConverter.load(source, type);
                 Utils.close(source);
                 edit.commit();
                 return value;
@@ -165,7 +165,7 @@ public class LruDiskCache extends BaseCache {
             return false;
         }
         long existTime = System.currentTimeMillis() - dataFile.lastModified();
-        return existTime > time*1000;
+        return existTime > time * 1000;
     }
-    
+
 }

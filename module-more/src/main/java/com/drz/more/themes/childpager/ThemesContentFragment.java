@@ -1,6 +1,11 @@
 package com.drz.more.themes.childpager;
 
-import java.util.ArrayList;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.drz.base.fragment.MvvmLazyFragment;
 import com.drz.common.contract.BaseCustomViewModel;
@@ -10,12 +15,7 @@ import com.drz.more.themes.childpager.adapter.ThemesContentAdapter;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.ClassicsHeader;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import java.util.ArrayList;
 
 /**
  * 应用模块:
@@ -28,23 +28,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  */
 public class ThemesContentFragment extends
         MvvmLazyFragment<MoreFragmentThemesContentBinding, ThemesContentViewModel>
-    implements IThemeContentView
-{
-    
+        implements IThemeContentView {
+
     private ThemesContentAdapter adapter;
-    
+
     private String typeName = "";
-    
+
     private String apiUrl = "";
-    
-    @Override
-    public int getLayoutId()
-    {
-        return R.layout.more_fragment_themes_content;
-    }
-    
-    public static ThemesContentFragment newInstance(String name, String url)
-    {
+
+    public static ThemesContentFragment newInstance(String name, String url) {
         ThemesContentFragment fragment = new ThemesContentFragment();
         Bundle bundle = new Bundle();
         bundle.putString("name", name);
@@ -52,23 +44,26 @@ public class ThemesContentFragment extends
         fragment.setArguments(bundle);
         return fragment;
     }
-    
+
     @Override
-    protected void onFragmentFirstVisible()
-    {
+    public int getLayoutId() {
+        return R.layout.more_fragment_themes_content;
+    }
+
+    @Override
+    protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
         initView();
     }
-    
-    private void initView()
-    {
+
+    private void initView() {
         viewDataBinding.rvThemeView.setHasFixedSize(true);
         viewDataBinding.rvThemeView
-            .setLayoutManager(new LinearLayoutManager(getContext()));
+                .setLayoutManager(new LinearLayoutManager(getContext()));
         viewDataBinding.refreshLayout
-            .setRefreshHeader(new ClassicsHeader(getContext()));
+                .setRefreshHeader(new ClassicsHeader(getContext()));
         viewDataBinding.refreshLayout
-            .setRefreshFooter(new ClassicsFooter(getContext()));
+                .setRefreshFooter(new ClassicsFooter(getContext()));
         viewDataBinding.refreshLayout.setOnRefreshListener(refreshLayout -> {
             viewModel.tryRefresh();
         });
@@ -80,77 +75,64 @@ public class ThemesContentFragment extends
         setLoadSir(viewDataBinding.refreshLayout);
         showLoading();
         viewModel.initModel(typeName, apiUrl);
-        
+
     }
-    
-    private View getFooterView()
-    {
+
+    private View getFooterView() {
         return LayoutInflater.from(getContext())
-            .inflate(R.layout.more_item_foote_view,
-                viewDataBinding.rvThemeView,
-                false);
+                .inflate(R.layout.more_item_foote_view,
+                        viewDataBinding.rvThemeView,
+                        false);
     }
-    
+
     @Override
-    protected void initParameters()
-    {
-        if (getArguments() != null)
-        {
+    protected void initParameters() {
+        if (getArguments() != null) {
             typeName = getArguments().getString("name");
             apiUrl = getArguments().getString("url");
         }
     }
-    
+
     @Override
-    public int getBindingVariable()
-    {
+    public int getBindingVariable() {
         return 0;
     }
-    
+
     @Override
-    protected ThemesContentViewModel getViewModel()
-    {
+    protected ThemesContentViewModel getViewModel() {
         return ViewModelProviders.of(this).get(ThemesContentViewModel.class);
     }
-    
+
     @Override
-    protected void onRetryBtnClick()
-    {
-        
+    protected void onRetryBtnClick() {
+
     }
-    
+
     @Override
     public void onDataLoaded(ArrayList<BaseCustomViewModel> viewModels,
-        boolean isFirstPage)
-    {
-        if (viewModels == null)
-        {
+                             boolean isFirstPage) {
+        if (viewModels == null) {
             return;
         }
-        if (isFirstPage)
-        {
+        if (isFirstPage) {
             adapter.setNewData(viewModels);
             showContent();
             viewDataBinding.refreshLayout.finishRefresh(true);
-        }
-        else
-        {
+        } else {
             adapter.addData(viewModels);
             showContent();
             viewDataBinding.refreshLayout.finishLoadMore(true);
         }
-        
+
     }
-    
+
     @Override
-    public void onLoadMoreFailure(String message)
-    {
+    public void onLoadMoreFailure(String message) {
         viewDataBinding.refreshLayout.finishLoadMore(false);
     }
-    
+
     @Override
-    public void onLoadMoreEmpty()
-    {
+    public void onLoadMoreEmpty() {
         adapter.addFooterView(getFooterView());
         viewDataBinding.refreshLayout.finishLoadMoreWithNoMoreData();
     }

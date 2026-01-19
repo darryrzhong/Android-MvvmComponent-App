@@ -17,65 +17,48 @@ import java.util.ArrayList;
  * @since 2020-02-14
  */
 public class DailyViewModel extends MvmBaseViewModel<IDailyView, DailyModel>
-    implements IPagingModelListener<ArrayList<BaseCustomViewModel>>
-{
-    
+        implements IPagingModelListener<ArrayList<BaseCustomViewModel>> {
+
     @Override
     public void onLoadFinish(BasePagingModel model,
                              ArrayList<BaseCustomViewModel> data, boolean isEmpty,
-                             boolean isFirstPage)
-    {
-        if (getPageView() != null)
-        {
-            if (isEmpty)
-            {
-                if (isFirstPage)
-                {
+                             boolean isFirstPage) {
+        if (getPageView() != null) {
+            if (isEmpty) {
+                if (isFirstPage) {
                     getPageView().showEmpty();
-                }
-                else
-                {
+                } else {
                     getPageView().onLoadMoreEmpty();
                 }
-            }
-            else
-            {
+            } else {
                 getPageView().onDataLoadFinish(data, isFirstPage);
             }
         }
-        
+
     }
-    
+
     @Override
     public void onLoadFail(BasePagingModel model, String prompt,
-        boolean isRefresh)
-    {
-        if (getPageView() != null)
-        {
-            if (isRefresh)
-            {
+                           boolean isRefresh) {
+        if (getPageView() != null) {
+            if (isRefresh) {
                 getPageView().showFailure(prompt);
-            }
-            else
-            {
+            } else {
                 getPageView().onLoadMoreFailure(prompt);
             }
         }
     }
-    
-    public void tryToRefresh()
-    {
+
+    public void tryToRefresh() {
         model.refresh();
     }
-    
-    public void loadMore()
-    {
+
+    public void loadMore() {
         model.loadMore();
     }
-    
+
     @Override
-    protected void initModel()
-    {
+    protected void initModel() {
         model = new DailyModel();
         model.register(this);
         model.getCacheDataAndLoad();

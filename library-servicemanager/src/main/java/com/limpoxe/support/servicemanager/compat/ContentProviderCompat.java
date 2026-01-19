@@ -37,7 +37,7 @@ public class ContentProviderCompat {
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-                    return  (Bundle) result;
+                    return (Bundle) result;
                 }
 
             } finally {

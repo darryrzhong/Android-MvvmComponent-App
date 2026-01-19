@@ -39,7 +39,7 @@ public interface IStrategy {
      * @param cacheKey  缓存key
      * @param cacheTime 缓存时间
      * @param source    网络请求对象
-     * @param type     要转换的目标对象
+     * @param type      要转换的目标对象
      * @return 返回带缓存的Observable流对象
      */
     <T> Observable<CacheResult<T>> execute(RxCache rxCache, String cacheKey, long cacheTime, Observable<T> source, Type type);

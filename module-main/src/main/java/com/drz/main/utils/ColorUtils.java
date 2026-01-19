@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat;
  * @since 2020-02-26
  */
 public class ColorUtils {
-    public static int getColor(Context context,int colorId){
-       return ContextCompat.getColor(context,colorId);
+    public static int getColor(Context context, int colorId) {
+        return ContextCompat.getColor(context, colorId);
     }
 }

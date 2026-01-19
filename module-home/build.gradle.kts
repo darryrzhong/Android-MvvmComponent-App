@@ -11,7 +11,7 @@ configure<BaseExtension> {
             applicationId = "com.drz.home"
         }
     }
-    
+
     resourcePrefix = "home_"
 }
 
@@ -19,9 +19,9 @@ dependencies {
     add("testImplementation", libs.junit)
     add("androidTestImplementation", libs.androidx.test.ext.junit)
     add("androidTestImplementation", libs.androidx.test.espresso.core)
-    
+
     add("annotationProcessor", libs.arouter.compiler)
     add("annotationProcessor", libs.glide.compiler)
-    
+
     add("api", project(":library-common"))
 }

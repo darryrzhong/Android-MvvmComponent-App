@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
-    android:opacity="opaque"
-    >
+    android:opacity="opaque">
     <item android:drawable="@android:color/transparent" />
-    <item >
+    <item>
         <bitmap
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-           android:src="@mipmap/splash_start"/>
+            android:src="@mipmap/splash_start" />
     </item>
 
 </layer-list>

@@ -14,8 +14,7 @@ import java.util.ArrayList;
  * @author darryrzhoong
  * @since 2020-02-12
  */
-public class BannerCardViewModel extends BaseCustomViewModel
-{
+public class BannerCardViewModel extends BaseCustomViewModel {
     public ArrayList<String> banners;
-    
+
 }

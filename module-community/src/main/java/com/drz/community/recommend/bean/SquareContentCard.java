@@ -9,7 +9,7 @@ package com.drz.community.recommend.bean;
  * @author darryrzhoong
  * @since 2020-02-17
  */
-public class SquareContentCard  {
+public class SquareContentCard {
 
     /**
      * type : squareCardOfCommunityContent

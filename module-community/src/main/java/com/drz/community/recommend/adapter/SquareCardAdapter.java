@@ -1,13 +1,14 @@
 package com.drz.community.recommend.adapter;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import androidx.databinding.DataBindingUtil;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.drz.community.databinding.CommunityItemSquareItemCardViewBinding;
 import com.drz.community.recommend.bean.SquareContentCard;
-import androidx.databinding.DataBindingUtil;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 应用模块:
@@ -27,15 +28,16 @@ public class SquareCardAdapter extends BaseQuickAdapter<SquareContentCard, BaseV
     protected void onItemViewHolderCreated(@NotNull BaseViewHolder viewHolder, int viewType) {
         DataBindingUtil.bind(viewHolder.itemView);
     }
+
     @Override
     protected void convert(@NotNull BaseViewHolder baseViewHolder, @Nullable SquareContentCard squareContentCard) {
-          if (squareContentCard == null){
-              return;
-          }
+        if (squareContentCard == null) {
+            return;
+        }
         CommunityItemSquareItemCardViewBinding binding = baseViewHolder.getBinding();
-          if (binding != null){
-              binding.setViewModel(squareContentCard);
-              binding.executePendingBindings();
-          }
+        if (binding != null) {
+            binding.setViewModel(squareContentCard);
+            binding.executePendingBindings();
+        }
     }
 }

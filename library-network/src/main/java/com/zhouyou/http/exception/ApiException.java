@@ -41,6 +41,8 @@ import retrofit2.HttpException;
  */
 @SuppressWarnings("deprecation")
 public class ApiException extends Exception {
+    public static final int UNKNOWN = 1000;
+    public static final int PARSE_ERROR = 1001;
     //对应HTTP的状态码
     private static final int BADREQUEST = 400;
     private static final int UNAUTHORIZED = 401;
@@ -52,12 +54,8 @@ public class ApiException extends Exception {
     private static final int BAD_GATEWAY = 502;
     private static final int SERVICE_UNAVAILABLE = 503;
     private static final int GATEWAY_TIMEOUT = 504;
-
     private final int code;
     private String displayMessage;
-
-    public static final int UNKNOWN = 1000;
-    public static final int PARSE_ERROR = 1001;
     private String message;
 
 
@@ -65,18 +63,6 @@ public class ApiException extends Exception {
         super(throwable);
         this.code = code;
         this.message = throwable.getMessage();
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getDisplayMessage() {
-        return displayMessage;
-    }
-
-    public void setDisplayMessage(String msg) {
-        this.displayMessage = msg + "(code:" + code + ")";
     }
 
     public static boolean isOk(ApiResult apiResult) {
@@ -156,6 +142,18 @@ public class ApiException extends Exception {
             ex.message = "未知错误";
             return ex;
         }
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getDisplayMessage() {
+        return displayMessage;
+    }
+
+    public void setDisplayMessage(String msg) {
+        this.displayMessage = msg + "(code:" + code + ")";
     }
 
     @Override

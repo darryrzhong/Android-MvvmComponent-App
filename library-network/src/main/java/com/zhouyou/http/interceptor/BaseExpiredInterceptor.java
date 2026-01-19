@@ -16,6 +16,8 @@
 
 package com.zhouyou.http.interceptor;
 
+import static com.zhouyou.http.utils.HttpUtil.UTF8;
+
 import com.zhouyou.http.utils.HttpLog;
 
 import java.io.IOException;
@@ -28,8 +30,6 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
-
-import static com.zhouyou.http.utils.HttpUtil.UTF8;
 
 /**
  * <p>描述：判断响应是否有效的处理</p>

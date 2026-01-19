@@ -18,84 +18,71 @@ import com.drz.common.services.config.ServicesConfig;
  * @author darryrzhoong
  * @since 2020-02-29
  */
-@Route(path = ServicesConfig.User.LONGING_SERVICE , name = "登录服务")
-public class ILoginServiceImpl implements ILoginService
-{
+@Route(path = ServicesConfig.User.LONGING_SERVICE, name = "登录服务")
+public class ILoginServiceImpl implements ILoginService {
     private boolean loginStatus;
-    
+
     @Override
-    public boolean saveStatus(boolean status)
-    {
+    public boolean saveStatus(boolean status) {
         this.loginStatus = status;
         return status;
     }
-    
+
     @Override
-    public boolean isLogin()
-    {
+    public boolean isLogin() {
         return loginStatus;
     }
-    
+
     @Override
-    public String getToken()
-    {
+    public String getToken() {
         return null;
     }
-    
+
     @Override
-    public String getUUID()
-    {
+    public String getUUID() {
         return null;
     }
-    
+
     @Override
-    public void refreshUserDetailInfo()
-    {
-        
+    public void refreshUserDetailInfo() {
+
     }
-    
+
     @Override
-    public void login()
-    {
+    public void login() {
         ARouter.getInstance()
-            .build(RouterActivityPath.User.PAGER_LOGIN)
-            .navigation();
+                .build(RouterActivityPath.User.PAGER_LOGIN)
+                .navigation();
     }
-    
+
     @Override
-    public void login(boolean isMainAccountLogin)
-    {
-        
+    public void login(boolean isMainAccountLogin) {
+
     }
-    
+
     @Override
-    public void logout()
-    {
-        
+    public void logout() {
+
     }
-    
+
     @Override
-    public UserInfo getUserInfo()
-    {
-        
+    public UserInfo getUserInfo() {
+
         return UserInfo.getInstance();
     }
-    
+
     @Override
-    public void onLoginCancel()
-    {
-        
+    public void onLoginCancel() {
+
     }
-    
+
     @Override
-    public void onTokenExpire()
-    {
-        
+    public void onTokenExpire() {
+
     }
-    
+
     @Override
-    public void init(Context context)
-    {
-        
+    public void init(Context context) {
+
     }
 }

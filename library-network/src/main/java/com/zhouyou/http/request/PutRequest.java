@@ -59,7 +59,7 @@ public class PutRequest extends BaseBodyRequest<PutRequest> {
         });
     }
 
-    @SuppressWarnings(value={"unchecked", "deprecation"})
+    @SuppressWarnings(value = {"unchecked", "deprecation"})
     public <T> Observable<T> execute(CallClazzProxy<? extends ApiResult<T>, T> proxy) {
         return build().generateRequest()
                 .map(new ApiResultFunc(proxy.getType()))
@@ -97,7 +97,7 @@ public class PutRequest extends BaseBodyRequest<PutRequest> {
     @SuppressWarnings("unchecked")
     private <T> Observable<CacheResult<T>> toObservable(Observable observable, CallBackProxy<? extends ApiResult<T>, T> proxy) {
         return observable.map(new ApiResultFunc(proxy != null ? proxy.getType() : new TypeToken<ResponseBody>() {
-        }.getType()))
+                }.getType()))
                 .compose(isSyncRequest ? RxUtil._main() : RxUtil._io_main())
                 .compose(rxCache.transformer(cacheMode, proxy.getCallBack().getType()))
                 .retryWhen(new RetryExceptionFunc(retryCount, retryDelay, retryIncreaseDelay));
@@ -110,7 +110,7 @@ public class PutRequest extends BaseBodyRequest<PutRequest> {
         } else if (this.json != null) {//Json
             RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), this.json);
             return apiManager.putJson(url, body);
-        }  else if (this.object != null) {//自定义的请求object
+        } else if (this.object != null) {//自定义的请求object
             return apiManager.putBody(url, object);
         } else if (this.string != null) {//文本内容
             RequestBody body = RequestBody.create(mediaType, this.string);

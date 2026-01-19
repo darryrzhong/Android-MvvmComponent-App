@@ -21,12 +21,12 @@ public class ObserverWrapper<T> implements Observer<T> {
 
     @Override
     public void onChanged(T t) {
-       if (observer != null){
-           if (isCallOnObserve()){
-               return;
-           }
-           observer.onChanged(t);
-       }
+        if (observer != null) {
+            if (isCallOnObserve()) {
+                return;
+            }
+            observer.onChanged(t);
+        }
     }
 
     private boolean isCallOnObserve() {

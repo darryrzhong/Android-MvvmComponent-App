@@ -1,6 +1,10 @@
 package com.drz.more.message;
 
-import java.util.List;
+import android.view.LayoutInflater;
+import android.view.View;
+
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.drz.base.fragment.MvvmLazyFragment;
 import com.drz.common.contract.BaseCustomViewModel;
@@ -12,11 +16,7 @@ import com.drz.more.message.adapter.MessageAdapter;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.ClassicsHeader;
 
-import android.view.LayoutInflater;
-import android.view.View;
-
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import java.util.List;
 
 /**
  * 应用模块:
@@ -28,42 +28,37 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  * @since 2020-02-23
  */
 public class MessageFragment extends
-    MvvmLazyFragment<MoreFragmentMessageBinding, MessageFragmentViewModel>
-    implements IMessageView
-{
-    
+        MvvmLazyFragment<MoreFragmentMessageBinding, MessageFragmentViewModel>
+        implements IMessageView {
+
     private MessageAdapter adapter;
-    
-    public static MessageFragment newInstance()
-    {
+
+    public static MessageFragment newInstance() {
         return new MessageFragment();
     }
-    
+
     @Override
-    public int getLayoutId()
-    {
+    public int getLayoutId() {
         return R.layout.more_fragment_message;
     }
-    
+
     @Override
-    protected void onFragmentFirstVisible()
-    {
+    protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
         initView();
     }
-    
-    private void initView()
-    {
+
+    private void initView() {
         int margin = DensityUtils.dp2px(getContext(), 10);
         viewDataBinding.rvMessageView.setHasFixedSize(true);
         viewDataBinding.rvMessageView.addItemDecoration(
-            new RecyclerItemDecoration(margin, margin, margin, 0));
+                new RecyclerItemDecoration(margin, margin, margin, 0));
         viewDataBinding.rvMessageView
-            .setLayoutManager(new LinearLayoutManager(getContext()));
+                .setLayoutManager(new LinearLayoutManager(getContext()));
         viewDataBinding.refreshLayout
-            .setRefreshHeader(new ClassicsHeader(getContext()));
+                .setRefreshHeader(new ClassicsHeader(getContext()));
         viewDataBinding.refreshLayout
-            .setRefreshFooter(new ClassicsFooter(getContext()));
+                .setRefreshFooter(new ClassicsFooter(getContext()));
         viewDataBinding.refreshLayout.setOnRefreshListener(refreshLayout -> {
             viewModel.tryRefresh();
         });
@@ -75,64 +70,53 @@ public class MessageFragment extends
         setLoadSir(viewDataBinding.refreshLayout);
         showLoading();
         viewModel.initModel();
-        
+
     }
-    
+
     @Override
-    public int getBindingVariable()
-    {
+    public int getBindingVariable() {
         return 0;
     }
-    
+
     @Override
-    protected MessageFragmentViewModel getViewModel()
-    {
+    protected MessageFragmentViewModel getViewModel() {
         return ViewModelProviders.of(this).get(MessageFragmentViewModel.class);
     }
-    
-    private View getFooterView()
-    {
+
+    private View getFooterView() {
         return LayoutInflater.from(getContext())
-            .inflate(R.layout.more_item_foote_view,
-                viewDataBinding.rvMessageView,
-                false);
+                .inflate(R.layout.more_item_foote_view,
+                        viewDataBinding.rvMessageView,
+                        false);
     }
-    
+
     @Override
-    protected void onRetryBtnClick()
-    {
-        
+    protected void onRetryBtnClick() {
+
     }
-    
+
     @Override
-    public void onLoadMoreFailure(String message)
-    {
+    public void onLoadMoreFailure(String message) {
         viewDataBinding.refreshLayout.finishLoadMore(false);
     }
-    
+
     @Override
-    public void onLoadMoreEmpty()
-    {
+    public void onLoadMoreEmpty() {
         adapter.addFooterView(getFooterView());
         viewDataBinding.refreshLayout.finishLoadMoreWithNoMoreData();
     }
-    
+
     @Override
     public void onDataLoaded(List<BaseCustomViewModel> data,
-        boolean isFirstPage)
-    {
-        if (data == null)
-        {
+                             boolean isFirstPage) {
+        if (data == null) {
             return;
         }
-        if (isFirstPage)
-        {
+        if (isFirstPage) {
             adapter.setNewData(data);
             showContent();
             viewDataBinding.refreshLayout.finishRefresh(true);
-        }
-        else
-        {
+        } else {
             adapter.addData(data);
             showContent();
             viewDataBinding.refreshLayout.finishLoadMore(true);

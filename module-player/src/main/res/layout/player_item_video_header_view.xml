@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-<variable
-    name="viewModel"
-    type="com.drz.common.contract.VideoHeaderBean" />
+
+        <variable
+            name="viewModel"
+            type="com.drz.common.contract.VideoHeaderBean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,9 +36,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textSize="13sp"
-            android:textColor="@color/common_color_small_text"
             android:text="@{viewModel.category}"
+            android:textColor="@color/common_color_small_text"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="@+id/tv_video_title"
             app:layout_constraintStart_toStartOf="@+id/tv_video_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_video_title"
@@ -50,9 +51,9 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:maxLines="4"
+            android:text="@{viewModel.video_description}"
             android:textColor="@color/common_color_small_text"
             android:textSize="13sp"
-            android:text="@{viewModel.video_description}"
             app:layout_constraintEnd_toEndOf="@+id/tv_video_title"
             app:layout_constraintStart_toStartOf="@+id/tv_video_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_category"
@@ -65,11 +66,11 @@
             android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/common_collection"
             android:drawablePadding="5dp"
+            android:drawableTint="@color/common_colorWhite"
             android:gravity="center_vertical"
+            android:text="@{String.valueOf(viewModel.collectionCount)}"
             android:textColor="@color/common_color_small_text"
             android:textSize="12sp"
-            android:text="@{String.valueOf(viewModel.collectionCount)}"
-            android:drawableTint="@color/common_colorWhite"
             app:layout_constraintStart_toStartOf="@+id/tv_video_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_description"
             tools:text="0" />
@@ -82,9 +83,9 @@
             android:drawablePadding="5dp"
             android:drawableTint="@color/common_colorWhite"
             android:gravity="center_vertical"
+            android:text="@{String.valueOf(viewModel.shareCount)}"
             android:textColor="@color/common_color_small_text"
             android:textSize="12sp"
-            android:text="@{String.valueOf(viewModel.shareCount)}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_collection_count"
             app:layout_constraintEnd_toStartOf="@+id/tv_real_count"
             app:layout_constraintStart_toEndOf="@+id/tv_collection_count"
@@ -98,12 +99,12 @@
             android:drawablePadding="5dp"
             android:drawableTint="@color/common_colorWhite"
             android:gravity="center_vertical"
+            android:text="缓存"
             android:textColor="@color/common_color_small_text"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_collection_count"
             app:layout_constraintEnd_toStartOf="@+id/iv_share"
-            app:layout_constraintStart_toEndOf="@+id/tv_reply_count"
-            android:text="缓存" />
+            app:layout_constraintStart_toEndOf="@+id/tv_reply_count" />
 
         <TextView
             android:id="@+id/iv_share"
@@ -113,19 +114,19 @@
             android:drawablePadding="5dp"
             android:drawableTint="@color/common_colorWhite"
             android:gravity="center_vertical"
+            android:text="收藏"
             android:textColor="@color/common_color_small_text"
             android:textSize="12sp"
-            android:text="收藏"
             app:layout_constraintBottom_toBottomOf="@+id/tv_collection_count"
             app:layout_constraintEnd_toEndOf="@+id/tv_video_title" />
 
         <ImageView
             android:id="@+id/iv_author"
+            imageCircleUrl="@{viewModel.avatar}"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:scaleType="fitXY"
-            imageCircleUrl="@{viewModel.avatar}"
             android:layout_marginTop="15dp"
+            android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="@+id/tv_video_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_collection_count"
             tools:background="@drawable/common_tools_iv_bg" />
@@ -138,10 +139,10 @@
             android:layout_marginEnd="8dp"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="@+id/iv_author"
-            app:layout_constraintEnd_toEndOf="@+id/tv_video_title"
             app:layout_constraintBottom_toBottomOf="@+id/iv_author"
-            app:layout_constraintStart_toEndOf="@+id/iv_author">
+            app:layout_constraintEnd_toEndOf="@+id/tv_video_title"
+            app:layout_constraintStart_toEndOf="@+id/iv_author"
+            app:layout_constraintTop_toTopOf="@+id/iv_author">
 
             <TextView
                 android:id="@+id/tv_nike_name"
@@ -156,26 +157,27 @@
                 tools:text="The Cgbros" />
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:id="@+id/tv_author_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:textColor="@color/common_color_small_text"
-                android:maxLines="1"
+                android:layout_marginTop="5dp"
                 android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@{viewModel.user_description}"
+                android:textColor="@color/common_color_small_text"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 tools:text="凯拉特  /  #影视" />
         </LinearLayout>
+
         <View
-            android:layout_marginTop="10dp"
             android:layout_width="0dp"
             android:layout_height="1dp"
+            android:layout_marginTop="10dp"
             android:background="@android:color/darker_gray"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -18,64 +18,47 @@ import java.util.List;
  * @since 2020-02-23
  */
 public class TopicFragmentViewModel
-    extends MvmBaseViewModel<ITopicView, TopicModel>
-    implements IPagingModelListener<List<BaseCustomViewModel>>
-{
+        extends MvmBaseViewModel<ITopicView, TopicModel>
+        implements IPagingModelListener<List<BaseCustomViewModel>> {
     @Override
-    protected void initModel()
-    {
+    protected void initModel() {
         model = new TopicModel();
         model.register(this);
         model.getCacheDataAndLoad();
     }
-    
+
     @Override
     public void onLoadFinish(BasePagingModel model,
-                             List<BaseCustomViewModel> data, boolean isEmpty, boolean isFirstPage)
-    {
-        if (getPageView() != null)
-        {
-            if (isEmpty)
-            {
-                if (isFirstPage)
-                {
+                             List<BaseCustomViewModel> data, boolean isEmpty, boolean isFirstPage) {
+        if (getPageView() != null) {
+            if (isEmpty) {
+                if (isFirstPage) {
                     getPageView().showEmpty();
-                }
-                else
-                {
+                } else {
                     getPageView().onLoadMoreEmpty();
                 }
-            }
-            else
-            {
+            } else {
                 getPageView().onDataLoaded(data, isFirstPage);
             }
         }
     }
-    
+
     @Override
     public void onLoadFail(BasePagingModel model, String prompt,
-        boolean isFirstPage)
-    {
-        if (getPageView() != null)
-        {
-            if (isFirstPage)
-            {
+                           boolean isFirstPage) {
+        if (getPageView() != null) {
+            if (isFirstPage) {
                 getPageView().showFailure(prompt);
-            }
-            else
-            {
+            } else {
                 getPageView().onLoadMoreFailure(prompt);
             }
         }
     }
-    
+
     @Override
-    public void detachUi()
-    {
+    public void detachUi() {
         super.detachUi();
-        if (model != null)
-        {
+        if (model != null) {
             model.unRegister(this);
         }
     }

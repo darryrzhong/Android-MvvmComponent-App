@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,19 +26,19 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
-            tools:background="@drawable/avatar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_more" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_more"
+            tools:background="@drawable/avatar" />
 
         <TextView
             android:id="@+id/tv_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="点击登录即可评论及发布内容"
             android:textColor="@android:color/black"
             android:textSize="12sp"
-            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_avatar" />
@@ -61,8 +62,8 @@
             android:drawableLeft="@drawable/common_collection"
             android:gravity="center"
             android:text="收藏"
-            android:textSize="13sp"
             android:textColor="@color/common_color_small_text"
+            android:textSize="13sp"
             app:layout_constraintEnd_toStartOf="@+id/user_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_tip" />
@@ -74,8 +75,8 @@
             android:drawableLeft="@drawable/common_collection"
             android:gravity="center"
             android:text="收藏"
-            android:textSize="13sp"
             android:textColor="@color/common_color_small_text"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_like"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/user_view"

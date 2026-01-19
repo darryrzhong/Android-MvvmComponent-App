@@ -12,11 +12,10 @@ import com.drz.common.contract.BaseCustomViewModel;
  * @author darryrzhoong
  * @since 2020-02-15
  */
-public class BriefCardViewModel extends BaseCustomViewModel
-{
+public class BriefCardViewModel extends BaseCustomViewModel {
     public String coverUrl;
-    
+
     public String title;
-    
+
     public String description;
 }

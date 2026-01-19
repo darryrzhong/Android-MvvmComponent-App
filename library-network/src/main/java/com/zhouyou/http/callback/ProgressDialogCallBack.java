@@ -37,6 +37,7 @@ public abstract class ProgressDialogCallBack<T> extends CallBack<T> implements P
     private IProgressDialog progressDialog;
     private Dialog mDialog;
     private boolean isShowProgress = true;
+    private Disposable disposed;
 
     public ProgressDialogCallBack(IProgressDialog progressDialog) {
         this.progressDialog = progressDialog;
@@ -125,8 +126,6 @@ public abstract class ProgressDialogCallBack<T> extends CallBack<T> implements P
             disposed.dispose();
         }
     }
-
-    private Disposable disposed;
 
     public void subscription(Disposable disposed) {
         this.disposed = disposed;

@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @author darryrzhoong
  * @since 2020-02-14
  */
-public interface IDailyView  extends IBasePagingView {
+public interface IDailyView extends IBasePagingView {
 
     /**
      * 数据加载完成

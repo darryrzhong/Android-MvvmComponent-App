@@ -41,15 +41,15 @@ import io.reactivex.functions.Consumer;
  * 版本： v2.0<br>
  */
 public class DownloadSubscriber<ResponseBody extends okhttp3.ResponseBody> extends BaseSubscriber<ResponseBody> {
-    private Context context;
-    private String path;
-    private String name;
-    public CallBack mCallBack;
     private static String APK_CONTENTTYPE = "application/vnd.android.package-archive";
     private static String PNG_CONTENTTYPE = "image/png";
     private static String JPG_CONTENTTYPE = "image/jpg";
     //private static String TEXT_CONTENTTYPE = "text/html; charset=utf-8";
     private static String fileSuffix = "";
+    public CallBack mCallBack;
+    private Context context;
+    private String path;
+    private String name;
     private long lastRefreshUiTime;
 
     public DownloadSubscriber(Context context, String path, String name, CallBack callBack) {

@@ -4,9 +4,9 @@
     <application>
 
         <provider
-            android:exported="false"
+            android:name="com.limpoxe.support.servicemanager.ServiceProvider"
             android:authorities="${applicationId}.svcmgr"
-            android:name="com.limpoxe.support.servicemanager.ServiceProvider"/>
+            android:exported="false" />
 
     </application>
 

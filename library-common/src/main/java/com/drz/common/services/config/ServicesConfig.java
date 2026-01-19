@@ -9,15 +9,17 @@ package com.drz.common.services.config;
  * @author darryrzhoong
  * @since 2020-02-29
  */
-public class ServicesConfig
-{
+public class ServicesConfig {
     private static final String SERVICE = "/service";
-    
-    /** 用户模块 */
-    public static class User
-    {
-        /** 用户登录状态 */
+
+    /**
+     * 用户模块
+     */
+    public static class User {
+        /**
+         * 用户登录状态
+         */
         public static final String LONGING_SERVICE = SERVICE + "/login";
     }
-    
+
 }

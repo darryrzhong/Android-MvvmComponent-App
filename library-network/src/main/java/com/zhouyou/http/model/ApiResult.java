@@ -26,6 +26,7 @@ public class ApiResult<T> {
     private int code;
     private String msg;
     private T data;
+
     public int getCode() {
         return code;
     }

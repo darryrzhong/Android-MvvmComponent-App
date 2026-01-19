@@ -12,7 +12,7 @@ import java.util.List;
  * @author darryrzhoong
  * @since 2020-02-11
  */
-public class FollowCardBean implements Serializable{
+public class FollowCardBean implements Serializable {
 
 
     /**

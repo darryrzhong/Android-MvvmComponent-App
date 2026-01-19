@@ -34,13 +34,13 @@ import okhttp3.Response;
  */
 public class CacheInterceptor implements Interceptor {
 
-    protected Context context;
-    protected String cacheControlValue_Offline;
-    protected String cacheControlValue_Online;
     //set cahe times is 3 days
     protected static final int maxStale = 60 * 60 * 24 * 3;
     // read from cache for 60 s
     protected static final int maxStaleOnline = 60;
+    protected Context context;
+    protected String cacheControlValue_Offline;
+    protected String cacheControlValue_Online;
 
     public CacheInterceptor(Context context) {
         this(context, String.format("max-age=%d", maxStaleOnline));
@@ -62,7 +62,7 @@ public class CacheInterceptor implements Interceptor {
         okhttp3.Response originalResponse = chain.proceed(chain.request());
         String cacheControl = originalResponse.header("Cache-Control");
         //String cacheControl = request.cacheControl().toString();
-       HttpLog.e( maxStaleOnline + "s load cache:" + cacheControl);
+        HttpLog.e(maxStaleOnline + "s load cache:" + cacheControl);
         if (TextUtils.isEmpty(cacheControl) || cacheControl.contains("no-store") || cacheControl.contains("no-cache") ||
                 cacheControl.contains("must-revalidate") || cacheControl.contains("max-age") || cacheControl.contains("max-stale")) {
             return originalResponse.newBuilder()

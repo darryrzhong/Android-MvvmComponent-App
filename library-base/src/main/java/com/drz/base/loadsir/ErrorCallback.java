@@ -1,7 +1,7 @@
 package com.drz.base.loadsir;
 
-import com.kingja.loadsir.callback.Callback;
 import com.drz.base.R;
+import com.kingja.loadsir.callback.Callback;
 
 /**
  * 应用模块:
@@ -12,11 +12,9 @@ import com.drz.base.R;
  * @author darryrzhoong
  * @since 2020-01-27
  */
-public class ErrorCallback extends Callback
-{
+public class ErrorCallback extends Callback {
     @Override
-    protected int onCreateView()
-    {
+    protected int onCreateView() {
         return R.layout.base_layout_error;
     }
 }
