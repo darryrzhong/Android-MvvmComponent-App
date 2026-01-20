@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import com.drz.common.router.RouterActivityPath
 import com.drz.user.viewmodel.LoginUiState
 import com.drz.user.viewmodel.UserViewModel
@@ -31,6 +32,7 @@ class LoginActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ARouter.getInstance().inject(this) // Keep if other fields need injection
         setContent {
             LoginScreen(viewModel)
         }
@@ -48,8 +50,9 @@ fun LoginScreen(viewModel: UserViewModel) {
     LaunchedEffect(uiState) {
         when (uiState) {
             is LoginUiState.Success -> {
-                Toast.makeText(context, (uiState as LoginUiState.Success).msg, Toast.LENGTH_SHORT).show()
-                // Navigate to main or finish
+                val user = (uiState as LoginUiState.Success).user
+                Toast.makeText(context, "Welcome ${user.nickname}", Toast.LENGTH_SHORT).show()
+                // Navigate to main
             }
             is LoginUiState.Error -> {
                 Toast.makeText(context, (uiState as LoginUiState.Error).msg, Toast.LENGTH_SHORT).show()

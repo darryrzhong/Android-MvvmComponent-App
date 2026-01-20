@@ -1,6 +1,7 @@
 package com.drz.user.repository
 
 import com.drz.user.api.UserApi
+import com.drz.user.bean.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -13,11 +14,21 @@ class UserRepository @Inject constructor(
     private val userApi: UserApi
 ) {
     
-    suspend fun login(username: String, password: String): Flow<Result<String>> = flow {
-        // 模拟网络请求，实际应调用 userApi.login
-        // val response = userApi.login(username, password)
-        // 这里为了演示直接返回成功
-        kotlinx.coroutines.delay(1000) // 模拟耗时
-        emit(Result.success("Login Success: $username"))
+    suspend fun login(username: String, password: String): Flow<Result<User>> = flow {
+        try {
+            val response = userApi.login(username, password)
+            if (response.isOk) {
+                // response.data could be null if parsing failed or data is null
+                if (response.data != null) {
+                    emit(Result.success(response.data))
+                } else {
+                    emit(Result.failure(Exception("Login failed: empty data")))
+                }
+            } else {
+                emit(Result.failure(Exception(response.msg ?: "Unknown error")))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
     }
 }

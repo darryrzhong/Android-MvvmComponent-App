@@ -23,8 +23,7 @@ object NetworkModule {
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor("HttpLog").apply {
-//            setPrintLevel(HttpLoggingInterceptor.Level.BODY)
-//            setColorLevel(java.util.logging.Level.INFO)
+            setLevel(HttpLoggingInterceptor.Level.BODY)
         }
     }
     

@@ -2,6 +2,7 @@ package com.drz.user.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.drz.base.viewmodel.BaseViewModel
+import com.drz.user.bean.User
 import com.drz.user.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,6 @@ class UserViewModel @Inject constructor(
 
 sealed class LoginUiState {
     object Idle : LoginUiState()
-    data class Success(val msg: String) : LoginUiState()
+    data class Success(val user: User) : LoginUiState()
     data class Error(val msg: String) : LoginUiState()
 }

@@ -12,13 +12,13 @@ import com.drz.common.config.ModuleLifecycleConfig;
  * @author darryrzhoong
  * @since 2020-02-26
  */
-public class AppApplication extends BaseApplication {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        setsDebug(BuildConfig.DEBUG);
-        // 初始化需要初始化的组件
-        ModuleLifecycleConfig.getInstance().initModuleAhead(this);
-    }
-}
+//public class AppApplication extends BaseApplication {
+//
+//    @Override
+//    public void onCreate() {
+//        super.onCreate();
+//        setsDebug(BuildConfig.DEBUG);
+//        // 初始化需要初始化的组件
+//        ModuleLifecycleConfig.getInstance().initModuleAhead(this);
+//    }
+//}
