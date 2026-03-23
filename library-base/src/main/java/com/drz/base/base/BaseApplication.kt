@@ -1,38 +1,19 @@
 package com.drz.base.base
 
 import android.app.Activity
-import android.app.ActivityManager
 import android.app.Application
-import android.content.Context
+import android.os.Build
 import android.os.Bundle
-import android.os.Process
 
-/**
- * 应用模块:
- *
- * 类描述:
- *
- *
- * @author darryrzhoong
- * @since 2020-02-25
- */
 open class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        setApplication(this)
-    }
-
-    /**
-     * 当宿主没有继承自该Application时,可以使用set方法进行初始化baseApplication
-     */
-    private fun setApplication(application: BaseApplication) {
-        sInstance = application
-        application.registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+        sInstance = this
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 AppManager.instance.addActivity(activity)
             }
-
             override fun onActivityStarted(activity: Activity) {}
             override fun onActivityResumed(activity: Activity) {}
             override fun onActivityPaused(activity: Activity) {}
@@ -44,9 +25,7 @@ open class BaseApplication : Application() {
         })
     }
 
-    fun isDebug(): Boolean {
-        return sDebug
-    }
+    fun isDebug(): Boolean = sDebug
 
     fun setDebug(isDebug: Boolean) {
         sDebug = isDebug
@@ -56,36 +35,20 @@ open class BaseApplication : Application() {
         private var sInstance: BaseApplication? = null
         private var sDebug = false
 
-        /**
-         * 获得当前app运行的Application
-         */
         @JvmStatic
         val instance: BaseApplication
-            get() {
-                if (sInstance == null) {
-                    throw NullPointerException("please inherit BaseApplication or call setApplication.")
-                }
-                return sInstance!!
-            }
+            get() = sInstance ?: throw NullPointerException("BaseApplication not initialized.")
 
-        /**
-         * 获取进程名
-         *
-         * @param context
-         * @return
-         */
         @JvmStatic
-        fun getCurrentProcessName(context: Context): String? {
-            val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-            val runningApps = am.runningAppProcesses ?: return null
-            for (proInfo in runningApps) {
-                if (proInfo.pid == Process.myPid()) {
-                    if (proInfo.processName != null) {
-                        return proInfo.processName
-                    }
-                }
+        fun currentProcessName(): String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Application.getProcessName()
+        } else {
+            try {
+                val cls = Class.forName("android.app.ActivityThread")
+                cls.getMethod("currentProcessName").invoke(null) as? String ?: ""
+            } catch (e: Exception) {
+                ""
             }
-            return null
         }
     }
 }

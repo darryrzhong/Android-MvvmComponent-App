@@ -12,8 +12,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:8.2.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22")
-    implementation("com.google.dagger:hilt-android-gradle-plugin:2.50")
-    implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.9.22-1.0.17")
+    implementation("com.android.tools.build:gradle:8.7.0")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21")
+    implementation("org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.0.21")
+    implementation("com.google.dagger:hilt-android-gradle-plugin:2.52")
+    implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.0.21-1.0.27")
 }

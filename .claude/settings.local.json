@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find D:/zj/mvvm/library-base -name *.kt)",
+      "Bash(xargs ls:*)",
+      "Bash(xargs cat:*)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl:*)"
+    ]
+  }
+}

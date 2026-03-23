@@ -16,13 +16,9 @@ configure<BaseExtension> {
 }
 
 dependencies {
+    add("api", project(":library-common"))
+    add("api", project(":library-video"))
     add("testImplementation", libs.junit)
     add("androidTestImplementation", libs.androidx.test.ext.junit)
     add("androidTestImplementation", libs.androidx.test.espresso.core)
-
-    add("annotationProcessor", libs.arouter.compiler)
-    add("annotationProcessor", libs.glide.compiler)
-
-    add("api", project(":library-common"))
-    add("api", project(":library-video"))
 }

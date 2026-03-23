@@ -11,7 +11,7 @@ configure<BaseExtension> {
 dependencies {
     add("api", libs.androidx.recyclerview)
     add("api", libs.glide)
-    add("annotationProcessor", libs.glide.compiler)
+    add("ksp", libs.glide.compiler)
     add("api", libs.gsyVideoPlayer.java)
     add("api", libs.gsyVideoPlayer.armv7a)
     add("api", libs.gsyVideoPlayer.arm64)

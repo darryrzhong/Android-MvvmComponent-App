@@ -1,0 +1,56 @@
+package com.drz.home.data.model
+
+import com.google.gson.annotations.SerializedName
+
+data class HomeResponse(
+    val itemList: List<ItemBean> = emptyList(),
+    val nextPageUrl: String? = null
+)
+
+data class ItemBean(
+    val type: String = "",
+    val data: ItemData = ItemData()
+)
+
+data class ItemData(
+    val id: Long = 0,
+    val title: String = "",
+    val description: String = "",
+    val category: String = "",
+    val image: String = "",
+    @SerializedName("playUrl") val playUrl: String = "",
+    val duration: Int = 0,
+    val cover: CoverData? = null,
+    val author: AuthorData? = null,
+    val consumption: ConsumptionData? = null,
+    val header: HeaderData? = null,
+    val itemList: List<ItemBean>? = null,
+    val text: String = "",
+    @SerializedName("rightText") val rightText: String = "",
+    val icon: String = "",
+    val content: ItemBean? = null
+)
+
+data class CoverData(
+    val detail: String = "",
+    val blurred: String = "",
+    val feed: String = ""
+)
+
+data class AuthorData(
+    val id: Long = 0,
+    val name: String = "",
+    val description: String = "",
+    val icon: String = ""
+)
+
+data class ConsumptionData(
+    val collectionCount: Int = 0,
+    val shareCount: Int = 0,
+    val replyCount: Int = 0
+)
+
+data class HeaderData(
+    val title: String = "",
+    val rightText: String = ""
+)

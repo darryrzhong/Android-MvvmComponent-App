@@ -19,8 +19,9 @@ class ModulePlugin : Plugin<Project> {
             project.plugins.apply("com.android.library")
         }
         project.plugins.apply("org.jetbrains.kotlin.android")
+        project.plugins.apply("org.jetbrains.kotlin.plugin.compose")
         project.plugins.apply("kotlin-parcelize")
-        project.plugins.apply("com.google.devtools.ksp") 
+        project.plugins.apply("com.google.devtools.ksp")
         project.plugins.apply("com.google.dagger.hilt.android")
 
         val libs = project.rootProject.extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
@@ -28,6 +29,11 @@ class ModulePlugin : Plugin<Project> {
         project.dependencies.add("ksp", libs.findLibrary("hilt-compiler").get())
         project.dependencies.add("implementation", libs.findLibrary("kotlinx-coroutines-android").get())
         project.dependencies.add("implementation", libs.findLibrary("kotlinx-coroutines-core").get())
+
+        // Compose BOM + runtime（所有模块都启用了 compose buildFeature，必须有 runtime）
+        val composeBom = project.dependencies.platform(libs.findLibrary("androidx-compose-bom").get())
+        project.dependencies.add("implementation", composeBom)
+        project.dependencies.add("implementation", libs.findLibrary("androidx-compose-runtime").get())
 
         project.extensions.configure<BaseExtension> {
             compileSdkVersion(libs.findVersion("android-compileSdk").get().requiredVersion.toInt())
@@ -40,12 +46,11 @@ class ModulePlugin : Plugin<Project> {
                 if (isBuildModule) {
                     val vCode = libs.findVersion("android-versionCode").get().requiredVersion.toInt()
                     val vName = libs.findVersion("android-versionName").get().requiredVersion
-                    
                     try {
                         val method = this.javaClass.getMethod("setVersionCode", Integer::class.java)
                         method.invoke(this, vCode)
                     } catch (e: Exception) { }
-                     try {
+                    try {
                         val method = this.javaClass.getMethod("setVersionName", String::class.java)
                         method.invoke(this, vName)
                     } catch (e: Exception) { }
@@ -53,12 +58,6 @@ class ModulePlugin : Plugin<Project> {
 
                 consumerProguardFiles("consumer-rules.pro")
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-                javaCompileOptions {
-                    annotationProcessorOptions {
-                        arguments["AROUTER_MODULE_NAME"] = project.name
-                    }
-                }
             }
 
             buildTypes {
@@ -81,27 +80,30 @@ class ModulePlugin : Plugin<Project> {
                     }
                 }
             }
-            
+
+            // 启用 ViewBinding 和 Compose，禁用 DataBinding
             try {
                 val buildFeatures = this::class.java.getMethod("getBuildFeatures").invoke(this)
-                val setMethod = buildFeatures::class.java.getMethod("setDataBinding", java.lang.Boolean::class.java)
-                setMethod.invoke(buildFeatures, true)
-                val setVBMethod = buildFeatures::class.java.getMethod("setViewBinding", java.lang.Boolean::class.java)
-                setVBMethod.invoke(buildFeatures, true)
-                
-                // Do NOT enable compose globally here. Let specific modules enable it.
+                buildFeatures::class.java.getMethod("setViewBinding", java.lang.Boolean::class.java)
+                    .invoke(buildFeatures, true)
+                buildFeatures::class.java.getMethod("setCompose", java.lang.Boolean::class.java)
+                    .invoke(buildFeatures, true)
+                // 确保 DataBinding 关闭
+                try {
+                    buildFeatures::class.java.getMethod("setDataBinding", java.lang.Boolean::class.java)
+                        .invoke(buildFeatures, false)
+                } catch (e: Exception) { }
             } catch (e: Exception) { }
 
             compileOptions {
-                sourceCompatibility = JavaVersion.VERSION_1_8
-                targetCompatibility = JavaVersion.VERSION_1_8
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
             }
         }
-        
-        // Fix JVM target incompatibility
+
         project.tasks.withType<KotlinCompile> {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
