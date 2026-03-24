@@ -8,8 +8,13 @@ import com.drz.home.ui.HomeScreen
 
 fun NavGraphBuilder.homeNavGraph(navController: NavController) {
     composable(AppRoutes.HOME) {
-        HomeScreen(onVideoClick = { videoId ->
-            navController.navigate(AppRoutes.videoPlayer(videoId))
-        })
+        HomeScreen(
+            onVideoClick = { videoId ->
+                navController.navigate(AppRoutes.videoPlayer(videoId))
+            },
+            onUrlClick = { url ->
+                navController.navigate(AppRoutes.webView(url))
+            }
+        )
     }
 }

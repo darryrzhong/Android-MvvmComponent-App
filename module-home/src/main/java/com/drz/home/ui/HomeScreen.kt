@@ -10,7 +10,7 @@ import com.drz.home.ui.discover.DiscoverScreen
 import com.drz.home.ui.nominate.NominateScreen
 
 @Composable
-fun HomeScreen(onVideoClick: (Long) -> Unit) {
+fun HomeScreen(onVideoClick: (Long) -> Unit, onUrlClick: (String) -> Unit) {
     val tabs = listOf("发现", "日报", "推荐")
     var selectedTab by remember { mutableIntStateOf(0) }
 
@@ -25,7 +25,7 @@ fun HomeScreen(onVideoClick: (Long) -> Unit) {
             }
         }
         when (selectedTab) {
-            0 -> DiscoverScreen(onVideoClick = onVideoClick)
+            0 -> DiscoverScreen(onVideoClick = onVideoClick, onUrlClick = onUrlClick)
             1 -> DailyScreen(onVideoClick = onVideoClick)
             2 -> NominateScreen(onVideoClick = onVideoClick)
         }
