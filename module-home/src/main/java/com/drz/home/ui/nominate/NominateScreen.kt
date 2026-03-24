@@ -65,6 +65,9 @@ private fun NominateList(
         items(items) { item ->
             when (item.type) {
                 "videoSmallCard", "followCard" -> VideoListItem(item = item, onVideoClick = onVideoClick)
+                "squareCardCollection" -> item.data.itemList?.forEach { child ->
+                    VideoListItem(item = child, onVideoClick = onVideoClick)
+                }
                 "textCard" -> Text(
                     text = item.data.text,
                     style = MaterialTheme.typography.titleSmall,
