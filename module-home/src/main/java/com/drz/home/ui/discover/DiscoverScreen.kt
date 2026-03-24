@@ -1,20 +1,25 @@
 package com.drz.home.ui.discover
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.drz.base.ui.EmptyScreen
@@ -125,25 +130,72 @@ private fun BannerCard(imageUrl: String) {
     }
 }
 
-// horizontalScrollCard：横向滚动 Banner 列表（banner2 子卡片）
+// horizontalScrollCard：圆角卡片轮播 Banner，露出右侧下一张，3秒自动切换
 @Composable
 private fun HorizontalBannerCard(item: ItemBean) {
     val banners = item.data.itemList ?: return
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    if (banners.isEmpty()) return
+
+    val pageCount = Int.MAX_VALUE
+    val initialPage = pageCount / 2 - (pageCount / 2 % banners.size)
+    val pagerState = rememberPagerState(initialPage = initialPage) { pageCount }
+
+    // 自动轮播，用 spring 动画让切换更顺滑
+    LaunchedEffect(pagerState) {
+        while (true) {
+            delay(3000)
+            pagerState.animateScrollToPage(
+                page = pagerState.currentPage + 1,
+                animationSpec = tween(durationMillis = 600)
+            )
+        }
+    }
+
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(180.dp)
     ) {
-        items(banners) { banner ->
+        // 卡片宽度 = 全宽 - 左边距16 - 右侧露出部分40，让右侧下一张可见
+        val cardWidth = maxWidth - 16.dp - 40.dp
+
+        HorizontalPager(
+            state = pagerState,
+            contentPadding = PaddingValues(start = 16.dp, end = 40.dp),
+            pageSpacing = 10.dp,
+            modifier = Modifier.fillMaxSize()
+        ) { page ->
+            val banner = banners[page % banners.size]
             val imageUrl = banner.data.image.ifEmpty { banner.data.cover?.detail ?: "" }
-            if (imageUrl.isNotEmpty()) {
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = banner.data.title,
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = banner.data.title,
+                modifier = Modifier
+                    .width(cardWidth)
+                    .fillMaxHeight()
+                    .clip(MaterialTheme.shapes.large),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        // 圆点指示器
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val currentIndex = pagerState.currentPage % banners.size
+            repeat(banners.size) { index ->
+                Box(
                     modifier = Modifier
-                        .width(280.dp)
-                        .height(160.dp)
-                        .clip(MaterialTheme.shapes.medium),
-                    contentScale = ContentScale.Crop
+                        .size(if (index == currentIndex) 8.dp else 6.dp)
+                        .clip(CircleShape)
+                        .background(
+                            if (index == currentIndex) Color.White
+                            else Color.White.copy(alpha = 0.5f)
+                        )
                 )
             }
         }
