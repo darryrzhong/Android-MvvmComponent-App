@@ -1,10 +1,16 @@
 package com.drz.player.ui
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.drz.base.viewmodel.BaseViewModel
+import com.drz.network.NetworkResult
+import com.drz.player.data.model.RelatedData
+import com.drz.player.data.model.ReplyData
+import com.drz.player.data.repository.PlayerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class VideoPlayerUiState {
@@ -27,16 +33,45 @@ sealed class VideoPlayerUiState {
 
 @HiltViewModel
 class VideoPlayerViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val repository: PlayerRepository
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow<VideoPlayerUiState>(VideoPlayerUiState.Loading)
     val state = _state.asStateFlow()
 
+    private val _relatedVideos = MutableStateFlow<List<RelatedData>>(emptyList())
+    val relatedVideos = _relatedVideos.asStateFlow()
+
+    private val _replies = MutableStateFlow<List<ReplyData>>(emptyList())
+    val replies = _replies.asStateFlow()
+
+    private val _repliesNextPageUrl = MutableStateFlow<String?>(null)
+    private val _isLoadingMore = MutableStateFlow(false)
+    val isLoadingMore = _isLoadingMore.asStateFlow()
+
+    fun switchVideo(related: RelatedData) {
+        _state.value = VideoPlayerUiState.Success(
+            videoId = related.id,
+            title = related.title,
+            description = related.description,
+            playUrl = related.playUrl,
+            coverUrl = related.cover?.feed ?: "",
+            blurredUrl = related.cover?.blurred ?: "",
+            authorName = related.author?.name ?: "",
+            authorAvatar = related.author?.icon ?: "",
+            authorDesc = related.author?.description ?: "",
+            collectionCount = related.consumption?.collectionCount ?: 0,
+            shareCount = related.consumption?.shareCount ?: 0
+        )
+        _relatedVideos.value = emptyList()
+        _replies.value = emptyList()
+        _repliesNextPageUrl.value = null
+        loadRelated(related.id)
+        loadReplies(related.id)
+    }
+
     fun loadVideo(videoId: Long) {
-        // 从 savedStateHandle 获取视频详情
-        // 实际项目中应通过 videoId 调用 API 获取详情
-        // 这里展示通过 savedStateHandle 传递的数据恢复
         val title = savedStateHandle.get<String>("title") ?: "视频详情"
         val playUrl = savedStateHandle.get<String>("playUrl") ?: ""
         val coverUrl = savedStateHandle.get<String>("coverUrl") ?: ""
@@ -60,8 +95,84 @@ class VideoPlayerViewModel @Inject constructor(
                 collectionCount = 0,
                 shareCount = 0
             )
+            loadRelated(videoId)
+            loadReplies(videoId)
         } else {
-            _state.value = VideoPlayerUiState.Error("视频信息不完整，请返回重试")
+            fetchVideoDetail(videoId)
+        }
+    }
+
+    private fun fetchVideoDetail(videoId: Long) {
+        _state.value = VideoPlayerUiState.Loading
+        viewModelScope.launch {
+            when (val result = repository.getVideoDetail(videoId)) {
+                is NetworkResult.Success -> {
+                    val d = result.data.data
+                    _state.value = VideoPlayerUiState.Success(
+                        videoId = d.id,
+                        title = d.title,
+                        description = d.description,
+                        playUrl = d.playUrl,
+                        coverUrl = d.cover?.feed ?: "",
+                        blurredUrl = d.cover?.blurred ?: "",
+                        authorName = d.author?.name ?: "",
+                        authorAvatar = d.author?.icon ?: "",
+                        authorDesc = d.author?.description ?: "",
+                        collectionCount = d.consumption?.collectionCount ?: 0,
+                        shareCount = d.consumption?.shareCount ?: 0
+                    )
+                    loadRelated(videoId)
+                    loadReplies(videoId)
+                }
+                is NetworkResult.Error -> {
+                    _state.value = VideoPlayerUiState.Error(result.message)
+                }
+            }
+        }
+    }
+
+    private fun loadRelated(videoId: Long) {
+        viewModelScope.launch {
+            when (val result = repository.getRelated(videoId)) {
+                is NetworkResult.Success -> {
+                    _relatedVideos.value = result.data.itemList
+                        .filter { it.type == "videoSmallCard" }
+                        .map { it.data }
+                }
+                is NetworkResult.Error -> {}
+            }
+        }
+    }
+
+    private fun loadReplies(videoId: Long) {
+        viewModelScope.launch {
+            when (val result = repository.getReplies(videoId)) {
+                is NetworkResult.Success -> {
+                    _replies.value = result.data.itemList
+                        .filter { it.type == "reply" }
+                        .map { it.data }
+                    _repliesNextPageUrl.value = result.data.nextPageUrl
+                }
+                is NetworkResult.Error -> {}
+            }
+        }
+    }
+
+    fun loadMoreReplies() {
+        val url = _repliesNextPageUrl.value ?: return
+        if (_isLoadingMore.value) return
+        viewModelScope.launch {
+            _isLoadingMore.value = true
+            when (val result = repository.getMoreReplies(url)) {
+                is NetworkResult.Success -> {
+                    _replies.value = _replies.value + result.data.itemList
+                        .filter { it.type == "reply" }
+                        .map { it.data }
+                    _repliesNextPageUrl.value = result.data.nextPageUrl
+                }
+                is NetworkResult.Error -> {}
+            }
+            _isLoadingMore.value = false
         }
     }
 }
