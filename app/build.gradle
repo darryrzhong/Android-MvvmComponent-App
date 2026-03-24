@@ -119,8 +119,6 @@ dependencies {
         implementation project(':module-home')
         //社区模块
         implementation project(':module-community')
-        //更多模块
-        implementation project(':module-more')
         //视频播放模块
         implementation project(':module-player')
         //用户模块

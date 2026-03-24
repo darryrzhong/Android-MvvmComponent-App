@@ -14,8 +14,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.drz.common.navigation.AppRoutes
 import com.drz.community.communityNavGraph
+import com.drz.home.dailyNavGraph
 import com.drz.home.homeNavGraph
-import com.drz.more.moreNavGraph
 import com.drz.mvvmcomponent.ui.WebViewScreen
 import com.drz.player.playerNavGraph
 import java.net.URLDecoder
@@ -32,7 +32,7 @@ fun AppNavHost() {
     val bottomNavItems = listOf(
         BottomNavItem(AppRoutes.HOME, "首页", com.drz.main.R.drawable.main_home),
         BottomNavItem(AppRoutes.COMMUNITY, "社区", com.drz.main.R.drawable.main_community),
-        BottomNavItem(AppRoutes.MORE, "通知", com.drz.main.R.drawable.main_notify),
+        BottomNavItem(AppRoutes.DAILY, "日报", com.drz.main.R.drawable.main_notify),
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -68,7 +68,7 @@ fun AppNavHost() {
         ) {
             homeNavGraph(navController)
             communityNavGraph(navController)
-            moreNavGraph(navController)
+            dailyNavGraph(navController)
             playerNavGraph(navController)
             composable(AppRoutes.WEB_VIEW) { backStackEntry ->
                 val encodedUrl = backStackEntry.arguments?.getString("url") ?: ""

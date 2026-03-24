@@ -30,7 +30,11 @@ data class ItemData(
     val text: String = "",
     @SerializedName("rightText") val rightText: String = "",
     val icon: String = "",
-    val content: ItemBean? = null
+    val content: ItemBean? = null,
+    val urls: List<String>? = null,
+    val subTitle: String? = null,
+    val bgPicture: String? = null,
+    val dataType: String? = null
 )
 
 data class CoverData(
@@ -53,6 +57,10 @@ data class ConsumptionData(
 )
 
 data class HeaderData(
-    val title: String = "",
-    val rightText: String = ""
+    val title: String? = null,
+    val rightText: String? = null,
+    val icon: String? = null,
+    val description: String? = null,
+    val actionUrl: String? = null,
+    val issuerName: String? = null
 )

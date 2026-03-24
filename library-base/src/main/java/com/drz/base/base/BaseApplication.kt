@@ -43,11 +43,11 @@ open class BaseApplication : Application() {
                 chain.proceed(original.newBuilder().url(newUrl).build())
             }
             .build()
-        Coil.setImageLoader(
+        Coil.setImageLoader {
             ImageLoader.Builder(this)
                 .okHttpClient(okHttpClient)
                 .build()
-        )
+        }
     }
 
     fun isDebug(): Boolean = sDebug

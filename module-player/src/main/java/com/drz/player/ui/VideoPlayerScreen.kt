@@ -12,6 +12,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -34,24 +36,37 @@ fun VideoPlayerScreen(
 
     BackHandler { onBack() }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        when (val s = state) {
-            is VideoPlayerUiState.Loading -> {
-                Box(Modifier.fillMaxWidth().height(220.dp), Alignment.Center) {
-                    CircularProgressIndicator()
+    Box(modifier = Modifier.fillMaxSize()) {
+        // 模糊背景图
+        if (state is VideoPlayerUiState.Success) {
+            AsyncImage(
+                model = (state as VideoPlayerUiState.Success).blurredUrl,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                alpha = 0.35f
+            )
+        }
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            when (val s = state) {
+                is VideoPlayerUiState.Loading -> {
+                    Box(Modifier.fillMaxWidth().height(220.dp), Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
                 }
-            }
-            is VideoPlayerUiState.Success -> {
-                GsyVideoPlayer(
-                    playUrl = s.playUrl,
-                    title = s.title,
-                    coverUrl = s.coverUrl
-                )
-                VideoDetails(state = s, onBack = onBack)
-            }
-            is VideoPlayerUiState.Error -> {
-                Box(Modifier.fillMaxWidth().height(220.dp), Alignment.Center) {
-                    Text(s.message)
+                is VideoPlayerUiState.Success -> {
+                    GsyVideoPlayer(
+                        playUrl = s.playUrl,
+                        title = s.title,
+                        coverUrl = s.coverUrl
+                    )
+                    VideoDetails(state = s, onBack = onBack)
+                }
+                is VideoPlayerUiState.Error -> {
+                    Box(Modifier.fillMaxWidth().height(220.dp), Alignment.Center) {
+                        Text(s.message)
+                    }
                 }
             }
         }

@@ -7,7 +7,5 @@ import com.drz.common.navigation.AppRoutes
 import com.drz.more.ui.MoreScreen
 
 fun NavGraphBuilder.moreNavGraph(navController: NavController) {
-    composable(AppRoutes.MORE) {
-        MoreScreen()
-    }
+
 }
