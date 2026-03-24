@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -28,6 +30,7 @@ import coil.compose.AsyncImage
 import com.drz.base.ui.EmptyScreen
 import com.drz.base.ui.ErrorScreen
 import com.drz.base.ui.LoadingScreen
+import com.drz.home.data.model.AuthorData
 import com.drz.home.data.model.HeaderData
 import com.drz.home.data.model.ItemBean
 import com.drz.home.data.model.ItemData
@@ -35,10 +38,11 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun CommunityScreen(
-    onVideoClick: (Long) -> Unit,
+    onVideoClick: (ItemData) -> Unit,
     viewModel: CommunityViewModel = hiltViewModel()
 ) {
     val state by viewModel.recommendState.collectAsState()
+    val isLoadingMore by viewModel.isLoadingMore.collectAsState()
 
     when (val s = state) {
         is CommunityUiState.Loading -> LoadingScreen()
@@ -48,18 +52,51 @@ fun CommunityScreen(
         )
         is CommunityUiState.Success -> {
             if (s.items.isEmpty()) EmptyScreen()
-            else CommunityFeedList(items = s.items, onVideoClick = onVideoClick)
+            else CommunityFeedList(
+                items = s.items,
+                isLoadingMore = isLoadingMore,
+                hasMore = viewModel.hasMore,
+                onVideoClick = onVideoClick,
+                onLoadMore = viewModel::loadMore
+            )
         }
     }
 }
 
 @Composable
-private fun CommunityFeedList(items: List<ItemBean>, onVideoClick: (Long) -> Unit) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+private fun CommunityFeedList(
+    items: List<ItemBean>,
+    isLoadingMore: Boolean,
+    hasMore: Boolean,
+    onVideoClick: (ItemData) -> Unit,
+    onLoadMore: () -> Unit
+) {
+    val listState = rememberLazyListState()
+
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val total = listState.layoutInfo.totalItemsCount
+            lastVisible != null && lastVisible.index >= total - 3
+        }
+    }
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore && hasMore && !isLoadingMore) onLoadMore()
+    }
+
+    LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
         items(items) { item ->
             when (item.type) {
                 "horizontalScrollCard" -> HorizontalEntryCard(item = item)
                 "communityColumnsCard" -> CommunityContentCard(item = item, onVideoClick = onVideoClick)
+            }
+        }
+        if (isLoadingMore) {
+            item {
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) { CircularProgressIndicator(modifier = Modifier.size(24.dp)) }
             }
         }
     }
@@ -205,7 +242,7 @@ private fun EntryItem(data: ItemData, modifier: Modifier = Modifier) {
 
 // communityColumnsCard：社区内容卡片（视频 or 图片）
 @Composable
-private fun CommunityContentCard(item: ItemBean, onVideoClick: (Long) -> Unit) {
+private fun CommunityContentCard(item: ItemBean, onVideoClick: (ItemData) -> Unit) {
     val header = item.data.header ?: return
     val content = item.data.content ?: return
     val contentData = content.data
@@ -257,17 +294,39 @@ private fun AuthorHeader(header: HeaderData) {
 }
 
 @Composable
-private fun VideoContent(data: ItemData, onVideoClick: (Long) -> Unit) {
+private fun VideoContent(data: ItemData, onVideoClick: (ItemData) -> Unit) {
     val coverUrl = data.cover?.detail ?: return
-    AsyncImage(
-        model = coverUrl,
-        contentDescription = data.description,
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .clickable { onVideoClick(data.id) },
-        contentScale = ContentScale.Crop
-    )
+            .clickable { onVideoClick(data) }
+    ) {
+        AsyncImage(
+            model = coverUrl,
+            contentDescription = data.description,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+        if (data.duration > 0) {
+            Text(
+                text = formatDuration(data.duration),
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.White,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(8.dp)
+                    .background(Color(0x99000000), MaterialTheme.shapes.extraSmall)
+                    .padding(horizontal = 4.dp, vertical = 2.dp)
+            )
+        }
+    }
+}
+
+private fun formatDuration(seconds: Int): String {
+    val m = seconds / 60
+    val s = seconds % 60
+    return "%d:%02d".format(m, s)
 }
 
 @Composable

@@ -2,15 +2,11 @@ package com.drz.player.data.api
 
 import com.drz.player.data.model.RelatedResponse
 import com.drz.player.data.model.ReplyResponse
-import com.drz.player.data.model.VideoDetailResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface PlayerApi {
-
-    @GET("v4/video")
-    suspend fun getVideoDetail(@Query("id") videoId: Long): VideoDetailResponse
 
     @GET("v4/video/related")
     suspend fun getRelated(@Query("id") videoId: Long): RelatedResponse

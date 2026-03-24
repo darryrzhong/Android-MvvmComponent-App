@@ -44,23 +44,6 @@ data class RelatedConsumption(
     val replyCount: Int = 0
 )
 
-// 视频详情接口响应（v4/video?id=xxx）
-data class VideoDetailResponse(
-    val type: String = "",
-    val data: VideoDetailData = VideoDetailData()
-)
-
-data class VideoDetailData(
-    val id: Long = 0,
-    val title: String = "",
-    val description: String = "",
-    @SerializedName("playUrl") val playUrl: String = "",
-    val duration: Int = 0,
-    val cover: RelatedCover? = null,
-    val author: RelatedAuthor? = null,
-    val consumption: RelatedConsumption? = null
-)
-
 // 评论接口响应
 data class ReplyResponse(
     val itemList: List<ReplyItem> = emptyList(),

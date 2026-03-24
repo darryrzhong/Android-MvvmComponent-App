@@ -34,7 +34,7 @@ data class ItemData(
     val urls: List<String>? = null,
     val subTitle: String? = null,
     val bgPicture: String? = null,
-    val dataType: String? = null
+    val dataType: String? = null,
 )
 
 data class CoverData(

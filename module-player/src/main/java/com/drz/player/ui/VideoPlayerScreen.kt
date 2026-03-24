@@ -1,5 +1,6 @@
 package com.drz.player.ui
 
+import android.app.Activity
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -30,6 +32,8 @@ import coil.compose.AsyncImage
 import com.drz.player.data.model.RelatedData
 import com.drz.player.data.model.ReplyData
 import com.shuyu.gsyvideoplayer.GSYVideoManager
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,6 +44,7 @@ fun VideoPlayerScreen(
     onBack: () -> Unit,
     viewModel: VideoPlayerViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     val relatedVideos by viewModel.relatedVideos.collectAsState()
     val replies by viewModel.replies.collectAsState()
@@ -47,7 +52,11 @@ fun VideoPlayerScreen(
 
     LaunchedEffect(videoId) { viewModel.loadVideo(videoId) }
 
-    BackHandler { onBack() }
+    // 按返回键时先尝试退出全屏，再退出页面
+    BackHandler {
+        if (GSYVideoManager.backFromWindowFull(context)) return@BackHandler
+        onBack()
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (state is VideoPlayerUiState.Success) {
@@ -64,6 +73,12 @@ fun VideoPlayerScreen(
         }
 
         val listState = rememberLazyListState()
+
+        // 切换视频时滚回顶部
+        val currentVideoId = (state as? VideoPlayerUiState.Success)?.videoId
+        LaunchedEffect(currentVideoId) {
+            if (currentVideoId != null) listState.scrollToItem(0)
+        }
 
         // 滚动到底部时加载更多评论
         val shouldLoadMore by remember {
@@ -92,12 +107,33 @@ fun VideoPlayerScreen(
                     }
                     is VideoPlayerUiState.Success -> {
                         Column {
+                            // 返回键 + 标题在视频上方
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                IconButton(onClick = onBack) {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        contentDescription = "返回"
+                                    )
+                                }
+                                Text(
+                                    text = s.title,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
                             GsyVideoPlayer(
                                 playUrl = s.playUrl,
                                 title = s.title,
                                 coverUrl = s.coverUrl
                             )
-                            VideoInfoHeader(state = s, onBack = onBack)
+                            VideoInfoBody(state = s)
                         }
                     }
                     is VideoPlayerUiState.Error -> {
@@ -153,61 +189,97 @@ fun VideoPlayerScreen(
 
 @Composable
 private fun GsyVideoPlayer(playUrl: String, title: String, coverUrl: String) {
+    val activity = LocalContext.current as Activity
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val playerRef = remember { mutableStateOf<StandardGSYVideoPlayer?>(null) }
+    val orientationRef = remember { mutableStateOf<OrientationUtils?>(null) }
 
     DisposableEffect(lifecycle) {
         val observer = LifecycleEventObserver { _, event ->
             val player = playerRef.value ?: return@LifecycleEventObserver
+            val orientation = orientationRef.value
             when (event) {
-                Lifecycle.Event.ON_PAUSE -> player.currentPlayer.onVideoPause()
-                Lifecycle.Event.ON_RESUME -> player.currentPlayer.onVideoResume(false)
-                Lifecycle.Event.ON_DESTROY -> GSYVideoManager.releaseAllVideos()
+                Lifecycle.Event.ON_PAUSE -> {
+                    orientation?.setEnable(false)
+                    player.currentPlayer.onVideoPause()
+                }
+                Lifecycle.Event.ON_RESUME -> {
+                    orientation?.setEnable(true)
+                    player.currentPlayer.onVideoResume(false)
+                }
+                Lifecycle.Event.ON_DESTROY -> {
+                    orientation?.releaseListener()
+                    GSYVideoManager.releaseAllVideos()
+                }
                 else -> {}
             }
         }
         lifecycle.addObserver(observer)
-        onDispose { lifecycle.removeObserver(observer) }
+        onDispose {
+            lifecycle.removeObserver(observer)
+            orientationRef.value?.releaseListener()
+            orientationRef.value = null
+        }
     }
 
-    AndroidView(
-        factory = { context ->
-            StandardGSYVideoPlayer(context).apply {
-                layoutParams = FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, 600
-                )
-                setUp(playUrl, true, title)
-                thumbImageView = android.widget.ImageView(context).also { iv ->
-                    iv.scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
+    // playUrl 变化时强制重建播放器
+    key(playUrl) {
+        AndroidView(
+            factory = { context ->
+                StandardGSYVideoPlayer(context).apply {
+                    layoutParams = FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, 600
+                    )
+
+                    val orientationUtils = OrientationUtils(activity, this)
+                    orientationUtils.isEnable = false // 先禁用，等 onPrepared 后再启用
+                    orientationRef.value = orientationUtils
+
+                    titleTextView.visibility = android.view.View.GONE
+                    backButton.visibility = android.view.View.GONE
+
+                    // 全屏按钮：强制横屏全屏
+                    fullscreenButton.setOnClickListener {
+                        orientationUtils.resolveByClick()
+                        startWindowFullscreen(context, false, true)
+                    }
+
+                    setVideoAllCallBack(object : GSYSampleCallBack() {
+                        override fun onPrepared(url: String?, vararg objects: Any?) {
+                            // 视频准备好后才启用旋转监听
+                            orientationUtils.isEnable = true
+                        }
+                        override fun onEnterFullscreen(url: String?, vararg objects: Any?) {
+                            // 进入全屏后由旋转传感器控制，不再需要 OrientationUtils 自动触发
+                            orientationUtils.isEnable = false
+                        }
+                        override fun onQuitFullscreen(url: String?, vararg objects: Any?) {
+                            // 退出全屏恢复竖屏，重新启用旋转监听
+                            orientationUtils.backToProtVideo()
+                            orientationUtils.isEnable = true
+                        }
+                    })
+
+                    setUp(playUrl, true, title)
+                    thumbImageView = android.widget.ImageView(context).also { iv ->
+                        iv.scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
+                    }
+                    setAutoFullWithSize(true)
+                    setReleaseWhenLossAudio(true)
+                    setShowFullAnimation(false)
+                    isNeedShowWifiTip = false
+                    startPlayLogic()
+                    playerRef.value = this
                 }
-                isRotateViewAuto = true
-                isLockLand = false
-                isAutoFullWithSize = true
-                isNeedShowWifiTip = false
-                startPlayLogic()
-                playerRef.value = this
-            }
-        },
-        modifier = Modifier.fillMaxWidth().height(220.dp)
-    )
+            },
+            modifier = Modifier.fillMaxWidth().height(220.dp)
+        )
+    }
 }
 
 @Composable
-private fun VideoInfoHeader(state: VideoPlayerUiState.Success, onBack: () -> Unit) {
+private fun VideoInfoBody(state: VideoPlayerUiState.Success) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
-            }
-            Text(
-                text = state.title,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.weight(1f),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-        Spacer(Modifier.height(8.dp))
         if (state.description.isNotEmpty()) {
             Text(state.description, style = MaterialTheme.typography.bodyMedium)
             Spacer(Modifier.height(12.dp))

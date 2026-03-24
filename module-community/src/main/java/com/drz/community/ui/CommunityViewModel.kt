@@ -25,15 +25,41 @@ class CommunityViewModel @Inject constructor(
     private val _recommendState = MutableStateFlow<CommunityUiState>(CommunityUiState.Loading)
     val recommendState = _recommendState.asStateFlow()
 
+    private val _nextPageUrl = MutableStateFlow<String?>(null)
+    private val _isLoadingMore = MutableStateFlow(false)
+    val isLoadingMore = _isLoadingMore.asStateFlow()
+    val hasMore get() = _nextPageUrl.value != null
+
     init {
         loadRecommend()
     }
 
     fun loadRecommend() = viewModelScope.launch {
         _recommendState.value = CommunityUiState.Loading
-        _recommendState.value = when (val r = repository.getRecommend()) {
-            is NetworkResult.Success -> CommunityUiState.Success(r.data.itemList)
-            is NetworkResult.Error -> CommunityUiState.Error(r.message)
+        _nextPageUrl.value = null
+        when (val r = repository.getRecommend()) {
+            is NetworkResult.Success -> {
+                _recommendState.value = CommunityUiState.Success(r.data.itemList)
+                _nextPageUrl.value = r.data.nextPageUrl
+            }
+            is NetworkResult.Error -> _recommendState.value = CommunityUiState.Error(r.message)
+        }
+    }
+
+    fun loadMore() {
+        val url = _nextPageUrl.value ?: return
+        if (_isLoadingMore.value) return
+        viewModelScope.launch {
+            _isLoadingMore.value = true
+            when (val r = repository.getRecommendMore(url)) {
+                is NetworkResult.Success -> {
+                    val current = (_recommendState.value as? CommunityUiState.Success)?.items ?: emptyList()
+                    _recommendState.value = CommunityUiState.Success(current + r.data.itemList)
+                    _nextPageUrl.value = r.data.nextPageUrl
+                }
+                is NetworkResult.Error -> {}
+            }
+            _isLoadingMore.value = false
         }
     }
 }

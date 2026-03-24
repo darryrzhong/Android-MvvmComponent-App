@@ -81,54 +81,21 @@ class VideoPlayerViewModel @Inject constructor(
         val authorAvatar = savedStateHandle.get<String>("authorAvatar") ?: ""
         val authorDesc = savedStateHandle.get<String>("authorDesc") ?: ""
 
-        if (playUrl.isNotEmpty()) {
-            _state.value = VideoPlayerUiState.Success(
-                videoId = videoId,
-                title = title,
-                description = description,
-                playUrl = playUrl,
-                coverUrl = coverUrl,
-                blurredUrl = blurredUrl,
-                authorName = authorName,
-                authorAvatar = authorAvatar,
-                authorDesc = authorDesc,
-                collectionCount = 0,
-                shareCount = 0
-            )
-            loadRelated(videoId)
-            loadReplies(videoId)
-        } else {
-            fetchVideoDetail(videoId)
-        }
-    }
-
-    private fun fetchVideoDetail(videoId: Long) {
-        _state.value = VideoPlayerUiState.Loading
-        viewModelScope.launch {
-            when (val result = repository.getVideoDetail(videoId)) {
-                is NetworkResult.Success -> {
-                    val d = result.data.data
-                    _state.value = VideoPlayerUiState.Success(
-                        videoId = d.id,
-                        title = d.title,
-                        description = d.description,
-                        playUrl = d.playUrl,
-                        coverUrl = d.cover?.feed ?: "",
-                        blurredUrl = d.cover?.blurred ?: "",
-                        authorName = d.author?.name ?: "",
-                        authorAvatar = d.author?.icon ?: "",
-                        authorDesc = d.author?.description ?: "",
-                        collectionCount = d.consumption?.collectionCount ?: 0,
-                        shareCount = d.consumption?.shareCount ?: 0
-                    )
-                    loadRelated(videoId)
-                    loadReplies(videoId)
-                }
-                is NetworkResult.Error -> {
-                    _state.value = VideoPlayerUiState.Error(result.message)
-                }
-            }
-        }
+        _state.value = VideoPlayerUiState.Success(
+            videoId = videoId,
+            title = title,
+            description = description,
+            playUrl = playUrl,
+            coverUrl = coverUrl,
+            blurredUrl = blurredUrl,
+            authorName = authorName,
+            authorAvatar = authorAvatar,
+            authorDesc = authorDesc,
+            collectionCount = 0,
+            shareCount = 0
+        )
+        loadRelated(videoId)
+        loadReplies(videoId)
     }
 
     private fun loadRelated(videoId: Long) {
