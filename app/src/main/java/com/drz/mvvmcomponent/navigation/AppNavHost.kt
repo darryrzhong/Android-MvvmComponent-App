@@ -9,13 +9,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.drz.common.navigation.AppRoutes
 import com.drz.community.communityNavGraph
 import com.drz.home.homeNavGraph
 import com.drz.more.moreNavGraph
+import com.drz.mvvmcomponent.ui.WebViewScreen
 import com.drz.player.playerNavGraph
+import java.net.URLDecoder
 
 data class BottomNavItem(
     val route: String,
@@ -67,6 +70,11 @@ fun AppNavHost() {
             communityNavGraph(navController)
             moreNavGraph(navController)
             playerNavGraph(navController)
+            composable(AppRoutes.WEB_VIEW) { backStackEntry ->
+                val encodedUrl = backStackEntry.arguments?.getString("url") ?: ""
+                val url = URLDecoder.decode(encodedUrl, "UTF-8")
+                WebViewScreen(url = url, onBack = { navController.popBackStack() })
+            }
         }
     }
 }

@@ -26,10 +26,25 @@ import com.drz.base.ui.EmptyScreen
 import com.drz.base.ui.ErrorScreen
 import com.drz.base.ui.LoadingScreen
 import com.drz.home.data.model.ItemBean
+import java.net.URLDecoder
+
+/** eyepetizer://webview/?url=<encoded> 中提取真实 http URL */
+private fun parseWebViewUrl(actionUrl: String): String? {
+    if (!actionUrl.startsWith("eyepetizer://webview/")) return null
+    return try {
+        val query = actionUrl.substringAfter("?")
+        val encoded = query.split("&").firstOrNull { it.startsWith("url=") }
+            ?.removePrefix("url=") ?: return null
+        URLDecoder.decode(encoded, "UTF-8")
+    } catch (e: Exception) {
+        null
+    }
+}
 
 @Composable
 fun DiscoverScreen(
     onVideoClick: (Long) -> Unit,
+    onUrlClick: (String) -> Unit = {},
     viewModel: DiscoverViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -41,35 +56,66 @@ fun DiscoverScreen(
             if (s.items.isEmpty()) {
                 EmptyScreen()
             } else {
-                DiscoverList(items = s.items, onVideoClick = onVideoClick)
+                DiscoverList(items = s.items, onVideoClick = onVideoClick, onUrlClick = onUrlClick)
             }
         }
     }
 }
 
 @Composable
-private fun DiscoverList(items: List<ItemBean>, onVideoClick: (Long) -> Unit) {
+private fun DiscoverList(items: List<ItemBean>, onVideoClick: (Long) -> Unit, onUrlClick: (String) -> Unit) {
+    val merged = remember(items) { mergeTextCards(items) }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = 8.dp)
     ) {
-        items(items) { item ->
-            DiscoverItem(item = item, onVideoClick = onVideoClick)
+        items(merged) { item ->
+            DiscoverItem(item = item, onVideoClick = onVideoClick, onUrlClick = onUrlClick)
         }
     }
 }
 
+/**
+ * footer2 与其所属区块的标题 textCard 不一定相邻（中间可能隔着 briefCard）。
+ * 策略：向前找最近的非 footer2 的 textCard，将 footer2 的 text/actionUrl 合并进去，
+ * 然后把 footer2 本身从列表中移除。
+ */
+private fun mergeTextCards(items: List<ItemBean>): List<ItemBean> {
+    val result = items.toMutableList()
+    val footerIndices = result.indices.filter {
+        result[it].type == "textCard" && result[it].data.type == "footer2"
+    }
+    // 从后往前处理，避免 index 偏移
+    for (fi in footerIndices.reversed()) {
+        val footer = result[fi]
+        // 向前找最近的标题 textCard
+        val headerIdx = (fi - 1 downTo 0).firstOrNull {
+            result[it].type == "textCard" && result[it].data.type != "footer2"
+        } ?: continue
+        // 合并 rightText / actionUrl
+        result[headerIdx] = result[headerIdx].copy(
+            data = result[headerIdx].data.copy(
+                rightText = footer.data.text,
+                actionUrl = footer.data.actionUrl
+            )
+        )
+        result.removeAt(fi)
+    }
+    return result
+}
+
 @Composable
-private fun DiscoverItem(item: ItemBean, onVideoClick: (Long) -> Unit) {
+private fun DiscoverItem(item: ItemBean, onVideoClick: (Long) -> Unit, onUrlClick: (String) -> Unit) {
     when (item.type) {
         "videoSmallCard" -> VideoCard(item = item, onVideoClick = onVideoClick)
-        "textCard" -> TextCard(text = item.data.text)
-        "banner" -> BannerCard(imageUrl = item.data.image.ifEmpty { item.data.cover?.detail ?: "" })
-        "horizontalScrollCard" -> HorizontalBannerCard(item = item)
-        "briefCard" -> BriefCard(item = item)
-        "columnCardList" -> ColumnCardList(item = item, onVideoClick = onVideoClick)
-        "squareCardOfColumn" -> SquareColumnCard(item = item)
-        else -> {} // 忽略未处理的卡片类型
+        "textCard" -> TextCard(item = item, onUrlClick = onUrlClick)
+        "banner" -> BannerCard(imageUrl = item.data.image.ifEmpty { item.data.cover?.detail ?: "" }, actionUrl = item.data.actionUrl, onUrlClick = onUrlClick)
+        "horizontalScrollCard" -> HorizontalBannerCard(item = item, onUrlClick = onUrlClick)
+        "briefCard" -> BriefCard(item = item, onUrlClick = onUrlClick)
+        "columnCardList" -> ColumnCardList(item = item, onVideoClick = onVideoClick, onUrlClick = onUrlClick)
+        "squareCardOfColumn" -> SquareColumnCard(item = item, onUrlClick = onUrlClick)
+        else -> {}
     }
 }
 
@@ -110,21 +156,41 @@ private fun VideoCard(item: ItemBean, onVideoClick: (Long) -> Unit) {
 }
 
 @Composable
-private fun TextCard(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleSmall,
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-    )
+private fun TextCard(item: ItemBean, onUrlClick: (String) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = item.data.text,
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.weight(1f)
+        )
+        if (item.data.rightText.isNotEmpty()) {
+            val webUrl = parseWebViewUrl(item.data.actionUrl)
+            Text(
+                text = item.data.rightText,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = if (webUrl != null) Modifier.clickable { onUrlClick(webUrl) } else Modifier
+            )
+        }
+    }
 }
 
 @Composable
-private fun BannerCard(imageUrl: String) {
+private fun BannerCard(imageUrl: String, actionUrl: String, onUrlClick: (String) -> Unit) {
     if (imageUrl.isNotEmpty()) {
+        val webUrl = parseWebViewUrl(actionUrl)
         AsyncImage(
             model = imageUrl,
             contentDescription = null,
-            modifier = Modifier.fillMaxWidth().height(180.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .then(if (webUrl != null) Modifier.clickable { onUrlClick(webUrl) } else Modifier),
             contentScale = ContentScale.Crop
         )
     }
@@ -132,7 +198,7 @@ private fun BannerCard(imageUrl: String) {
 
 // horizontalScrollCard：圆角卡片轮播 Banner，露出右侧下一张，3秒自动切换
 @Composable
-private fun HorizontalBannerCard(item: ItemBean) {
+private fun HorizontalBannerCard(item: ItemBean, onUrlClick: (String) -> Unit) {
     val banners = item.data.itemList ?: return
     if (banners.isEmpty()) return
 
@@ -167,13 +233,15 @@ private fun HorizontalBannerCard(item: ItemBean) {
         ) { page ->
             val banner = banners[page % banners.size]
             val imageUrl = banner.data.image.ifEmpty { banner.data.cover?.detail ?: "" }
+            val webUrl = parseWebViewUrl(banner.data.actionUrl)
             AsyncImage(
                 model = imageUrl,
                 contentDescription = banner.data.title,
                 modifier = Modifier
                     .width(cardWidth)
                     .fillMaxHeight()
-                    .clip(MaterialTheme.shapes.large),
+                    .clip(MaterialTheme.shapes.large)
+                    .then(if (webUrl != null) Modifier.clickable { onUrlClick(webUrl) } else Modifier),
                 contentScale = ContentScale.Crop
             )
         }
@@ -204,12 +272,14 @@ private fun HorizontalBannerCard(item: ItemBean) {
 
 // squareCardOfColumn：开眼栏目子卡片（图片 + 标题）
 @Composable
-private fun SquareColumnCard(item: ItemBean) {
+private fun SquareColumnCard(item: ItemBean, onUrlClick: (String) -> Unit) {
     val imageUrl = item.data.image.ifEmpty { item.data.cover?.feed ?: item.data.cover?.detail ?: "" }
+    val webUrl = parseWebViewUrl(item.data.actionUrl)
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
+            .then(if (webUrl != null) Modifier.clickable { onUrlClick(webUrl) } else Modifier)
     ) {
         if (imageUrl.isNotEmpty()) {
             AsyncImage(
@@ -236,11 +306,13 @@ private fun SquareColumnCard(item: ItemBean) {
 
 // briefCard：话题/分类卡片（icon + 标题 + 描述）
 @Composable
-private fun BriefCard(item: ItemBean) {
+private fun BriefCard(item: ItemBean, onUrlClick: (String) -> Unit) {
+    val webUrl = parseWebViewUrl(item.data.actionUrl)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .then(if (webUrl != null) Modifier.clickable { onUrlClick(webUrl) } else Modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
@@ -274,7 +346,7 @@ private fun BriefCard(item: ItemBean) {
 
 // columnCardList：嵌套视频列表，展开其中的子卡片
 @Composable
-private fun ColumnCardList(item: ItemBean, onVideoClick: (Long) -> Unit) {
+private fun ColumnCardList(item: ItemBean, onVideoClick: (Long) -> Unit, onUrlClick: (String) -> Unit) {
     Column {
         item.data.header?.let { header ->
             if (header.title.isNotEmpty()) {
@@ -286,7 +358,7 @@ private fun ColumnCardList(item: ItemBean, onVideoClick: (Long) -> Unit) {
             }
         }
         item.data.itemList?.forEach { child ->
-            DiscoverItem(item = child, onVideoClick = onVideoClick)
+            DiscoverItem(item = child, onVideoClick = onVideoClick, onUrlClick = onUrlClick)
         }
     }
 }

@@ -14,6 +14,8 @@ data class ItemBean(
 
 data class ItemData(
     val id: Long = 0,
+    val type: String = "",       // textCard 的子类型：header5、footer2、header7 等
+    val actionUrl: String = "",  // 点击跳转链接
     val title: String = "",
     val description: String = "",
     val category: String = "",
