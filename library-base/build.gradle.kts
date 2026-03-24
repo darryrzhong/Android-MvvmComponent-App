@@ -9,21 +9,32 @@ configure<BaseExtension> {
 }
 
 dependencies {
+    add("api", project(":library-network"))
+
     add("api", libs.androidx.appcompat)
-    add("api", libs.androidx.lifecycle.extensions)
-    add("api", libs.androidx.lifecycle.viewmodel.ktx) // Updated
-    add("api", libs.androidx.recyclerview)
-    add("api", libs.androidx.constraintlayout)
-    add("api", libs.androidx.cardview)
+    add("api", libs.androidx.lifecycle.runtime.ktx)
+    add("api", libs.androidx.lifecycle.viewmodel.ktx)
+    add("api", libs.androidx.lifecycle.runtime.compose)
+    add("api", libs.androidx.lifecycle.viewmodel.compose)
+    add("api", libs.androidx.activity.compose)
+    add("api", libs.core.ktx)
     add("api", libs.android.material)
-    add("api", libs.androidx.navigation.fragment)
-    add("api", libs.androidx.navigation.ui)
-    add("api", libs.loadsir)
-    add("api", libs.gson)
-    add("api", libs.rxjava2)
-    add("api", libs.rxpermissions)
+
+    // Compose
+    add("api", platform(libs.androidx.compose.bom))
+    add("api", libs.androidx.compose.ui)
+    add("api", libs.androidx.compose.ui.tooling.preview)
+    add("api", libs.androidx.compose.material3)
+    add("api", libs.androidx.compose.foundation)
+    add("api", libs.androidx.compose.runtime)
+    add("debugImplementation", libs.androidx.compose.ui.tooling)
+
+    // Navigation
+    add("api", libs.androidx.navigation.compose)
+    add("api", libs.hilt.navigation.compose)
+
+    // Utilities
     add("api", libs.mmkv)
-    add("api", libs.brvah)
-    add("api", libs.immersionbar)
-    add("api", libs.glide)
+    add("api", libs.logger)
+    add("api", libs.coil.compose)
 }

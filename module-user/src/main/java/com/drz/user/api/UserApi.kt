@@ -1,7 +1,6 @@
 package com.drz.user.api
 
 import com.drz.user.bean.User
-import com.zhouyou.http.model.ApiResult
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
@@ -16,5 +15,5 @@ interface UserApi {
     suspend fun login(
         @Field("username") username: String,
         @Field("password") password: String
-    ): ApiResult<User>
+    ): User
 }

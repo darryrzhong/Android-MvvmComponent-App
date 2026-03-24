@@ -4,6 +4,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("kotlin-parcelize")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
@@ -44,11 +45,6 @@ android {
             abiFilters.add("arm64-v8a")
             abiFilters.add("armeabi-v7a")
         }
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments["AROUTER_MODULE_NAME"] = project.name
-            }
-        }
     }
 
     buildTypes {
@@ -74,12 +70,16 @@ android {
 
     resourcePrefix = "app_"
     buildFeatures {
-        dataBinding = true
+        compose = true
         buildConfig = true
+        dataBinding = false
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
@@ -88,13 +88,10 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
     
-    // Processors
     ksp(libs.hilt.compiler)
-    annotationProcessor(libs.arouter.compiler)
-    annotationProcessor(libs.glide.compiler)
-    
-    // Hilt
+
     implementation(libs.hilt.android)
+    implementation(libs.glide)
     
     val isBuildModule: String by project
     if (isBuildModule.toBoolean()) {

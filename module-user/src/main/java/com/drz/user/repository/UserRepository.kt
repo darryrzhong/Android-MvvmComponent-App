@@ -1,5 +1,7 @@
 package com.drz.user.repository
 
+import com.drz.network.NetworkResult
+import com.drz.network.safeApiCall
 import com.drz.user.api.UserApi
 import com.drz.user.bean.User
 import kotlinx.coroutines.flow.Flow
@@ -13,22 +15,11 @@ import javax.inject.Inject
 class UserRepository @Inject constructor(
     private val userApi: UserApi
 ) {
-    
-    suspend fun login(username: String, password: String): Flow<Result<User>> = flow {
-        try {
-            val response = userApi.login(username, password)
-            if (response.isOk) {
-                // response.data could be null if parsing failed or data is null
-                if (response.data != null) {
-                    emit(Result.success(response.data))
-                } else {
-                    emit(Result.failure(Exception("Login failed: empty data")))
-                }
-            } else {
-                emit(Result.failure(Exception(response.msg ?: "Unknown error")))
-            }
-        } catch (e: Exception) {
-            emit(Result.failure(e))
+
+    fun login(username: String, password: String): Flow<Result<User>> = flow {
+        when (val result = safeApiCall { userApi.login(username, password) }) {
+            is NetworkResult.Success -> emit(Result.success(result.data))
+            is NetworkResult.Error -> emit(Result.failure(Exception(result.message)))
         }
     }
 }

@@ -1,143 +1,79 @@
 package com.drz.main.ui
 
-
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.animation.DecelerateInterpolator
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.drz.main.R
-import com.drz.main.bean.CustomBean
-import com.drz.main.viewholder.CustomPageViewHolder
-import com.gyf.immersionbar.BarHide
-import com.gyf.immersionbar.ImmersionBar
-import com.zhpan.bannerview.BannerViewPager
-import com.zhpan.bannerview.adapter.OnPageChangeListenerAdapter
-import com.zhpan.bannerview.constants.TransformerStyle
-import com.zhpan.bannerview.holder.HolderCreator
-import com.zhpan.bannerview.utils.BannerUtils
-import com.zhpan.indicator.enums.IndicatorSlideMode
-import java.util.Random
+import com.drz.main.theme.AppTheme
+import com.tencent.mmkv.MMKV
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-class GuideActivity : BaseDataActivity(), HolderCreator<CustomPageViewHolder> {
-
-    private lateinit var mViewPager: BannerViewPager<CustomBean, CustomPageViewHolder>
-    private var tv_describe: TextView? = null
-    private var btn_start: TextView? = null
-
-    private val des = arrayOf(
-        "在这里\n你可以听到周围人的心声",
-        "在这里\nTA会在下一秒遇见你",
-        "在这里\n不再错过可以改变你一生的人"
-    )
-
-    private val transforms = intArrayOf(
-        TransformerStyle.NONE,
-        TransformerStyle.ACCORDION,
-        TransformerStyle.STACK,
-        TransformerStyle.DEPTH,
-        TransformerStyle.ROTATE,
-        TransformerStyle.SCALE_IN
-    )
-
-    private val data: List<CustomBean>
-        get() {
-            val list = ArrayList<CustomBean>()
-            for (i in mDrawableList.indices) {
-                val customBean = CustomBean()
-                customBean.imageRes = mDrawableList[i]
-                customBean.imageDescription = des[i]
-                list.add(customBean)
-            }
-            return list
-        }
-
+@AndroidEntryPoint
+class GuideActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity_guide)
-
-        tv_describe = findViewById(R.id.tv_describe)
-        btn_start = findViewById(R.id.btn_start)
-
-        ImmersionBar.with(this)
-            .titleBar(findViewById<View>(R.id.top_view))
-            .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
-            .init()
-        setupViewPager()
-        updateUI(0)
-        mViewPager.create(data)
-    }
-
-    private fun setupViewPager() {
-        mViewPager = findViewById(R.id.viewpager)
-        mViewPager.setAutoPlay(false)
-            .setCanLoop(false)
-            .setPageTransformerStyle(transforms[Random().nextInt(6)])
-            .setScrollDuration(ANIMATION_DURATION)
-            .setIndicatorMargin(0, 0, 0, resources.getDimension(R.dimen.main_dp_100).toInt())
-            .setIndicatorGap(resources.getDimension(R.dimen.main_dp_10).toInt())
-            .setIndicatorColor(
-                ContextCompat.getColor(this, android.R.color.white),
-                ContextCompat.getColor(this, R.color.main_white_alpha_75)
-            )
-            .setIndicatorSlideMode(IndicatorSlideMode.SMOOTH)
-            .setIndicatorRadius(
-                resources.getDimension(R.dimen.main_dp_3).toInt(),
-                resources.getDimension(R.dimen.main_dp_4_5).toInt()
-            )
-            .setOnPageChangeListener(object : OnPageChangeListenerAdapter() {
-                override fun onPageSelected(position: Int) {
-                    BannerUtils.log("position:$position")
-                    updateUI(position)
+        setContent {
+            AppTheme {
+                GuideScreen {
+                    MMKV.defaultMMKV().encode("first", false)
+                    startActivity(
+                        Intent().setClassName(packageName, "com.drz.mvvmcomponent.AppMainActivity")
+                    )
+                    finish()
                 }
-            })
-            .setHolderCreator(this)
-            .create(data)
-    }
-
-    fun onClick(view: View) {
-        MainActivity.start(this)
-        finish()
-    }
-
-    private fun updateUI(position: Int) {
-        tv_describe?.text = des[position]
-        val translationAnim = ObjectAnimator.ofFloat(tv_describe, "translationX", -120f, 0f)
-        translationAnim.duration = ANIMATION_DURATION.toLong()
-        translationAnim.interpolator = DecelerateInterpolator()
-        val alphaAnimator1 = ObjectAnimator.ofFloat(tv_describe, "alpha", 0f, 1f)
-        alphaAnimator1.duration = ANIMATION_DURATION.toLong()
-        val animatorSet = AnimatorSet()
-        animatorSet.playTogether(translationAnim, alphaAnimator1)
-        animatorSet.start()
-
-        if (position == mViewPager.list.size - 1 && btn_start?.visibility == View.GONE) {
-            btn_start?.visibility = View.VISIBLE
-            ObjectAnimator
-                .ofFloat(btn_start, "alpha", 0f, 1f)
-                .setDuration(ANIMATION_DURATION.toLong()).start()
-        } else {
-            btn_start?.visibility = View.GONE
+            }
         }
     }
+}
 
-    override fun createViewHolder(): CustomPageViewHolder {
-        val customPageViewHolder = CustomPageViewHolder()
-        customPageViewHolder.setOnSubViewClickListener { _, position ->
-            Toast.makeText(
-                this,
-                "Logo Clicked,Item: $position",
-                Toast.LENGTH_SHORT
-            ).show()
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun GuideScreen(onFinish: () -> Unit) {
+    val images = listOf(R.drawable.guide0, R.drawable.guide1, R.drawable.guide2)
+    val descriptions = listOf(
+        "在这里\n你可以发现优质视频内容",
+        "在这里\n每天精选好看的视频",
+        "在这里\n不再错过可以改变你一生的视频"
+    )
+    val pagerState = rememberPagerState { images.size }
+    val scope = rememberCoroutineScope()
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+            Image(
+                painter = painterResource(images[page]),
+                contentDescription = descriptions[page],
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
         }
-        return customPageViewHolder
-    }
-
-    companion object {
-
-        private const val ANIMATION_DURATION = 1300
+        val isLast = pagerState.currentPage == images.lastIndex
+        Button(
+            onClick = {
+                if (isLast) onFinish()
+                else scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+            },
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 64.dp)
+        ) {
+            Text(if (isLast) "立即体验" else "下一步")
+        }
     }
 }

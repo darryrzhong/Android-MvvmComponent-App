@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.drz.main">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
         <activity
@@ -10,16 +9,15 @@
             android:theme="@style/AppTheme.Start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.drz.main.ui.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.GuideActivity"
+            android:name="com.drz.main.ui.GuideActivity"
             android:exported="false" />
     </application>
 

@@ -1,4 +1,8 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'com.google.devtools.ksp'
+apply plugin: 'com.google.dagger.hilt.android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 
@@ -25,12 +29,6 @@ android {
     compileSdkVersion libs.versions.android.compileSdk.get().toInteger()
     buildToolsVersion libs.versions.android.buildTools.get()
     defaultConfig {
-        applicationId libs.versions.android.applicationId.get()
-        // Assuming I put applicationId in catalog? No I didn't.
-        // Wait, I didn't put applicationId in catalog. I should have.
-        // It was in config.gradle: applicationId    : "com.mvvm.mvvmcomponent"
-        // I will hardcode it here or add to catalog.
-        // Hardcode is fine for now, or use a variable.
         applicationId "com.mvvm.mvvmcomponent"
 
         minSdkVersion libs.versions.android.minSdk.get().toInteger()
@@ -81,21 +79,35 @@ android {
     buildFeatures {
         dataBinding = true
         buildConfig = true
+        compose = true
     }
 
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
+    implementation libs.core.ktx
+
+    def composeBom = platform(libs.androidx.compose.bom)
+    implementation composeBom
+    implementation libs.androidx.compose.runtime
+    implementation libs.androidx.activity.compose
+
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.androidx.test.espresso.core
     //组件中依赖阿里路由编译框架
-    annotationProcessor libs.arouter.compiler
+//    annotationProcessor libs.arouter.compiler
     annotationProcessor libs.glide.compiler
+
+    implementation libs.hilt.android
+    ksp libs.hilt.compiler
     //宿主项目中判断组件是否需要独立运行
     if (isBuildModule.toBoolean()) {
         //组件独立运行时，宿主项目直接依赖基础库，避免编译错误

@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /d/zj/mvvm/module-home/src -type f -name *.kt)",
+      "Bash(find /d/zj/mvvm/library-common/src -name \"*.java\" -delete)",
+      "Bash(find /d/zj/mvvm/module-main/src -name \"*.java\" -delete)",
+      "Bash(find /d/zj/mvvm/module-home/src -name \"*.java\" -delete)",
+      "Bash(sort find:*)",
+      "Bash(find /d/zj/mvvm/module-community/src -name \"*.java\" -delete)",
+      "Bash(find /d/zj/mvvm/module-more/src -name \"*.java\" -delete)",
+      "Bash(find /d/zj/mvvm/module-user/src -name \"*.java\" -delete)",
+      "Bash(find /d/zj/mvvm/module-player/src -name \"*.java\" -delete)",
+      "Bash(find /d/zj/mvvm/app/src -name \"*.java\" -delete)",
+      "Bash(grep -r \"servicemanager\\\\|ServiceManager\\\\|ILoginService\\\\|IAppInfoService\" /d/zj/mvvm --include=*.kt --include=*.java -l)",
+      "Bash(./gradlew assembleDebug)",
+      "Bash(find d:/zj/mvvm/module-player/src/main/java -name *.kt)",
+      "Bash(xargs rm:*)",
+      "Bash(rm module-community/src/main/res/layout/community_fragment_attention.xml module-community/src/main/res/layout/community_fragment_community.xml module-community/src/main/res/layout/community_fragment_recommend.xml module-community/src/main/res/layout/community_item_attention_card_view.xml module-community/src/main/res/layout/community_item_community_view.xml module-community/src/main/res/layout/community_item_square_card_view.xml module-community/src/main/res/layout/community_item_square_item_card_view.xml)",
+      "Bash(rm module-home/src/main/res/layout/home_item_banner_item_view.xml module-home/src/main/res/layout/home_item_foote_view.xml)",
+      "Bash(adb uninstall:*)",
+      "Bash(adb devices:*)",
+      "Bash(adb shell:*)",
+      "Bash(find d:/zj/mvvm/app -name *.java -o -name *.kt)",
+      "Bash(find d:/zj/mvvm -path */build/generated/ksp* -name Hilt_AppApplication*)",
+      "Bash(find d:/zj/mvvm/app/build -name *.java -path */hilt*)",
+      "Bash(find d:/zj/mvvm/app/build -name *.java -path *Hilt*)",
+      "Bash(find d:/zj/mvvm/app/build -name *.java -path *dagger*)",
+      "Bash(./gradlew clean:*)",
+      "Bash(./gradlew :app:assembleDebug)"
+    ],
+    "additionalDirectories": [
+      "d:\\zj\\mvvm\\module-more\\src\\main\\res\\layout",
+      "d:\\zj\\mvvm\\module-main\\src\\main\\res\\layout"
+    ]
+  }
+}
