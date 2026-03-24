@@ -100,7 +100,6 @@ dependencies {
         implementation(project(":module-main"))
         implementation(project(":module-home"))
         implementation(project(":module-community"))
-        implementation(project(":module-more"))
         implementation(project(":module-player"))
         implementation(project(":module-user"))
     }

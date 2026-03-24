@@ -11,7 +11,17 @@ import com.drz.player.ui.VideoPlayerScreen
 fun NavGraphBuilder.playerNavGraph(navController: NavController) {
     composable(
         route = AppRoutes.VIDEO_PLAYER,
-        arguments = listOf(navArgument("videoId") { type = NavType.LongType })
+        arguments = listOf(
+            navArgument("videoId") { type = NavType.LongType },
+            navArgument("title") { type = NavType.StringType; defaultValue = "" },
+            navArgument("playUrl") { type = NavType.StringType; defaultValue = "" },
+            navArgument("coverUrl") { type = NavType.StringType; defaultValue = "" },
+            navArgument("blurredUrl") { type = NavType.StringType; defaultValue = "" },
+            navArgument("description") { type = NavType.StringType; defaultValue = "" },
+            navArgument("authorName") { type = NavType.StringType; defaultValue = "" },
+            navArgument("authorAvatar") { type = NavType.StringType; defaultValue = "" },
+            navArgument("authorDesc") { type = NavType.StringType; defaultValue = "" }
+        )
     ) { backStackEntry ->
         val videoId = backStackEntry.arguments?.getLong("videoId") ?: 0L
         VideoPlayerScreen(

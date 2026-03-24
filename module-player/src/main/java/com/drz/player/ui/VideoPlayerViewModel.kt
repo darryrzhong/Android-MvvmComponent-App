@@ -40,6 +40,7 @@ class VideoPlayerViewModel @Inject constructor(
         val title = savedStateHandle.get<String>("title") ?: "视频详情"
         val playUrl = savedStateHandle.get<String>("playUrl") ?: ""
         val coverUrl = savedStateHandle.get<String>("coverUrl") ?: ""
+        val blurredUrl = savedStateHandle.get<String>("blurredUrl") ?: ""
         val description = savedStateHandle.get<String>("description") ?: ""
         val authorName = savedStateHandle.get<String>("authorName") ?: ""
         val authorAvatar = savedStateHandle.get<String>("authorAvatar") ?: ""
@@ -52,7 +53,7 @@ class VideoPlayerViewModel @Inject constructor(
                 description = description,
                 playUrl = playUrl,
                 coverUrl = coverUrl,
-                blurredUrl = "",
+                blurredUrl = blurredUrl,
                 authorName = authorName,
                 authorAvatar = authorAvatar,
                 authorDesc = authorDesc,

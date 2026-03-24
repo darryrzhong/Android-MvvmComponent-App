@@ -25,25 +25,13 @@ class CommunityViewModel @Inject constructor(
     private val _recommendState = MutableStateFlow<CommunityUiState>(CommunityUiState.Loading)
     val recommendState = _recommendState.asStateFlow()
 
-    private val _attentionState = MutableStateFlow<CommunityUiState>(CommunityUiState.Loading)
-    val attentionState = _attentionState.asStateFlow()
-
     init {
         loadRecommend()
-        loadAttention()
     }
 
     fun loadRecommend() = viewModelScope.launch {
         _recommendState.value = CommunityUiState.Loading
         _recommendState.value = when (val r = repository.getRecommend()) {
-            is NetworkResult.Success -> CommunityUiState.Success(r.data.itemList)
-            is NetworkResult.Error -> CommunityUiState.Error(r.message)
-        }
-    }
-
-    fun loadAttention() = viewModelScope.launch {
-        _attentionState.value = CommunityUiState.Loading
-        _attentionState.value = when (val r = repository.getAttention()) {
             is NetworkResult.Success -> CommunityUiState.Success(r.data.itemList)
             is NetworkResult.Error -> CommunityUiState.Error(r.message)
         }

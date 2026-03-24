@@ -270,36 +270,51 @@ private fun HorizontalBannerCard(item: ItemBean, onUrlClick: (String) -> Unit) {
     }
 }
 
-// squareCardOfColumn：开眼栏目子卡片（图片 + 标题）
+// squareCardOfColumn：开眼栏目子卡片，圆角卡片 + 图片上叠加描述
 @Composable
 private fun SquareColumnCard(item: ItemBean, onUrlClick: (String) -> Unit) {
     val imageUrl = item.data.image.ifEmpty { item.data.cover?.feed ?: item.data.cover?.detail ?: "" }
     val webUrl = parseWebViewUrl(item.data.actionUrl)
-    Column(
+    if (imageUrl.isEmpty()) return
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
+            .height(180.dp)
+            .clip(MaterialTheme.shapes.large)
             .then(if (webUrl != null) Modifier.clickable { onUrlClick(webUrl) } else Modifier)
     ) {
-        if (imageUrl.isNotEmpty()) {
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = item.data.title,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .clip(MaterialTheme.shapes.medium),
-                contentScale = ContentScale.Crop
-            )
-        }
-        if (item.data.title.isNotEmpty()) {
-            Text(
-                text = item.data.title,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = 4.dp),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = item.data.title,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomStart)
+                .background(Color.Black.copy(alpha = 0.4f))
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            if (item.data.title.isNotEmpty()) {
+                Text(
+                    text = item.data.title,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Color.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            if (item.data.description.isNotEmpty()) {
+                Text(
+                    text = item.data.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.White.copy(alpha = 0.75f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
@@ -349,7 +364,7 @@ private fun BriefCard(item: ItemBean, onUrlClick: (String) -> Unit) {
 private fun ColumnCardList(item: ItemBean, onVideoClick: (Long) -> Unit, onUrlClick: (String) -> Unit) {
     Column {
         item.data.header?.let { header ->
-            if (header.title.isNotEmpty()) {
+            if (!header.title.isNullOrEmpty()) {
                 Text(
                     text = header.title,
                     style = MaterialTheme.typography.titleSmall,

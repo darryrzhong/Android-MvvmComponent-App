@@ -35,7 +35,6 @@ include(
     ":module-home",
     ":module-community",
     ":library-video",
-    ":module-more",
     ":module-player",
     ":module-user"
 )
