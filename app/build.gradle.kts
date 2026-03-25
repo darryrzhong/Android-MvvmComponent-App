@@ -1,6 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -10,23 +7,21 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
-val keystorePropertiesFile = rootProject.file("keystore.properties")
-val keystoreProperties = Properties()
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-}
-
 android {
     namespace = "com.drz.mvvmcomponent"
-    
+
     signingConfigs {
         create("release") {
-            if (keystoreProperties["keyAlias"] != null) {
-                keyAlias = keystoreProperties["keyAlias"] as String
-                keyPassword = keystoreProperties["keyPassword"] as String
-                storeFile = file(keystoreProperties["storeFile"] as String)
-                storePassword = keystoreProperties["storePassword"] as String
-            }
+            keyAlias = "key0"
+            keyPassword = "mvvm123"
+            storeFile = file("sign/mvvm.jks")
+            storePassword = "mvvm123"
+        }
+        getByName("debug") {
+            keyAlias = "key0"
+            keyPassword = "mvvm123"
+            storeFile = file("sign/mvvm.jks")
+            storePassword = "mvvm123"
         }
     }
 
@@ -51,9 +46,10 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            if (keystoreProperties["keyAlias"] != null) {
-                signingConfig = signingConfigs.getByName("release")
-            }
+            signingConfig = signingConfigs.getByName("release")
+        }
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 

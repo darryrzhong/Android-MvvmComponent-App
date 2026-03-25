@@ -15,7 +15,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.drz.main.R
 import com.drz.main.theme.AppTheme
-import com.tencent.mmkv.MMKV
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 
@@ -26,15 +25,9 @@ class SplashActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 SplashScreen {
-                    val isFirstLaunch = MMKV.defaultMMKV().decodeBool("first", true)
-                    if (isFirstLaunch) {
-                        startActivity(Intent(this, GuideActivity::class.java))
-                    } else {
-                        // 通过包名+类名解耦，跳转到 app 模块的 AppMainActivity
-                        startActivity(
-                            Intent().setClassName(packageName, "com.drz.mvvmcomponent.AppMainActivity")
-                        )
-                    }
+                    startActivity(
+                        Intent().setClassName(packageName, "com.drz.mvvmcomponent.AppMainActivity")
+                    )
                     finish()
                 }
             }

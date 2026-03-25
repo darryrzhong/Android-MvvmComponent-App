@@ -12,13 +12,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.drz.main.ui.MainActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.drz.main.ui.GuideActivity"
-            android:exported="false" />
+
     </application>
 
 </manifest>
