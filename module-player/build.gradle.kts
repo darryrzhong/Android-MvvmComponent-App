@@ -17,7 +17,11 @@ configure<BaseExtension> {
 
 dependencies {
     add("api", project(":library-common"))
-    add("api", project(":library-video"))
+    add("api", libs.androidx.recyclerview)
+    add("api", libs.glide)
+    add("ksp", libs.glide.compiler)
+    add("api", libs.gsyVideoPlayer.java)
+    add("api", libs.gsyVideoPlayer.exo)
     add("testImplementation", libs.junit)
     add("androidTestImplementation", libs.androidx.test.ext.junit)
     add("androidTestImplementation", libs.androidx.test.espresso.core)

@@ -6,8 +6,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("kotlin-parcelize")
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -101,6 +101,6 @@ dependencies {
         implementation(project(":module-home"))
         implementation(project(":module-community"))
         implementation(project(":module-player"))
-        implementation(project(":module-user"))
+//        implementation(project(":module-user"))
     }
 }
