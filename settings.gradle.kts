@@ -29,7 +29,6 @@ include(
     ":app",
     ":library-base",
     ":library-common",
-    ":library-servicemanager",
     ":library-network",
     ":module-main",
     ":module-home",

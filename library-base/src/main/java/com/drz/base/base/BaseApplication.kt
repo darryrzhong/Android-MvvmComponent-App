@@ -1,9 +1,7 @@
 package com.drz.base.base
 
-import android.app.Activity
 import android.app.Application
 import android.os.Build
-import android.os.Bundle
 import coil.Coil
 import coil.ImageLoader
 import okhttp3.OkHttpClient
@@ -14,19 +12,6 @@ open class BaseApplication : Application() {
         super.onCreate()
         sInstance = this
         initCoil()
-        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                AppManager.instance.addActivity(activity)
-            }
-            override fun onActivityStarted(activity: Activity) {}
-            override fun onActivityResumed(activity: Activity) {}
-            override fun onActivityPaused(activity: Activity) {}
-            override fun onActivityStopped(activity: Activity) {}
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
-            override fun onActivityDestroyed(activity: Activity) {
-                AppManager.instance.removeActivity(activity)
-            }
-        })
     }
 
     private fun initCoil() {
