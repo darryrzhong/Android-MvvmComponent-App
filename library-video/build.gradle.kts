@@ -13,6 +13,5 @@ dependencies {
     add("api", libs.glide)
     add("ksp", libs.glide.compiler)
     add("api", libs.gsyVideoPlayer.java)
-    add("api", libs.gsyVideoPlayer.armv7a)
-    add("api", libs.gsyVideoPlayer.arm64)
+    add("api", libs.gsyVideoPlayer.exo)
 }
