@@ -1,6 +1,6 @@
 > 一款模仿 Eyepetizer | 开眼视频的开源 Android App
 
-基于 **MVVM + 组件化** 架构，采用 Jetpack Compose + Hilt + Navigation Compose 全面重构，UI 层完全使用 Compose 实现。
+基于 **MVVM + 组件化** 架构，采用 **Jetpack Compose + Hilt + Navigation Compose** 全面重构，UI 层完全使用 Compose 实现。
 
 ## 效果图
 
